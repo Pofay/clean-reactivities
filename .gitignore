@@ -491,3 +491,10 @@ FodyWeavers.xsd
 
 ### VisualStudio Patch ###
 # Additional files built by Visual Studio
+
+# Environment Files
+appsettings.json
+
+## SQLite Artifacts
+reactivities.db-shm
+reactivities.db-wal
