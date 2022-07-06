@@ -2,9 +2,11 @@
 
 This is my output on following along this [Udemy course using .NET Core, React and MobX][1]
 
+The `master` contains the code that deviates only a little from what is shown in the course (For learning Purposes)
+
 Also serves as both a refresher for .NET and its new features.
 
-Later on I'm going to adjust the codebase to fit my architectural standards:
+If you want to see the codebase with these changes below then you should visit the `adjusted` branch
 
 - T.D.D some parts of the application
 - Using Repositories and Interactor classes
