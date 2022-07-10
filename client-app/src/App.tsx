@@ -3,6 +3,7 @@ import logo from './logo.svg'
 import './App.css'
 import axios from 'axios'
 import 'semantic-ui-css/semantic.min.css'
+import { Header, List } from 'semantic-ui-react'
 
 const tap =
   (f: (a: any) => void) =>
@@ -22,15 +23,13 @@ function App() {
       .then(setActivities)
   }, [])
   return (
-    <div className='App'>
-      <header className='App-header'>
-        <img src={logo} className='App-logo' alt='logo' />
-        <ul>
-          {activities.map((a: any) => (
-            <li key={a.id}>{a.title}</li>
-          ))}
-        </ul>
-      </header>
+    <div>
+      <Header as='h2' icon='users' content='Reactivities' />
+      <List>
+        {activities.map((a: any) => (
+          <List.Item key={a.id}>{a.title}</List.Item>
+        ))}
+      </List>
     </div>
   )
 }
