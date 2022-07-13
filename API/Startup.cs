@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Application.Activities;
+using Application.Settings;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -48,6 +49,7 @@ namespace API
                 });
             });
             services.AddMediatR(typeof(ListActivities.Handler).Assembly);
+            services.AddAutoMapper(typeof(MappingProfiles));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
