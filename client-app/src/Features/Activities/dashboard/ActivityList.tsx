@@ -1,4 +1,4 @@
-import { Button, Item, Label, Segment } from 'semantic-ui-react'
+import { Item, Segment } from 'semantic-ui-react'
 import { Activity } from '../../../App/models/interfaces/activity'
 import ActivityItem from './ActivityItem'
 

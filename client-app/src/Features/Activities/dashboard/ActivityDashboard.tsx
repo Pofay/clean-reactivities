@@ -1,4 +1,4 @@
-import { Grid, List } from 'semantic-ui-react'
+import { Grid } from 'semantic-ui-react'
 import { Activity } from '../../../App/models/interfaces/activity'
 import ActivityList from './ActivityList'
 

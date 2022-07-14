@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 import 'semantic-ui-css/semantic.min.css'
-import { Container, List } from 'semantic-ui-react'
+import { Container } from 'semantic-ui-react'
 import { Activity } from '../models/interfaces/activity'
 import ActivityDashboard from '../../Features/Activities/dashboard/ActivityDashboard'
 import Navbar from './Navbar'
