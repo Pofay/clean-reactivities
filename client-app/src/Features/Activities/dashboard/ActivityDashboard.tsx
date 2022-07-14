@@ -6,16 +6,32 @@ import ActivityList from './ActivityList'
 
 interface ActivityDashboardProps {
   activities: Activity[]
+  selectedActivity: Activity | undefined
+  onSelectActivity: (activity: Activity) => void
+  onDeselectActivity: () => void
 }
 
-function ActivityDashboard({ activities }: ActivityDashboardProps) {
+function ActivityDashboard({
+  activities,
+  selectedActivity,
+  onSelectActivity,
+  onDeselectActivity,
+}: ActivityDashboardProps) {
   return (
     <Grid>
       <Grid.Column width='10'>
-        <ActivityList activities={activities} />
+        <ActivityList
+          activities={activities}
+          onSelectActivity={onSelectActivity}
+        />
       </Grid.Column>
       <Grid.Column width='6'>
-        {activities[1] && <ActivityDetails activity={activities[1]} />}
+        {selectedActivity && (
+          <ActivityDetails
+            activity={selectedActivity}
+            onDeselectActivity={onDeselectActivity}
+          />
+        )}
         <ActivityForm />
       </Grid.Column>
     </Grid>

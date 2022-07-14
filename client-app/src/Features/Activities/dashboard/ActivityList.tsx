@@ -4,13 +4,18 @@ import ActivityItem from './ActivityItem'
 
 interface ActivityListProps {
   activities: Activity[]
+  onSelectActivity: (activity: Activity) => void
 }
-function ActivityList({ activities }: ActivityListProps) {
+function ActivityList({ activities, onSelectActivity }: ActivityListProps) {
   return (
     <Segment>
       <Item.Group divided>
         {activities.map((a) => (
-          <ActivityItem key={a.id} activity={a} />
+          <ActivityItem
+            onSelectActivity={onSelectActivity}
+            key={a.id}
+            activity={a}
+          />
         ))}
       </Item.Group>
     </Segment>

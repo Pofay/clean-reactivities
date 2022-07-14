@@ -1,11 +1,18 @@
+import React from 'react'
 import { Image, Card, Button } from 'semantic-ui-react'
 import { Activity } from '../../../App/models/interfaces/activity'
 
 interface Props {
   activity: Activity
+  onDeselectActivity: () => void
 }
 
-function ActivityDetails({ activity }: Props) {
+function ActivityDetails({ activity, onDeselectActivity }: Props) {
+  const handleCancel = (event: React.MouseEvent) => {
+    event.preventDefault()
+    onDeselectActivity()
+  }
+
   return (
     <Card fluid>
       <Image src={`/assets/categoryImages/${activity.category}.jpg`} />
@@ -19,7 +26,7 @@ function ActivityDetails({ activity }: Props) {
       <Card.Content extra>
         <Button.Group widths='2'>
           <Button basic color='blue' content='Edit' />
-          <Button basic color='grey' content='Cancel' />
+          <Button basic color='grey' content='Cancel' onClick={handleCancel} />
         </Button.Group>
       </Card.Content>
     </Card>

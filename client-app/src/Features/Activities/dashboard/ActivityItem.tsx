@@ -3,9 +3,14 @@ import { Activity } from '../../../App/models/interfaces/activity'
 
 interface Props {
   activity: Activity
+  onSelectActivity: (activity: Activity) => void
 }
 
-function ActivityItem({ activity }: Props) {
+function ActivityItem({ activity, onSelectActivity }: Props) {
+  const handleClick = (event: React.MouseEvent) => {
+    event.preventDefault()
+    onSelectActivity(activity)
+  }
   return (
     <Item key={activity.id}>
       <Item.Content>
@@ -20,7 +25,12 @@ function ActivityItem({ activity }: Props) {
           </div>
         </Item.Description>
         <Item.Extra>
-          <Button floated='right' content='View' color='blue' />
+          <Button
+            floated='right'
+            content='View'
+            color='blue'
+            onClick={handleClick}
+          />
           <Label basic content={activity.category} />
         </Item.Extra>
       </Item.Content>

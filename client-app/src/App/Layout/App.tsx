@@ -15,6 +15,9 @@ const tap =
 
 function App() {
   const [activities, setActivities] = useState<Activity[]>([])
+  const [selectedActivity, setSelectedActivity] = useState<
+    Activity | undefined
+  >(undefined)
 
   useEffect(() => {
     axios
@@ -23,11 +26,24 @@ function App() {
       .then(tap((a) => console.log(a)))
       .then(setActivities)
   }, [])
+
+  const handleSelectActivity = (activity: Activity) => {
+    setSelectedActivity(activity)
+  }
+
+  const handleDeselectActivity = () => {
+    setSelectedActivity(undefined)
+  }
   return (
     <>
       <Navbar />
       <Container style={{ marginTop: '7em' }}>
-        <ActivityDashboard activities={activities} />
+        <ActivityDashboard
+          activities={activities}
+          selectedActivity={selectedActivity}
+          onSelectActivity={handleSelectActivity}
+          onDeselectActivity={handleDeselectActivity}
+        />
       </Container>
     </>
   )
