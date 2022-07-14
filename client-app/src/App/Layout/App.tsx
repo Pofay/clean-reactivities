@@ -3,6 +3,7 @@ import axios from 'axios'
 import 'semantic-ui-css/semantic.min.css'
 import { Header, List } from 'semantic-ui-react'
 import { Activity } from '../models/interfaces/activity'
+import Navbar from './Navbar'
 
 const tap =
   (f: (a: any) => void) =>
@@ -23,7 +24,7 @@ function App() {
   }, [])
   return (
     <div>
-      <Header as='h2' icon='users' content='Reactivities' />
+      <Navbar />
       <List>
         {activities.map((a) => (
           <List.Item key={a.id}>{a.title}</List.Item>
