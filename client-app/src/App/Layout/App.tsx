@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 import 'semantic-ui-css/semantic.min.css'
-import { Header, List } from 'semantic-ui-react'
+import { Container, List } from 'semantic-ui-react'
 import { Activity } from '../models/interfaces/activity'
 import Navbar from './Navbar'
 
@@ -23,14 +23,16 @@ function App() {
       .then(setActivities)
   }, [])
   return (
-    <div>
+    <>
       <Navbar />
-      <List>
-        {activities.map((a) => (
-          <List.Item key={a.id}>{a.title}</List.Item>
-        ))}
-      </List>
-    </div>
+      <Container style={{ marginTop: '7em' }}>
+        <List>
+          {activities.map((a) => (
+            <List.Item key={a.id}>{a.title}</List.Item>
+          ))}
+        </List>
+      </Container>
+    </>
   )
 }
 
