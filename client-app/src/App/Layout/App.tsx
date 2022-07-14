@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react'
-import './App.css'
 import axios from 'axios'
 import 'semantic-ui-css/semantic.min.css'
 import { Header, List } from 'semantic-ui-react'
+import { Activity } from '../models/interfaces/activity'
 
 const tap =
   (f: (a: any) => void) =>
@@ -12,11 +12,11 @@ const tap =
   }
 
 function App() {
-  const [activities, setActivities] = useState([])
+  const [activities, setActivities] = useState<Activity[]>([])
 
   useEffect(() => {
     axios
-      .get('http://localhost:5272/api/activities')
+      .get<Activity[]>('http://localhost:5272/api/activities')
       .then((res) => res.data)
       .then(tap((a) => console.log(a)))
       .then(setActivities)
@@ -25,7 +25,7 @@ function App() {
     <div>
       <Header as='h2' icon='users' content='Reactivities' />
       <List>
-        {activities.map((a: any) => (
+        {activities.map((a) => (
           <List.Item key={a.id}>{a.title}</List.Item>
         ))}
       </List>
