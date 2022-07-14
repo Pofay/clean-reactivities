@@ -3,6 +3,7 @@ import axios from 'axios'
 import 'semantic-ui-css/semantic.min.css'
 import { Container, List } from 'semantic-ui-react'
 import { Activity } from '../models/interfaces/activity'
+import ActivityDashboard from '../../Features/Activities/dashboard/ActivityDashboard'
 import Navbar from './Navbar'
 
 const tap =
@@ -26,11 +27,7 @@ function App() {
     <>
       <Navbar />
       <Container style={{ marginTop: '7em' }}>
-        <List>
-          {activities.map((a) => (
-            <List.Item key={a.id}>{a.title}</List.Item>
-          ))}
-        </List>
+        <ActivityDashboard activities={activities} />
       </Container>
     </>
   )
