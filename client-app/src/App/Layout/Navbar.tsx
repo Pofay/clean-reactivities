@@ -1,7 +1,15 @@
 import React from 'react'
 import { Button, Container, Menu } from 'semantic-ui-react'
+import { Activity } from '../models/interfaces/activity'
 
-export default function Navbar() {
+interface Props {
+  onCreateActivity: (activity?: Activity) => void
+}
+export default function Navbar(props: Props) {
+  const handleCreate = (event: React.MouseEvent) => {
+    event.preventDefault()
+    props.onCreateActivity()
+  }
   return (
     <Menu inverted fixed='top'>
       <Container>
@@ -15,7 +23,7 @@ export default function Navbar() {
         </Menu.Item>
         <Menu.Item name='Actitivies' />
         <Menu.Item>
-          <Button positive content='Create Activity' />
+          <Button positive content='Create Activity' onClick={handleCreate} />
         </Menu.Item>
       </Container>
     </Menu>

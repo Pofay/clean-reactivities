@@ -18,6 +18,7 @@ function App() {
   const [selectedActivity, setSelectedActivity] = useState<
     Activity | undefined
   >(undefined)
+  const [editMode, setEditMode] = useState(false)
 
   useEffect(() => {
     axios
@@ -34,15 +35,38 @@ function App() {
   const handleDeselectActivity = () => {
     setSelectedActivity(undefined)
   }
+
+  const handleSubmit = (activity: Activity) => {
+    if (activities.some((a) => a.id === activity.id)) {
+      const updatedActivities = activities.filter((a) => a.id !== activity.id)
+      setActivities(updatedActivities.concat(activity))
+    } else {
+      const updatedActivities = activities.concat(activity)
+      setActivities(updatedActivities)
+    }
+  }
+
+  const handleOpenForm = (activity?: Activity) => {
+    activity ? handleSelectActivity(activity) : handleDeselectActivity()
+    setEditMode(true)
+  }
+
+  const handleCloseForm = () => {
+    setEditMode(false)
+  }
   return (
     <>
-      <Navbar />
+      <Navbar onCreateActivity={handleOpenForm} />
       <Container style={{ marginTop: '7em' }}>
         <ActivityDashboard
           activities={activities}
           selectedActivity={selectedActivity}
+          editMode={editMode}
           onSelectActivity={handleSelectActivity}
           onDeselectActivity={handleDeselectActivity}
+          onSubmitActivity={handleSubmit}
+          onCloseForm={handleCloseForm}
+          onOpenForm={handleOpenForm}
         />
       </Container>
     </>

@@ -7,15 +7,23 @@ import ActivityList from './ActivityList'
 interface ActivityDashboardProps {
   activities: Activity[]
   selectedActivity: Activity | undefined
+  editMode: boolean
   onSelectActivity: (activity: Activity) => void
   onDeselectActivity: () => void
+  onSubmitActivity: (activity: Activity) => void
+  onOpenForm: (activity: Activity) => void
+  onCloseForm: () => void
 }
 
 function ActivityDashboard({
   activities,
   selectedActivity,
+  editMode,
   onSelectActivity,
   onDeselectActivity,
+  onSubmitActivity,
+  onOpenForm,
+  onCloseForm,
 }: ActivityDashboardProps) {
   return (
     <Grid>
@@ -26,13 +34,20 @@ function ActivityDashboard({
         />
       </Grid.Column>
       <Grid.Column width='6'>
-        {selectedActivity && (
+        {selectedActivity && !editMode && (
           <ActivityDetails
             activity={selectedActivity}
             onDeselectActivity={onDeselectActivity}
+            onEditActivity={onOpenForm}
           />
         )}
-        <ActivityForm />
+        {editMode && (
+          <ActivityForm
+            activity={selectedActivity}
+            onSubmit={onSubmitActivity}
+            onCancel={onCloseForm}
+          />
+        )}
       </Grid.Column>
     </Grid>
   )

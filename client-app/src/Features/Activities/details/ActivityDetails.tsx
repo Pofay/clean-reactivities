@@ -4,13 +4,23 @@ import { Activity } from '../../../App/models/interfaces/activity'
 
 interface Props {
   activity: Activity
+  onEditActivity: (activity: Activity) => void
   onDeselectActivity: () => void
 }
 
-function ActivityDetails({ activity, onDeselectActivity }: Props) {
+function ActivityDetails({
+  activity,
+  onDeselectActivity,
+  onEditActivity,
+}: Props) {
   const handleCancel = (event: React.MouseEvent) => {
     event.preventDefault()
     onDeselectActivity()
+  }
+
+  const handleClick = (event: React.MouseEvent) => {
+    event.preventDefault()
+    onEditActivity(activity)
   }
 
   return (
@@ -25,7 +35,7 @@ function ActivityDetails({ activity, onDeselectActivity }: Props) {
       </Card.Content>
       <Card.Content extra>
         <Button.Group widths='2'>
-          <Button basic color='blue' content='Edit' />
+          <Button basic color='blue' content='Edit' onClick={handleClick} />
           <Button basic color='grey' content='Cancel' onClick={handleCancel} />
         </Button.Group>
       </Card.Content>
