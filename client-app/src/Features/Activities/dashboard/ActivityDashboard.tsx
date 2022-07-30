@@ -35,6 +35,7 @@ function ActivityDashboard({
         <ActivityList
           activities={activities}
           deleteActivity={deleteActivity}
+          submitting={submitting}
           onSelectActivity={onSelectActivity}
         />
       </Grid.Column>
