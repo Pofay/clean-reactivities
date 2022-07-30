@@ -38,12 +38,15 @@ function App() {
 
   const handleSubmit = (activity: Activity) => {
     if (activities.some((a) => a.id === activity.id)) {
-      const updatedActivities = activities.filter((a) => a.id !== activity.id)
-      setActivities(updatedActivities.concat(activity))
+      setActivities([
+        ...activities.filter((a) => a.id !== activity.id),
+        activity,
+      ])
     } else {
-      const updatedActivities = activities.concat(activity)
-      setActivities(updatedActivities)
+      setActivities([...activities, activity])
     }
+    setEditMode(false)
+    setSelectedActivity(activity)
   }
 
   const handleOpenForm = (activity?: Activity) => {

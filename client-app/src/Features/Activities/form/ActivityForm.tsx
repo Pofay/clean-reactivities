@@ -24,7 +24,6 @@ function ActivityForm(props: Props) {
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault()
     props.onSubmit(activity)
-    props.onCancel()
   }
 
   const handleChange = (
