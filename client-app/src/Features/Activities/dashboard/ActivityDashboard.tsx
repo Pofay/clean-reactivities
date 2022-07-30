@@ -11,6 +11,7 @@ interface ActivityDashboardProps {
   onSelectActivity: (activity: Activity) => void
   onDeselectActivity: () => void
   onSubmitActivity: (activity: Activity) => void
+  deleteActivity: (id: string) => void
   onOpenForm: (activity: Activity) => void
   onCloseForm: () => void
 }
@@ -22,6 +23,7 @@ function ActivityDashboard({
   onSelectActivity,
   onDeselectActivity,
   onSubmitActivity,
+  deleteActivity,
   onOpenForm,
   onCloseForm,
 }: ActivityDashboardProps) {
@@ -30,6 +32,7 @@ function ActivityDashboard({
       <Grid.Column width='10'>
         <ActivityList
           activities={activities}
+          deleteActivity={deleteActivity}
           onSelectActivity={onSelectActivity}
         />
       </Grid.Column>

@@ -1,16 +1,24 @@
+import React from 'react'
 import { Button, Item, Label } from 'semantic-ui-react'
 import { Activity } from '../../../App/models/interfaces/activity'
 
 interface Props {
   activity: Activity
   onSelectActivity: (activity: Activity) => void
+  deleteActivity: (id: string) => void
 }
 
-function ActivityItem({ activity, onSelectActivity }: Props) {
-  const handleClick = (event: React.MouseEvent) => {
+function ActivityItem({ activity, onSelectActivity, deleteActivity }: Props) {
+  const handleSelectActivity = (event: React.MouseEvent) => {
     event.preventDefault()
     onSelectActivity(activity)
   }
+
+  const handleDeleteActivity = (event: React.MouseEvent) => {
+    event.preventDefault()
+    deleteActivity(activity.id)
+  }
+
   return (
     <Item key={activity.id}>
       <Item.Content>
@@ -29,7 +37,13 @@ function ActivityItem({ activity, onSelectActivity }: Props) {
             floated='right'
             content='View'
             color='blue'
-            onClick={handleClick}
+            onClick={handleSelectActivity}
+          />
+          <Button
+            floated='right'
+            content='Delete'
+            color='red'
+            onClick={handleDeleteActivity}
           />
           <Label basic content={activity.category} />
         </Item.Extra>

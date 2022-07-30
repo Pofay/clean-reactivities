@@ -50,6 +50,10 @@ function App() {
     setSelectedActivity(activity)
   }
 
+  const handleDeleteActivity = (id: string) => {
+    setActivities([...activities.filter((a) => a.id !== id)])
+  }
+
   const handleOpenForm = (activity?: Activity) => {
     activity ? handleSelectActivity(activity) : handleDeselectActivity()
     setEditMode(true)
@@ -69,6 +73,7 @@ function App() {
           onSelectActivity={handleSelectActivity}
           onDeselectActivity={handleDeselectActivity}
           onSubmitActivity={handleSubmit}
+          deleteActivity={handleDeleteActivity}
           onCloseForm={handleCloseForm}
           onOpenForm={handleOpenForm}
         />
