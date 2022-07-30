@@ -5,6 +5,7 @@ import { Container } from 'semantic-ui-react'
 import { Activity } from '../models/interfaces/activity'
 import ActivityDashboard from '../../Features/Activities/dashboard/ActivityDashboard'
 import Navbar from './Navbar'
+import { v4 as uuid } from 'uuid'
 
 const tap =
   (f: (a: any) => void) =>
@@ -43,7 +44,7 @@ function App() {
         activity,
       ])
     } else {
-      setActivities([...activities, activity])
+      setActivities([...activities, { ...activity, id: uuid() }])
     }
     setEditMode(false)
     setSelectedActivity(activity)
