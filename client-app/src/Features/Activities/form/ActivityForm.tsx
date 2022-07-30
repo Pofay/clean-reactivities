@@ -56,6 +56,7 @@ function ActivityForm(props: Props) {
         />
         <Form.Input
           placeholder='Date'
+          type='date'
           name='date'
           value={activity.date}
           onChange={handleChange}

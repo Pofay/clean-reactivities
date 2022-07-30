@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react'
-import axios from 'axios'
 import 'semantic-ui-css/semantic.min.css'
 import { Container } from 'semantic-ui-react'
 import { Activity } from '../models/interfaces/activity'
@@ -7,6 +6,8 @@ import ActivityDashboard from '../../Features/Activities/dashboard/ActivityDashb
 import Navbar from './Navbar'
 import { v4 as uuid } from 'uuid'
 import agent from '../api/agent'
+import { parseISO, format } from 'date-fns/fp'
+import { pipe } from 'fp-ts/lib/function'
 
 const tap =
   (f: (a: any) => void) =>
@@ -14,6 +15,15 @@ const tap =
     f(v)
     return v
   }
+
+const parseAndFormatISODateString = (isoDateString: string) =>
+  pipe(isoDateString, parseISO, format('yyyy-mm-dd'))
+
+const formatDates = (activities: Activity[]) =>
+  activities.map((a) => ({
+    ...a,
+    date: parseAndFormatISODateString(a.date),
+  }))
 
 function App() {
   const [activities, setActivities] = useState<Activity[]>([])
@@ -25,6 +35,7 @@ function App() {
   useEffect(() => {
     agent.Activities.list()
       .then(tap((a) => console.log(a)))
+      .then(formatDates)
       .then(setActivities)
   }, [])
 
