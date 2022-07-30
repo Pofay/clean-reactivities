@@ -1,7 +1,21 @@
 import axios, { AxiosResponse } from 'axios'
 import { Activity } from '../models/interfaces/activity'
 
+const sleep = (delay: number) =>
+  new Promise((resolve) => {
+    setTimeout(resolve, delay)
+  })
+
 axios.defaults.baseURL = 'http://localhost:5272/api'
+
+axios.interceptors.response.use((response) => {
+  return sleep(1000)
+    .then(() => response)
+    .catch((error) => {
+      console.error(error)
+      return Promise.reject(error)
+    })
+})
 
 const responseBody = <T>(response: AxiosResponse<T>) => response.data
 
