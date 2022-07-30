@@ -8,6 +8,7 @@ import { v4 as uuid } from 'uuid'
 import agent from '../api/agent'
 import { parseISO, format } from 'date-fns/fp'
 import { pipe } from 'fp-ts/lib/function'
+import LoadingComponent from './LoadingComponent'
 
 const tap =
   (f: (a: any) => void) =>
@@ -31,12 +32,14 @@ function App() {
     Activity | undefined
   >(undefined)
   const [editMode, setEditMode] = useState(false)
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     agent.Activities.list()
       .then(tap((a) => console.log(a)))
       .then(formatDates)
       .then(setActivities)
+      .then(() => setLoading(false))
   }, [])
 
   const handleSelectActivity = (activity: Activity) => {
@@ -72,6 +75,8 @@ function App() {
   const handleCloseForm = () => {
     setEditMode(false)
   }
+
+  if (loading) return <LoadingComponent content='Loading app' />
   return (
     <>
       <Navbar onCreateActivity={handleOpenForm} />
