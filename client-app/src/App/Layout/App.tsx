@@ -6,6 +6,7 @@ import { Activity } from '../models/interfaces/activity'
 import ActivityDashboard from '../../Features/Activities/dashboard/ActivityDashboard'
 import Navbar from './Navbar'
 import { v4 as uuid } from 'uuid'
+import agent from '../api/agent'
 
 const tap =
   (f: (a: any) => void) =>
@@ -22,9 +23,7 @@ function App() {
   const [editMode, setEditMode] = useState(false)
 
   useEffect(() => {
-    axios
-      .get<Activity[]>('http://localhost:5272/api/activities')
-      .then((res) => res.data)
+    agent.Activities.list()
       .then(tap((a) => console.log(a)))
       .then(setActivities)
   }, [])
