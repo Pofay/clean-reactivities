@@ -5,11 +5,13 @@ import ActivityItem from './ActivityItem'
 interface ActivityListProps {
   activities: Activity[]
   onSelectActivity: (activity: Activity) => void
+  submitting: boolean
   deleteActivity: (id: string) => void
 }
 function ActivityList({
   activities,
   onSelectActivity,
+  submitting,
   deleteActivity,
 }: ActivityListProps) {
   return (
@@ -19,6 +21,7 @@ function ActivityList({
           <ActivityItem
             onSelectActivity={onSelectActivity}
             deleteActivity={deleteActivity}
+            submitting={submitting}
             key={a.id}
             activity={a}
           />

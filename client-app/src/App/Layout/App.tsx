@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from 'react'
-import axios from 'axios'
 import 'semantic-ui-css/semantic.min.css'
 import { Container } from 'semantic-ui-react'
 import { Activity } from '../models/interfaces/activity'
 import ActivityDashboard from '../../Features/Activities/dashboard/ActivityDashboard'
 import Navbar from './Navbar'
 import { v4 as uuid } from 'uuid'
+import agent from '../api/agent'
+import { parseISO, format } from 'date-fns/fp'
+import { pipe } from 'fp-ts/lib/function'
+import LoadingComponent from './LoadingComponent'
 
 const tap =
   (f: (a: any) => void) =>
@@ -14,19 +17,30 @@ const tap =
     return v
   }
 
+const parseAndFormatISODateString = (isoDateString: string) =>
+  pipe(isoDateString, parseISO, format('yyyy-mm-dd'))
+
+const formatDates = (activities: Activity[]) =>
+  activities.map((a) => ({
+    ...a,
+    date: parseAndFormatISODateString(a.date),
+  }))
+
 function App() {
   const [activities, setActivities] = useState<Activity[]>([])
   const [selectedActivity, setSelectedActivity] = useState<
     Activity | undefined
   >(undefined)
   const [editMode, setEditMode] = useState(false)
+  const [loading, setLoading] = useState(true)
+  const [submitting, setSubmitting] = useState(false)
 
   useEffect(() => {
-    axios
-      .get<Activity[]>('http://localhost:5272/api/activities')
-      .then((res) => res.data)
+    agent.Activities.list()
       .then(tap((a) => console.log(a)))
+      .then(formatDates)
       .then(setActivities)
+      .then(() => setLoading(false))
   }, [])
 
   const handleSelectActivity = (activity: Activity) => {
@@ -38,20 +52,34 @@ function App() {
   }
 
   const handleSubmit = (activity: Activity) => {
+    setSubmitting(true)
     if (activities.some((a) => a.id === activity.id)) {
-      setActivities([
-        ...activities.filter((a) => a.id !== activity.id),
-        activity,
-      ])
+      agent.Activities.update(activity).then(() => {
+        setActivities([
+          ...activities.filter((a) => a.id !== activity.id),
+          activity,
+        ])
+        setEditMode(false)
+        setSelectedActivity(activity)
+        setSubmitting(false)
+      })
     } else {
-      setActivities([...activities, { ...activity, id: uuid() }])
+      const newActivity = { ...activity, id: uuid() }
+      agent.Activities.create(newActivity).then(() => {
+        setActivities([...activities, newActivity])
+        setEditMode(false)
+        setSelectedActivity(activity)
+        setSubmitting(false)
+      })
     }
-    setEditMode(false)
-    setSelectedActivity(activity)
   }
 
   const handleDeleteActivity = (id: string) => {
-    setActivities([...activities.filter((a) => a.id !== id)])
+    setSubmitting(true)
+    agent.Activities.delete(id).then(() => {
+      setActivities([...activities.filter((a) => a.id !== id)])
+      setSubmitting(false)
+    })
   }
 
   const handleOpenForm = (activity?: Activity) => {
@@ -62,6 +90,8 @@ function App() {
   const handleCloseForm = () => {
     setEditMode(false)
   }
+
+  if (loading) return <LoadingComponent content='Loading app' />
   return (
     <>
       <Navbar onCreateActivity={handleOpenForm} />
@@ -76,6 +106,7 @@ function App() {
           deleteActivity={handleDeleteActivity}
           onCloseForm={handleCloseForm}
           onOpenForm={handleOpenForm}
+          submitting={submitting}
         />
       </Container>
     </>

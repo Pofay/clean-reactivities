@@ -13,6 +13,7 @@ interface ActivityDashboardProps {
   onSubmitActivity: (activity: Activity) => void
   deleteActivity: (id: string) => void
   onOpenForm: (activity: Activity) => void
+  submitting: boolean
   onCloseForm: () => void
 }
 
@@ -25,6 +26,7 @@ function ActivityDashboard({
   onSubmitActivity,
   deleteActivity,
   onOpenForm,
+  submitting,
   onCloseForm,
 }: ActivityDashboardProps) {
   return (
@@ -33,6 +35,7 @@ function ActivityDashboard({
         <ActivityList
           activities={activities}
           deleteActivity={deleteActivity}
+          submitting={submitting}
           onSelectActivity={onSelectActivity}
         />
       </Grid.Column>
@@ -47,6 +50,7 @@ function ActivityDashboard({
         {editMode && (
           <ActivityForm
             activity={selectedActivity}
+            submitting={submitting}
             onSubmit={onSubmitActivity}
             onCancel={onCloseForm}
           />
