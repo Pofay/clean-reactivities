@@ -1,21 +1,33 @@
-import React from 'react'
+import React, { SyntheticEvent, useState } from 'react'
 import { Button, Item, Label } from 'semantic-ui-react'
 import { Activity } from '../../../App/models/interfaces/activity'
 
 interface Props {
   activity: Activity
   onSelectActivity: (activity: Activity) => void
+  submitting: boolean
   deleteActivity: (id: string) => void
 }
 
-function ActivityItem({ activity, onSelectActivity, deleteActivity }: Props) {
+function ActivityItem({
+  activity,
+  onSelectActivity,
+  submitting,
+  deleteActivity,
+}: Props) {
+  const [target, setTarget] = useState('')
+
   const handleSelectActivity = (event: React.MouseEvent) => {
     event.preventDefault()
     onSelectActivity(activity)
   }
 
-  const handleDeleteActivity = (event: React.MouseEvent) => {
+  const handleDeleteActivity = (
+    event: SyntheticEvent<HTMLButtonElement>,
+    id: string
+  ) => {
     event.preventDefault()
+    setTarget(event.currentTarget.name)
     deleteActivity(activity.id)
   }
 
@@ -40,10 +52,12 @@ function ActivityItem({ activity, onSelectActivity, deleteActivity }: Props) {
             onClick={handleSelectActivity}
           />
           <Button
+            name={activity.id}
             floated='right'
             content='Delete'
             color='red'
-            onClick={handleDeleteActivity}
+            loading={submitting && target === activity.id}
+            onClick={(e) => handleDeleteActivity(e, activity.id)}
           />
           <Label basic content={activity.category} />
         </Item.Extra>
