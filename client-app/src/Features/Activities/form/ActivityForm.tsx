@@ -4,6 +4,7 @@ import { Activity } from '../../../App/models/interfaces/activity'
 
 interface Props {
   activity: Activity | undefined
+  submitting: boolean
   onSubmit: (activity: Activity) => void
   onCancel: () => void
 }
@@ -40,18 +41,21 @@ function ActivityForm(props: Props) {
           placeholder='Title'
           name='title'
           value={activity.title}
+          required={true}
           onChange={handleChange}
         />
         <Form.TextArea
           placeholder='Description'
           name='description'
           value={activity.description}
+          required={true}
           onChange={handleChange}
         />
         <Form.Input
           placeholder='Category'
           name='category'
           value={activity.category}
+          required={true}
           onChange={handleChange}
         />
         <Form.Input
@@ -59,21 +63,30 @@ function ActivityForm(props: Props) {
           type='date'
           name='date'
           value={activity.date}
+          required={true}
           onChange={handleChange}
         />
         <Form.Input
           placeholder='City'
           name='city'
           value={activity.city}
+          required={true}
           onChange={handleChange}
         />
         <Form.Input
           placeholder='Venue'
           name='venue'
           value={activity.venue}
+          required={true}
           onChange={handleChange}
         />
-        <Button floated='right' positive type='submit' content='Submit' />
+        <Button
+          loading={props.submitting}
+          floated='right'
+          positive
+          type='submit'
+          content='Submit'
+        />
         <Button
           floated='right'
           type='button'
