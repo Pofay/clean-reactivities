@@ -1,27 +1,22 @@
 import React from 'react'
 import { Image, Card, Button } from 'semantic-ui-react'
-import { Activity } from '../../../App/models/interfaces/activity'
+import { useStore } from '../../../App/stores/store'
 
-interface Props {
-  activity: Activity
-  onEditActivity: (activity: Activity) => void
-  onDeselectActivity: () => void
-}
+function ActivityDetails() {
+  const { activityStore } = useStore()
+  const { selectedActivity: activity } = activityStore
 
-function ActivityDetails({
-  activity,
-  onDeselectActivity,
-  onEditActivity,
-}: Props) {
   const handleCancel = (event: React.MouseEvent) => {
     event.preventDefault()
-    onDeselectActivity()
+    activityStore.deselectActivity()
   }
 
   const handleClick = (event: React.MouseEvent) => {
     event.preventDefault()
-    onEditActivity(activity)
+    activityStore.openForm(activity)
   }
+
+  if (!activity) return <></>
 
   return (
     <Card fluid>

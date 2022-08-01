@@ -1,14 +1,12 @@
 import React from 'react'
 import { Button, Container, Menu } from 'semantic-ui-react'
-import { Activity } from '../models/interfaces/activity'
+import { useStore } from '../stores/store'
 
-interface Props {
-  onCreateActivity: (activity?: Activity) => void
-}
-export default function Navbar(props: Props) {
+export default function Navbar() {
+  const { activityStore } = useStore()
   const handleCreate = (event: React.MouseEvent) => {
     event.preventDefault()
-    props.onCreateActivity()
+    activityStore.openForm()
   }
   return (
     <Menu inverted fixed='top'>

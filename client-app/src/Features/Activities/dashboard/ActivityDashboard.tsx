@@ -1,63 +1,34 @@
+import { observer } from 'mobx-react-lite'
 import { Grid } from 'semantic-ui-react'
 import { Activity } from '../../../App/models/interfaces/activity'
+import { useStore } from '../../../App/stores/store'
 import ActivityDetails from '../details/ActivityDetails'
 import ActivityForm from '../form/ActivityForm'
 import ActivityList from './ActivityList'
 
-interface ActivityDashboardProps {
-  activities: Activity[]
-  selectedActivity: Activity | undefined
-  editMode: boolean
-  onSelectActivity: (activity: Activity) => void
-  onDeselectActivity: () => void
-  onSubmitActivity: (activity: Activity) => void
-  deleteActivity: (id: string) => void
-  onOpenForm: (activity: Activity) => void
-  submitting: boolean
-  onCloseForm: () => void
-}
+function ActivityDashboard() {
+  const { activityStore } = useStore()
+  const { selectedActivity, editMode } = activityStore
 
-function ActivityDashboard({
-  activities,
-  selectedActivity,
-  editMode,
-  onSelectActivity,
-  onDeselectActivity,
-  onSubmitActivity,
-  deleteActivity,
-  onOpenForm,
-  submitting,
-  onCloseForm,
-}: ActivityDashboardProps) {
+  const handleSubmit = (activity: Activity) => {
+    if (activityStore.getActivitiesByDate().some((a) => a.id === activity.id)) {
+      activityStore.updateActivity(activity)
+    } else {
+      activityStore.createActivity(activity)
+    }
+  }
+
   return (
     <Grid>
       <Grid.Column width='10'>
-        <ActivityList
-          activities={activities}
-          deleteActivity={deleteActivity}
-          submitting={submitting}
-          onSelectActivity={onSelectActivity}
-        />
+        <ActivityList />
       </Grid.Column>
       <Grid.Column width='6'>
-        {selectedActivity && !editMode && (
-          <ActivityDetails
-            activity={selectedActivity}
-            onDeselectActivity={onDeselectActivity}
-            onEditActivity={onOpenForm}
-          />
-        )}
-        {editMode && (
-          <ActivityForm
-            activity={selectedActivity}
-            submitting={submitting}
-            onSubmit={onSubmitActivity}
-            onCancel={onCloseForm}
-          />
-        )}
+        {selectedActivity && !editMode && <ActivityDetails />}
+        {editMode && <ActivityForm onSubmit={handleSubmit} />}
       </Grid.Column>
     </Grid>
   )
 }
 
-export default ActivityDashboard
+export default observer(ActivityDashboard)

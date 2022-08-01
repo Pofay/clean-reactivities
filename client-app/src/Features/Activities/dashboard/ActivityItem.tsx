@@ -4,22 +4,22 @@ import { Activity } from '../../../App/models/interfaces/activity'
 
 interface Props {
   activity: Activity
-  onSelectActivity: (activity: Activity) => void
-  submitting: boolean
+  onSelectActivity: (id: string) => void
+  loading: boolean
   deleteActivity: (id: string) => void
 }
 
 function ActivityItem({
   activity,
   onSelectActivity,
-  submitting,
+  loading,
   deleteActivity,
 }: Props) {
   const [target, setTarget] = useState('')
 
   const handleSelectActivity = (event: React.MouseEvent) => {
     event.preventDefault()
-    onSelectActivity(activity)
+    onSelectActivity(activity.id)
   }
 
   const handleDeleteActivity = (
@@ -56,7 +56,7 @@ function ActivityItem({
             floated='right'
             content='Delete'
             color='red'
-            loading={submitting && target === activity.id}
+            loading={loading && target === activity.id}
             onClick={(e) => handleDeleteActivity(e, activity.id)}
           />
           <Label basic content={activity.category} />
