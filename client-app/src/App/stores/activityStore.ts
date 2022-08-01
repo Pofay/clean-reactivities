@@ -15,7 +15,7 @@ const formatDates = (activities: Activity[]) =>
 
 export default class ActivityStore {
   activities: Activity[] = []
-  selectedActivity: Activity | null = null
+  selectedActivity: Activity | undefined = undefined
   editMode = false
   loading = false
   loadingInitial = false
@@ -43,5 +43,26 @@ export default class ActivityStore {
 
   setLoadingInitial = (state: boolean) => {
     this.loadingInitial = state
+  }
+
+  selectActivity = (id: string) => {
+    this.selectedActivity = this.activities.find((a) => a.id === id)
+  }
+
+  deselectActivity = () => {
+    this.selectedActivity = undefined
+  }
+
+  setEditMode = (state: boolean) => {
+    this.editMode = state
+  }
+
+  openForm = (activity?: Activity) => {
+    activity ? this.selectActivity(activity.id) : this.deselectActivity()
+    this.setEditMode(true)
+  }
+
+  closeForm = () => {
+    this.setEditMode(false)
   }
 }

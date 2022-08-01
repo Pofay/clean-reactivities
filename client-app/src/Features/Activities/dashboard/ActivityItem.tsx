@@ -4,7 +4,7 @@ import { Activity } from '../../../App/models/interfaces/activity'
 
 interface Props {
   activity: Activity
-  onSelectActivity: (activity: Activity) => void
+  onSelectActivity: (id: string) => void
   submitting: boolean
   deleteActivity: (id: string) => void
 }
@@ -19,7 +19,7 @@ function ActivityItem({
 
   const handleSelectActivity = (event: React.MouseEvent) => {
     event.preventDefault()
-    onSelectActivity(activity)
+    onSelectActivity(activity.id)
   }
 
   const handleDeleteActivity = (

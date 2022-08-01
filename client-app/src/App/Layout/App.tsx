@@ -23,14 +23,6 @@ function App() {
     activityStore.loadActivities()
   }, [activityStore])
 
-  const handleSelectActivity = (activity: Activity) => {
-    setSelectedActivity(activity)
-  }
-
-  const handleDeselectActivity = () => {
-    setSelectedActivity(undefined)
-  }
-
   const handleSubmit = (activity: Activity) => {
     setSubmitting(true)
     if (activities.some((a) => a.id === activity.id)) {
@@ -62,31 +54,17 @@ function App() {
     })
   }
 
-  const handleOpenForm = (activity?: Activity) => {
-    activity ? handleSelectActivity(activity) : handleDeselectActivity()
-    setEditMode(true)
-  }
-
-  const handleCloseForm = () => {
-    setEditMode(false)
-  }
-
   if (activityStore.loadingInitial)
     return <LoadingComponent content='Loading app' />
+
   return (
     <>
-      <Navbar onCreateActivity={handleOpenForm} />
+      <Navbar />
       <Container style={{ marginTop: '7em' }}>
         <ActivityDashboard
           activities={activityStore.activities}
-          selectedActivity={selectedActivity}
-          editMode={editMode}
-          onSelectActivity={handleSelectActivity}
-          onDeselectActivity={handleDeselectActivity}
           onSubmitActivity={handleSubmit}
           deleteActivity={handleDeleteActivity}
-          onCloseForm={handleCloseForm}
-          onOpenForm={handleOpenForm}
           submitting={submitting}
         />
       </Container>

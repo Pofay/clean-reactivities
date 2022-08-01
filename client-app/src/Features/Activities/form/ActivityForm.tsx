@@ -1,17 +1,19 @@
 import React, { ChangeEvent, useState } from 'react'
 import { Button, Form, Segment } from 'semantic-ui-react'
 import { Activity } from '../../../App/models/interfaces/activity'
+import { useStore } from '../../../App/stores/store'
 
 interface Props {
-  activity: Activity | undefined
   submitting: boolean
   onSubmit: (activity: Activity) => void
-  onCancel: () => void
 }
 
 function ActivityForm(props: Props) {
+  const { activityStore } = useStore()
+  const { selectedActivity, closeForm } = activityStore
+
   const [activity, setActivity] = useState<Activity>(
-    props.activity ?? {
+    selectedActivity ?? {
       id: '',
       title: '',
       date: '',
@@ -91,7 +93,7 @@ function ActivityForm(props: Props) {
           floated='right'
           type='button'
           content='Cancel'
-          onClick={props.onCancel}
+          onClick={closeForm}
         />
       </Form>
     </Segment>
