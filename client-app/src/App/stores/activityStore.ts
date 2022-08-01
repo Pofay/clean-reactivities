@@ -15,7 +15,7 @@ const formatDates = (activities: Activity[]) =>
   }))
 
 export default class ActivityStore {
-  activities: Activity[] = []
+  activityRegistry = new Map<string, Activity>()
   selectedActivity: Activity | undefined = undefined
   editMode = false
   loading = false
@@ -23,6 +23,12 @@ export default class ActivityStore {
 
   constructor() {
     makeAutoObservable(this)
+  }
+
+  getActivitiesByDate = () => {
+    return Array.from(this.activityRegistry.values()).sort(
+      (a, b) => Date.parse(a.date) - Date.parse(b.date)
+    )
   }
 
   loadActivities = async () => {
@@ -39,7 +45,9 @@ export default class ActivityStore {
   }
 
   setActivities = (activities: Activity[]) => {
-    this.activities = activities
+    activities.forEach((a) => {
+      this.activityRegistry.set(a.id, a)
+    })
   }
 
   setLoadingInitial = (state: boolean) => {
@@ -47,7 +55,7 @@ export default class ActivityStore {
   }
 
   selectActivity = (id: string) => {
-    this.selectedActivity = this.activities.find((a) => a.id === id)
+    this.selectedActivity = this.activityRegistry.get(id)
   }
 
   deselectActivity = () => {
@@ -79,7 +87,7 @@ export default class ActivityStore {
   }
 
   addActivity = (activity: Activity) => {
-    this.activities = this.activities.concat(activity)
+    this.activityRegistry.set(activity.id, activity)
   }
 
   updateActivity = async (activity: Activity) => {
@@ -87,10 +95,7 @@ export default class ActivityStore {
     try {
       await agent.Activities.update(activity)
       runInAction(() => {
-        this.activities = [
-          ...this.activities.filter((a) => a.id !== activity.id),
-          activity,
-        ]
+        this.addActivity(activity)
         this.setEditMode(false)
         this.selectActivity(activity.id)
         this.setLoading(false)
@@ -106,7 +111,7 @@ export default class ActivityStore {
     try {
       await agent.Activities.delete(id)
       runInAction(() => {
-        this.activities = [...this.activities.filter((a) => a.id !== id)]
+        this.activityRegistry.delete(id)
         this.setLoading(false)
         this.deselectActivity()
       })

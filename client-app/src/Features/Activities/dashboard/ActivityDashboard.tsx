@@ -11,7 +11,7 @@ function ActivityDashboard() {
   const { selectedActivity, editMode } = activityStore
 
   const handleSubmit = (activity: Activity) => {
-    if (activityStore.activities.some((a) => a.id === activity.id)) {
+    if (activityStore.getActivitiesByDate().some((a) => a.id === activity.id)) {
       activityStore.updateActivity(activity)
     } else {
       activityStore.createActivity(activity)
