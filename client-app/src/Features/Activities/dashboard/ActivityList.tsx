@@ -1,19 +1,13 @@
 import { Item, Segment } from 'semantic-ui-react'
-import { Activity } from '../../../App/models/interfaces/activity'
 import { useStore } from '../../../App/stores/store'
 import ActivityItem from './ActivityItem'
 
 interface ActivityListProps {
-  activities: Activity[]
-  submitting: boolean
   deleteActivity: (id: string) => void
 }
-function ActivityList({
-  activities,
-  submitting,
-  deleteActivity,
-}: ActivityListProps) {
+function ActivityList({ deleteActivity }: ActivityListProps) {
   const { activityStore } = useStore()
+  const { loading, activities } = activityStore
 
   return (
     <Segment>
@@ -22,7 +16,7 @@ function ActivityList({
           <ActivityItem
             onSelectActivity={activityStore.selectActivity}
             deleteActivity={deleteActivity}
-            submitting={submitting}
+            loading={loading}
             key={a.id}
             activity={a}
           />

@@ -1,8 +1,9 @@
 import { format, parseISO } from 'date-fns/fp'
 import { pipe } from 'fp-ts/lib/function'
-import { makeAutoObservable } from 'mobx'
+import { makeAutoObservable, runInAction } from 'mobx'
 import agent from '../api/agent'
 import { Activity } from '../models/interfaces/activity'
+import { v4 as uuid } from 'uuid'
 
 const parseAndFormatISODateString = (isoDateString: string) =>
   pipe(isoDateString, parseISO, format('yyyy-mm-dd'))
@@ -60,6 +61,48 @@ export default class ActivityStore {
   openForm = (activity?: Activity) => {
     activity ? this.selectActivity(activity.id) : this.deselectActivity()
     this.setEditMode(true)
+  }
+
+  createActivity = async (activity: Activity) => {
+    this.setLoading(true)
+    const newActivity = { ...activity, id: uuid() }
+    try {
+      await agent.Activities.create(newActivity)
+      this.addActivity(newActivity)
+      this.setEditMode(false)
+      this.selectActivity(newActivity.id)
+      this.setLoading(false)
+    } catch (error) {
+      console.error(error)
+      this.setLoading(false)
+    }
+  }
+
+  addActivity = (activity: Activity) => {
+    this.activities = this.activities.concat(activity)
+  }
+
+  updateActivity = async (activity: Activity) => {
+    this.setLoading(true)
+    try {
+      await agent.Activities.update(activity)
+      runInAction(() => {
+        this.activities = [
+          ...this.activities.filter((a) => a.id !== activity.id),
+          activity,
+        ]
+        this.setEditMode(false)
+        this.selectActivity(activity.id)
+        this.setLoading(false)
+      })
+    } catch (error) {
+      console.error(error)
+      this.setLoading(false)
+    }
+  }
+
+  setLoading = (state: boolean) => {
+    this.loading = state
   }
 
   closeForm = () => {

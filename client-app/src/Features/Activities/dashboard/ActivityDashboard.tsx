@@ -10,31 +10,23 @@ interface ActivityDashboardProps {
   activities: Activity[]
   onSubmitActivity: (activity: Activity) => void
   deleteActivity: (id: string) => void
-  submitting: boolean
 }
 
 function ActivityDashboard({
   activities,
   onSubmitActivity,
   deleteActivity,
-  submitting,
 }: ActivityDashboardProps) {
   const { activityStore } = useStore()
   const { selectedActivity, editMode } = activityStore
   return (
     <Grid>
       <Grid.Column width='10'>
-        <ActivityList
-          activities={activities}
-          deleteActivity={deleteActivity}
-          submitting={submitting}
-        />
+        <ActivityList deleteActivity={deleteActivity} />
       </Grid.Column>
       <Grid.Column width='6'>
         {selectedActivity && !editMode && <ActivityDetails />}
-        {editMode && (
-          <ActivityForm submitting={submitting} onSubmit={onSubmitActivity} />
-        )}
+        {editMode && <ActivityForm onSubmit={onSubmitActivity} />}
       </Grid.Column>
     </Grid>
   )

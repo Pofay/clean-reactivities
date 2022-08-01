@@ -1,16 +1,16 @@
+import { observer } from 'mobx-react-lite'
 import React, { ChangeEvent, useState } from 'react'
 import { Button, Form, Segment } from 'semantic-ui-react'
 import { Activity } from '../../../App/models/interfaces/activity'
 import { useStore } from '../../../App/stores/store'
 
 interface Props {
-  submitting: boolean
   onSubmit: (activity: Activity) => void
 }
 
 function ActivityForm(props: Props) {
   const { activityStore } = useStore()
-  const { selectedActivity, closeForm } = activityStore
+  const { selectedActivity, loading, closeForm } = activityStore
 
   const [activity, setActivity] = useState<Activity>(
     selectedActivity ?? {
@@ -88,7 +88,7 @@ function ActivityForm(props: Props) {
           onChange={handleChange}
         />
         <Button
-          loading={props.submitting}
+          loading={loading}
           floated='right'
           positive
           type='submit'
@@ -105,4 +105,4 @@ function ActivityForm(props: Props) {
   )
 }
 
-export default ActivityForm
+export default observer(ActivityForm)

@@ -13,19 +13,18 @@ import { observer } from 'mobx-react-lite'
 function App() {
   const { activityStore } = useStore()
   const [activities, setActivities] = useState<Activity[]>([])
-  const [selectedActivity, setSelectedActivity] = useState<
-    Activity | undefined
-  >(undefined)
-  const [editMode, setEditMode] = useState(false)
-  const [submitting, setSubmitting] = useState(false)
 
   useEffect(() => {
     activityStore.loadActivities()
   }, [activityStore])
 
   const handleSubmit = (activity: Activity) => {
-    setSubmitting(true)
-    if (activities.some((a) => a.id === activity.id)) {
+    if (activityStore.activities.some((a) => a.id === activity.id)) {
+      activityStore.updateActivity(activity)
+    } else {
+      activityStore.createActivity(activity)
+    }
+    /* if (activities.some((a) => a.id === activity.id)) {
       agent.Activities.update(activity).then(() => {
         setActivities([
           ...activities.filter((a) => a.id !== activity.id),
@@ -43,14 +42,12 @@ function App() {
         setSelectedActivity(activity)
         setSubmitting(false)
       })
-    }
+    } */
   }
 
   const handleDeleteActivity = (id: string) => {
-    setSubmitting(true)
     agent.Activities.delete(id).then(() => {
       setActivities([...activities.filter((a) => a.id !== id)])
-      setSubmitting(false)
     })
   }
 
@@ -65,7 +62,6 @@ function App() {
           activities={activityStore.activities}
           onSubmitActivity={handleSubmit}
           deleteActivity={handleDeleteActivity}
-          submitting={submitting}
         />
       </Container>
     </>
