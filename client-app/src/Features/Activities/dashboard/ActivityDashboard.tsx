@@ -9,20 +9,18 @@ import ActivityList from './ActivityList'
 interface ActivityDashboardProps {
   activities: Activity[]
   onSubmitActivity: (activity: Activity) => void
-  deleteActivity: (id: string) => void
 }
 
 function ActivityDashboard({
   activities,
   onSubmitActivity,
-  deleteActivity,
 }: ActivityDashboardProps) {
   const { activityStore } = useStore()
   const { selectedActivity, editMode } = activityStore
   return (
     <Grid>
       <Grid.Column width='10'>
-        <ActivityList deleteActivity={deleteActivity} />
+        <ActivityList />
       </Grid.Column>
       <Grid.Column width='6'>
         {selectedActivity && !editMode && <ActivityDetails />}

@@ -1,13 +1,11 @@
+import { observer } from 'mobx-react-lite'
 import { Item, Segment } from 'semantic-ui-react'
 import { useStore } from '../../../App/stores/store'
 import ActivityItem from './ActivityItem'
 
-interface ActivityListProps {
-  deleteActivity: (id: string) => void
-}
-function ActivityList({ deleteActivity }: ActivityListProps) {
+function ActivityList() {
   const { activityStore } = useStore()
-  const { loading, activities } = activityStore
+  const { loading, activities, deleteActivity } = activityStore
 
   return (
     <Segment>
@@ -26,4 +24,4 @@ function ActivityList({ deleteActivity }: ActivityListProps) {
   )
 }
 
-export default ActivityList
+export default observer(ActivityList)

@@ -1,17 +1,15 @@
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import 'semantic-ui-css/semantic.min.css'
 import { Container } from 'semantic-ui-react'
 import { Activity } from '../models/interfaces/activity'
 import ActivityDashboard from '../../Features/Activities/dashboard/ActivityDashboard'
 import Navbar from './Navbar'
-import agent from '../api/agent'
 import LoadingComponent from './LoadingComponent'
 import { useStore } from '../stores/store'
 import { observer } from 'mobx-react-lite'
 
 function App() {
   const { activityStore } = useStore()
-  const [activities, setActivities] = useState<Activity[]>([])
 
   useEffect(() => {
     activityStore.loadActivities()
@@ -25,12 +23,6 @@ function App() {
     }
   }
 
-  const handleDeleteActivity = (id: string) => {
-    agent.Activities.delete(id).then(() => {
-      setActivities([...activities.filter((a) => a.id !== id)])
-    })
-  }
-
   if (activityStore.loadingInitial)
     return <LoadingComponent content='Loading app' />
 
@@ -41,7 +33,6 @@ function App() {
         <ActivityDashboard
           activities={activityStore.activities}
           onSubmitActivity={handleSubmit}
-          deleteActivity={handleDeleteActivity}
         />
       </Container>
     </>

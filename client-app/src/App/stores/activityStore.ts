@@ -101,6 +101,20 @@ export default class ActivityStore {
     }
   }
 
+  deleteActivity = async (id: string) => {
+    this.setLoading(true)
+    try {
+      await agent.Activities.delete(id)
+      runInAction(() => {
+        this.activities = [...this.activities.filter((a) => a.id !== id)]
+        this.setLoading(false)
+      })
+    } catch (error) {
+      console.error(error)
+      this.setLoading(false)
+    }
+  }
+
   setLoading = (state: boolean) => {
     this.loading = state
   }
