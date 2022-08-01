@@ -108,6 +108,7 @@ export default class ActivityStore {
       runInAction(() => {
         this.activities = [...this.activities.filter((a) => a.id !== id)]
         this.setLoading(false)
+        this.deselectActivity()
       })
     } catch (error) {
       console.error(error)
