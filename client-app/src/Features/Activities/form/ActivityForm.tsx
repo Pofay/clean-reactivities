@@ -29,6 +29,11 @@ function ActivityForm(props: Props) {
     props.onSubmit(activity)
   }
 
+  const handleClose = (event: React.SyntheticEvent) => {
+    event.preventDefault()
+    closeForm()
+  }
+
   const handleChange = (
     event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
@@ -93,7 +98,7 @@ function ActivityForm(props: Props) {
           floated='right'
           type='button'
           content='Cancel'
-          onClick={closeForm}
+          onClick={handleClose}
         />
       </Form>
     </Segment>

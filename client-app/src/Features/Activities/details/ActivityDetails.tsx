@@ -4,11 +4,11 @@ import { useStore } from '../../../App/stores/store'
 
 function ActivityDetails() {
   const { activityStore } = useStore()
-
   const { selectedActivity: activity } = activityStore
+
   const handleCancel = (event: React.MouseEvent) => {
     event.preventDefault()
-    activityStore.closeForm()
+    activityStore.deselectActivity()
   }
 
   const handleClick = (event: React.MouseEvent) => {
