@@ -6,17 +6,18 @@ import ActivityDetails from '../details/ActivityDetails'
 import ActivityForm from '../form/ActivityForm'
 import ActivityList from './ActivityList'
 
-interface ActivityDashboardProps {
-  activities: Activity[]
-  onSubmitActivity: (activity: Activity) => void
-}
-
-function ActivityDashboard({
-  activities,
-  onSubmitActivity,
-}: ActivityDashboardProps) {
+function ActivityDashboard() {
   const { activityStore } = useStore()
   const { selectedActivity, editMode } = activityStore
+
+  const handleSubmit = (activity: Activity) => {
+    if (activityStore.activities.some((a) => a.id === activity.id)) {
+      activityStore.updateActivity(activity)
+    } else {
+      activityStore.createActivity(activity)
+    }
+  }
+
   return (
     <Grid>
       <Grid.Column width='10'>
@@ -24,7 +25,7 @@ function ActivityDashboard({
       </Grid.Column>
       <Grid.Column width='6'>
         {selectedActivity && !editMode && <ActivityDetails />}
-        {editMode && <ActivityForm onSubmit={onSubmitActivity} />}
+        {editMode && <ActivityForm onSubmit={handleSubmit} />}
       </Grid.Column>
     </Grid>
   )
