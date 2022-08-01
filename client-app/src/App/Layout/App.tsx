@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import 'semantic-ui-css/semantic.min.css'
 import { Container } from 'semantic-ui-react'
 import { Activity } from '../models/interfaces/activity'
@@ -6,42 +6,22 @@ import ActivityDashboard from '../../Features/Activities/dashboard/ActivityDashb
 import Navbar from './Navbar'
 import { v4 as uuid } from 'uuid'
 import agent from '../api/agent'
-import { parseISO, format } from 'date-fns/fp'
-import { pipe } from 'fp-ts/lib/function'
 import LoadingComponent from './LoadingComponent'
-
-const tap =
-  (f: (a: any) => void) =>
-  (v: any): any => {
-    f(v)
-    return v
-  }
-
-const parseAndFormatISODateString = (isoDateString: string) =>
-  pipe(isoDateString, parseISO, format('yyyy-mm-dd'))
-
-const formatDates = (activities: Activity[]) =>
-  activities.map((a) => ({
-    ...a,
-    date: parseAndFormatISODateString(a.date),
-  }))
+import { useStore } from '../stores/store'
+import { observer } from 'mobx-react-lite'
 
 function App() {
+  const { activityStore } = useStore()
   const [activities, setActivities] = useState<Activity[]>([])
   const [selectedActivity, setSelectedActivity] = useState<
     Activity | undefined
   >(undefined)
   const [editMode, setEditMode] = useState(false)
-  const [loading, setLoading] = useState(true)
   const [submitting, setSubmitting] = useState(false)
 
   useEffect(() => {
-    agent.Activities.list()
-      .then(tap((a) => console.log(a)))
-      .then(formatDates)
-      .then(setActivities)
-      .then(() => setLoading(false))
-  }, [])
+    activityStore.loadActivities()
+  }, [activityStore])
 
   const handleSelectActivity = (activity: Activity) => {
     setSelectedActivity(activity)
@@ -91,13 +71,14 @@ function App() {
     setEditMode(false)
   }
 
-  if (loading) return <LoadingComponent content='Loading app' />
+  if (activityStore.loadingInitial)
+    return <LoadingComponent content='Loading app' />
   return (
     <>
       <Navbar onCreateActivity={handleOpenForm} />
       <Container style={{ marginTop: '7em' }}>
         <ActivityDashboard
-          activities={activities}
+          activities={activityStore.activities}
           selectedActivity={selectedActivity}
           editMode={editMode}
           onSelectActivity={handleSelectActivity}
@@ -113,4 +94,4 @@ function App() {
   )
 }
 
-export default App
+export default observer(App)
