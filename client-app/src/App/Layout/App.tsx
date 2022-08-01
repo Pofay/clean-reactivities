@@ -4,7 +4,6 @@ import { Container } from 'semantic-ui-react'
 import { Activity } from '../models/interfaces/activity'
 import ActivityDashboard from '../../Features/Activities/dashboard/ActivityDashboard'
 import Navbar from './Navbar'
-import { v4 as uuid } from 'uuid'
 import agent from '../api/agent'
 import LoadingComponent from './LoadingComponent'
 import { useStore } from '../stores/store'
@@ -24,25 +23,6 @@ function App() {
     } else {
       activityStore.createActivity(activity)
     }
-    /* if (activities.some((a) => a.id === activity.id)) {
-      agent.Activities.update(activity).then(() => {
-        setActivities([
-          ...activities.filter((a) => a.id !== activity.id),
-          activity,
-        ])
-        setEditMode(false)
-        setSelectedActivity(activity)
-        setSubmitting(false)
-      })
-    } else {
-      const newActivity = { ...activity, id: uuid() }
-      agent.Activities.create(newActivity).then(() => {
-        setActivities([...activities, newActivity])
-        setEditMode(false)
-        setSelectedActivity(activity)
-        setSubmitting(false)
-      })
-    } */
   }
 
   const handleDeleteActivity = (id: string) => {
