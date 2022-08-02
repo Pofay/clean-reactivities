@@ -1,22 +1,27 @@
-import React from 'react'
-import { Image, Card, Button } from 'semantic-ui-react'
-import { useStore } from '../../../App/stores/store'
+import { observer } from 'mobx-react-lite';
+import React, { useEffect } from 'react';
+import { useParams } from 'react-router-dom';
+import { Image, Card, Button } from 'semantic-ui-react';
+import LoadingComponent from '../../../App/Layout/LoadingComponent';
+import { useStore } from '../../../App/stores/store';
 
 function ActivityDetails() {
-  const { activityStore } = useStore()
-  const { selectedActivity: activity } = activityStore
+  const { activityStore } = useStore();
+  const { id } = useParams<{ id: string }>();
+  const { selectedActivity: activity } = activityStore;
+  useEffect(() => {
+    if (id) activityStore.loadActivity(id);
+  }, [id, activityStore]);
 
   const handleCancel = (event: React.MouseEvent) => {
-    event.preventDefault()
-    activityStore.deselectActivity()
-  }
+    event.preventDefault();
+  };
 
   const handleClick = (event: React.MouseEvent) => {
-    event.preventDefault()
-    activityStore.openForm(activity)
-  }
+    event.preventDefault();
+  };
 
-  if (!activity) return <></>
+  if (!activity) return <LoadingComponent content="Loading Specific Activity"/>
 
   return (
     <Card fluid>
@@ -35,7 +40,7 @@ function ActivityDetails() {
         </Button.Group>
       </Card.Content>
     </Card>
-  )
+  );
 }
 
-export default ActivityDetails
+export default observer(ActivityDetails);

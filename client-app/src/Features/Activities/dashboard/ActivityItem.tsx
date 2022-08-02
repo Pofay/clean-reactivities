@@ -40,7 +40,7 @@ function ActivityItem({
         </Item.Description>
         <Item.Extra>
           <Button
-            as={Link} to={`/activities${activity.id}`}
+            as={Link} to={`/activities/${activity.id}`}
             floated='right'
             content='View'
             color='blue'
