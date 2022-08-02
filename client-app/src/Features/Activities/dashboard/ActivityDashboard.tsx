@@ -10,14 +10,6 @@ function ActivityDashboard() {
   const { activityStore } = useStore()
   const { selectedActivity, editMode } = activityStore
 
-  const handleSubmit = (activity: Activity) => {
-    if (activityStore.getActivitiesByDate().some((a) => a.id === activity.id)) {
-      activityStore.updateActivity(activity)
-    } else {
-      activityStore.createActivity(activity)
-    }
-  }
-
   return (
     <Grid>
       <Grid.Column width='10'>
@@ -25,7 +17,7 @@ function ActivityDashboard() {
       </Grid.Column>
       <Grid.Column width='6'>
         {selectedActivity && !editMode && <ActivityDetails />}
-        {editMode && <ActivityForm onSubmit={handleSubmit} />}
+        {editMode && <ActivityForm />}
       </Grid.Column>
     </Grid>
   )

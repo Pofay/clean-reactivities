@@ -1,16 +1,12 @@
-import { observer } from 'mobx-react-lite'
-import React, { ChangeEvent, useState } from 'react'
-import { Button, Form, Segment } from 'semantic-ui-react'
-import { Activity } from '../../../App/models/interfaces/activity'
-import { useStore } from '../../../App/stores/store'
+import { observer } from 'mobx-react-lite';
+import React, { ChangeEvent, useState } from 'react';
+import { Button, Form, Segment } from 'semantic-ui-react';
+import { Activity } from '../../../App/models/interfaces/activity';
+import { useStore } from '../../../App/stores/store';
 
-interface Props {
-  onSubmit: (activity: Activity) => void
-}
-
-function ActivityForm(props: Props) {
-  const { activityStore } = useStore()
-  const { selectedActivity, loading, closeForm } = activityStore
+function ActivityForm() {
+  const { activityStore } = useStore();
+  const { selectedActivity, loading, closeForm } = activityStore;
 
   const [activity, setActivity] = useState<Activity>(
     selectedActivity ?? {
@@ -22,24 +18,32 @@ function ActivityForm(props: Props) {
       city: '',
       venue: '',
     }
-  )
+  );
+
+  const createOrEditActivity = (activity: Activity) => {
+    if (activityStore.getActivitiesByDate().some((a) => a.id === activity.id)) {
+      activityStore.updateActivity(activity);
+    } else {
+      activityStore.createActivity(activity);
+    }
+  };
 
   const handleSubmit = (event: React.FormEvent) => {
-    event.preventDefault()
-    props.onSubmit(activity)
-  }
+    event.preventDefault();
+    createOrEditActivity(activity)
+  };
 
   const handleClose = (event: React.SyntheticEvent) => {
-    event.preventDefault()
-    closeForm()
-  }
+    event.preventDefault();
+    closeForm();
+  };
 
   const handleChange = (
     event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
-    const { name, value } = event.target
-    setActivity({ ...activity, [name]: value })
-  }
+    const { name, value } = event.target;
+    setActivity({ ...activity, [name]: value });
+  };
 
   return (
     <Segment clearing>
@@ -102,7 +106,7 @@ function ActivityForm(props: Props) {
         />
       </Form>
     </Segment>
-  )
+  );
 }
 
-export default observer(ActivityForm)
+export default observer(ActivityForm);
