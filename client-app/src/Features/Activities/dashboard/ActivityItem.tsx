@@ -1,26 +1,20 @@
 import React, { SyntheticEvent, useState } from 'react'
+import { Link } from 'react-router-dom'
 import { Button, Item, Label } from 'semantic-ui-react'
 import { Activity } from '../../../App/models/interfaces/activity'
 
 interface Props {
   activity: Activity
-  onSelectActivity: (id: string) => void
   loading: boolean
   deleteActivity: (id: string) => void
 }
 
 function ActivityItem({
   activity,
-  onSelectActivity,
   loading,
   deleteActivity,
 }: Props) {
   const [target, setTarget] = useState('')
-
-  const handleSelectActivity = (event: React.MouseEvent) => {
-    event.preventDefault()
-    onSelectActivity(activity.id)
-  }
 
   const handleDeleteActivity = (
     event: SyntheticEvent<HTMLButtonElement>,
@@ -46,10 +40,10 @@ function ActivityItem({
         </Item.Description>
         <Item.Extra>
           <Button
+            as={Link} to={`/activities${activity.id}`}
             floated='right'
             content='View'
             color='blue'
-            onClick={handleSelectActivity}
           />
           <Button
             name={activity.id}

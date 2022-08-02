@@ -6,6 +6,7 @@ import { observer } from 'mobx-react-lite';
 import HomePage from '../../Features/home/HomePage';
 import { Route, Routes } from 'react-router-dom';
 import ActivityForm from '../../Features/Activities/form/ActivityForm';
+import ActivityDetails from '../../Features/Activities/details/ActivityDetails';
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
         <Routes>
           <Route path='/' element={<HomePage />} />
           <Route path='/activities' element={<ActivityDashboard />} />
+          <Route path='/activities/:id' element={<ActivityDetails />} />
           <Route path='/createActivity' element={<ActivityForm />} />
         </Routes>
       </Container>

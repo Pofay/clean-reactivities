@@ -13,7 +13,6 @@ function ActivityList() {
       <Item.Group divided>
         {getActivitiesByDate().map((a: Activity) => (
           <ActivityItem
-            onSelectActivity={activityStore.selectActivity}
             deleteActivity={deleteActivity}
             loading={loading}
             key={a.id}
