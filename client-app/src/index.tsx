@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import { BrowserRouter } from 'react-router-dom';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import App from './App/Layout/App';
 import './App/Layout/styles.css';
 import { store, StoreContext } from './App/stores/store';
@@ -13,7 +13,9 @@ root.render(
   <React.StrictMode>
     <StoreContext.Provider value={store}>
       <BrowserRouter>
-        <App />
+        <Routes>
+          <Route path='/' element={<App />}></Route>
+        </Routes>
       </BrowserRouter>
     </StoreContext.Provider>
   </React.StrictMode>
