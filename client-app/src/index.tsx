@@ -13,9 +13,7 @@ root.render(
   <React.StrictMode>
     <StoreContext.Provider value={store}>
       <BrowserRouter>
-        <Routes>
-          <Route path='/' element={<App />}></Route>
-        </Routes>
+        <App />
       </BrowserRouter>
     </StoreContext.Provider>
   </React.StrictMode>
