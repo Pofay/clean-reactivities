@@ -9,6 +9,7 @@ function ActivityDetails() {
   const { activityStore } = useStore();
   const { id } = useParams<{ id: string }>();
   const { selectedActivity: activity } = activityStore;
+
   useEffect(() => {
     if (id) activityStore.loadActivity(id);
   }, [id, activityStore]);
