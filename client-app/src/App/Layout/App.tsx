@@ -18,6 +18,7 @@ function App() {
           <Route path='/activities' element={<ActivityDashboard />} />
           <Route path='/activities/:id' element={<ActivityDetails />} />
           <Route path='/createActivity' element={<ActivityForm />} />
+          <Route path='/manage/:id' element={<ActivityForm />} />
         </Routes>
       </Container>
     </>

@@ -1,10 +1,10 @@
-import { format, parseISO } from 'date-fns/fp';
+import { format, parseISO, parse as parseDate } from 'date-fns/fp';
 import { pipe } from 'fp-ts/lib/function';
 import { makeAutoObservable, runInAction } from 'mobx';
 import agent from '../api/agent';
 import { Activity } from '../models/interfaces/activity';
 import { v4 as uuid } from 'uuid';
-import { isFloat32Array } from 'util/types';
+import { toDate } from 'date-fns/esm';
 
 const parseAndFormatISODateString = (isoDateString: string) =>
   pipe(isoDateString, parseISO, format('yyyy-mm-dd'));
@@ -45,10 +45,12 @@ export default class ActivityStore {
     }
   };
 
+  // WARNING: Violates CQS and is really a jarbled mess of responsibilities
   loadActivity = async (id: string) => {
     let activity = this.getActivity(id);
     if (activity) {
       this.selectActivity(activity.id);
+      return activity;
     } else {
       this.setLoadingInitial(true);
       try {
@@ -58,8 +60,9 @@ export default class ActivityStore {
           date: parseAndFormatISODateString(activity.date),
         };
         this.addActivity(activity);
-        this.setLoadingInitial(false)
-        this.selectActivity(activity.id)
+        this.setLoadingInitial(false);
+        this.selectActivity(activity.id);
+        return activity;
       } catch (error) {
         console.error(error);
         this.setLoadingInitial(false);
@@ -95,7 +98,11 @@ export default class ActivityStore {
 
   createActivity = async (activity: Activity) => {
     this.setLoading(true);
-    const newActivity = { ...activity, id: uuid() };
+    const newActivity = {
+      ...activity,
+      id: uuid(),
+      date: parseDate(activity.date)
+    };
     try {
       await agent.Activities.create(newActivity);
       this.addActivity(newActivity);
@@ -145,9 +152,5 @@ export default class ActivityStore {
 
   setLoading = (state: boolean) => {
     this.loading = state;
-  };
-
-  closeForm = () => {
-    this.setEditMode(false);
   };
 }

@@ -1,6 +1,6 @@
 import { observer } from 'mobx-react-lite';
-import React, { useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useEffect } from 'react';
+import { Link, useParams } from 'react-router-dom';
 import { Image, Card, Button } from 'semantic-ui-react';
 import LoadingComponent from '../../../App/Layout/LoadingComponent';
 import { useStore } from '../../../App/stores/store';
@@ -14,15 +14,8 @@ function ActivityDetails() {
     if (id) activityStore.loadActivity(id);
   }, [id, activityStore]);
 
-  const handleCancel = (event: React.MouseEvent) => {
-    event.preventDefault();
-  };
-
-  const handleClick = (event: React.MouseEvent) => {
-    event.preventDefault();
-  };
-
-  if (!activity) return <LoadingComponent content="Loading Specific Activity"/>
+  if (!activity)
+    return <LoadingComponent content='Loading Specific Activity' />;
 
   return (
     <Card fluid>
@@ -36,8 +29,20 @@ function ActivityDetails() {
       </Card.Content>
       <Card.Content extra>
         <Button.Group widths='2'>
-          <Button basic color='blue' content='Edit' onClick={handleClick} />
-          <Button basic color='grey' content='Cancel' onClick={handleCancel} />
+          <Button
+            as={Link}
+            to={`/manage/${activity.id}`}
+            basic
+            color='blue'
+            content='Edit'
+          />
+          <Button
+            as={Link}
+            to='/activities'
+            basic
+            color='grey'
+            content='Cancel'
+          />
         </Button.Group>
       </Card.Content>
     </Card>
