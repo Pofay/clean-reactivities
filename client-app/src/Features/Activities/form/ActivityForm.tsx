@@ -1,10 +1,10 @@
-import { observer } from 'mobx-react-lite';
-import React, { ChangeEvent, useEffect, useState } from 'react';
-import { Link, useNavigate, useParams } from 'react-router-dom';
-import { Button, Form, Segment } from 'semantic-ui-react';
-import LoadingComponent from '../../../App/Layout/LoadingComponent';
-import { Activity } from '../../../App/models/interfaces/activity';
-import { useStore } from '../../../App/stores/store';
+import { observer } from 'mobx-react-lite'
+import React, { ChangeEvent, useEffect, useState } from 'react'
+import { Link, useNavigate, useParams } from 'react-router-dom'
+import { Button, Form, Segment } from 'semantic-ui-react'
+import LoadingComponent from '../../../App/Layout/LoadingComponent'
+import { Activity } from '../../../App/models/interfaces/activity'
+import { useStore } from '../../../App/stores/store'
 
 const INITIAL_STATE = {
   id: '',
@@ -14,47 +14,46 @@ const INITIAL_STATE = {
   category: '',
   city: '',
   venue: '',
-};
+}
 
 function ActivityForm() {
-  const { activityStore } = useStore();
-  const navigate = useNavigate();
-  const { loadActivity, loading, loadingInitial } = activityStore;
-  const { id } = useParams<{ id: string }>();
+  const { activityStore } = useStore()
+  const navigate = useNavigate()
+  const { loadActivity, loading, loadingInitial } = activityStore
+  const { id } = useParams<{ id: string }>()
 
-  const [activity, setActivity] = useState<Activity>(INITIAL_STATE);
+  const [activity, setActivity] = useState<Activity>(INITIAL_STATE)
 
   useEffect(() => {
     if (id) {
-      loadActivity(id).then((a) => setActivity(a!));
+      loadActivity(id).then((a) => setActivity(a!))
     } else {
-      setActivity(INITIAL_STATE);
+      setActivity(INITIAL_STATE)
     }
-  }, [id, loadActivity]);
+  }, [id, loadActivity])
 
   const createOrEditActivity = (activity: Activity) => {
     if (activityStore.getActivitiesByDate().some((a) => a.id === activity.id)) {
-      activityStore.updateActivity(activity);
+      activityStore.updateActivity(activity)
     } else {
-      activityStore.createActivity(activity);
+      activityStore.createActivity(activity)
     }
-    navigate('/activities');
-  };
+    navigate('/activities')
+  }
 
   const handleSubmit = (event: React.FormEvent) => {
-    event.preventDefault();
-    createOrEditActivity(activity);
-  };
+    event.preventDefault()
+    createOrEditActivity(activity)
+  }
 
   const handleChange = (
     event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
-    const { name, value } = event.target;
-    console.log(`${name} : ${value}`);
-    setActivity({ ...activity, [name]: value });
-  };
+    const { name, value } = event.target
+    setActivity({ ...activity, [name]: value })
+  }
 
-  if (loadingInitial) return <LoadingComponent content='Loading activity...' />;
+  if (loadingInitial) return <LoadingComponent content='Loading activity...' />
 
   return (
     <Segment clearing>
@@ -118,7 +117,7 @@ function ActivityForm() {
         />
       </Form>
     </Segment>
-  );
+  )
 }
 
-export default observer(ActivityForm);
+export default observer(ActivityForm)

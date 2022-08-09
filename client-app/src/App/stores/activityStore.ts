@@ -1,156 +1,165 @@
-import { format, parseISO, parse as parseDate } from 'date-fns/fp';
-import { pipe } from 'fp-ts/lib/function';
-import { makeAutoObservable, runInAction } from 'mobx';
-import agent from '../api/agent';
-import { Activity } from '../models/interfaces/activity';
-import { v4 as uuid } from 'uuid';
-import { toDate } from 'date-fns/esm';
+import { format, parseISO } from 'date-fns/fp'
+import { parse } from 'date-fns'
+import { pipe } from 'fp-ts/lib/function'
+import { makeAutoObservable, runInAction } from 'mobx'
+import agent from '../api/agent'
+import { Activity } from '../models/interfaces/activity'
+import { v4 as uuid } from 'uuid'
 
 const parseAndFormatISODateString = (isoDateString: string) =>
-  pipe(isoDateString, parseISO, format('yyyy-mm-dd'));
+  pipe(isoDateString, parseISO, format('yyyy-MM-dd'))
 
 const formatDates = (activities: Activity[]) =>
   activities.map((a) => ({
     ...a,
     date: parseAndFormatISODateString(a.date),
-  }));
+  }))
 
 export default class ActivityStore {
-  activityRegistry = new Map<string, Activity>();
-  selectedActivity: Activity | undefined = undefined;
-  editMode = false;
-  loading = false;
-  loadingInitial = false;
+  activityRegistry = new Map<string, Activity>()
+  selectedActivity: Activity | undefined = undefined
+  editMode = false
+  loading = false
+  loadingInitial = false
 
   constructor() {
-    makeAutoObservable(this);
+    makeAutoObservable(this)
   }
 
   getActivitiesByDate = () => {
     return Array.from(this.activityRegistry.values()).sort(
       (a, b) => Date.parse(a.date) - Date.parse(b.date)
-    );
-  };
+    )
+  }
 
   loadActivities = async () => {
-    this.setLoadingInitial(true);
+    this.setLoadingInitial(true)
     try {
       await agent.Activities.list()
+        .then((a) => {
+          a.forEach((ac) => console.log(ac.date))
+          return a
+        })
         .then(formatDates)
         .then(this.setActivities)
-        .then(() => this.setLoadingInitial(false));
+        .then(() => this.setLoadingInitial(false))
     } catch (error) {
-      console.error(error);
-      this.setLoadingInitial(false);
+      console.error(error)
+      this.setLoadingInitial(false)
     }
-  };
+  }
 
   // WARNING: Violates CQS and is really a jarbled mess of responsibilities
   loadActivity = async (id: string) => {
-    let activity = this.getActivity(id);
+    let activity = this.getActivity(id)
     if (activity) {
-      this.selectActivity(activity.id);
-      return activity;
+      this.selectActivity(activity.id)
+      return activity
     } else {
-      this.setLoadingInitial(true);
+      this.setLoadingInitial(true)
       try {
-        activity = await agent.Activities.details(id);
+        activity = await agent.Activities.details(id)
         activity = {
           ...activity,
           date: parseAndFormatISODateString(activity.date),
-        };
-        this.addActivity(activity);
-        this.setLoadingInitial(false);
-        this.selectActivity(activity.id);
-        return activity;
+        }
+        this.addActivity(activity)
+        this.setLoadingInitial(false)
+        this.selectActivity(activity.id)
+        return activity
       } catch (error) {
-        console.error(error);
-        this.setLoadingInitial(false);
+        console.error(error)
+        this.setLoadingInitial(false)
       }
     }
-  };
+  }
 
   private getActivity = (id: string) => {
-    return this.activityRegistry.get(id);
-  };
+    return this.activityRegistry.get(id)
+  }
 
   setActivities = (activities: Activity[]) => {
     activities.forEach((a) => {
-      this.activityRegistry.set(a.id, a);
-    });
-  };
+      this.activityRegistry.set(a.id, a)
+    })
+  }
 
   setLoadingInitial = (state: boolean) => {
-    this.loadingInitial = state;
-  };
+    this.loadingInitial = state
+  }
 
   selectActivity = (id: string) => {
-    this.selectedActivity = this.getActivity(id);
-  };
+    this.selectedActivity = this.getActivity(id)
+  }
 
   deselectActivity = () => {
-    this.selectedActivity = undefined;
-  };
+    this.selectedActivity = undefined
+  }
 
   setEditMode = (state: boolean) => {
-    this.editMode = state;
-  };
+    this.editMode = state
+  }
 
   createActivity = async (activity: Activity) => {
-    this.setLoading(true);
+    this.setLoading(true)
+    console.log(activity.date)
     const newActivity = {
       ...activity,
       id: uuid(),
-      date: parseDate(activity.date)
-    };
-    try {
-      await agent.Activities.create(newActivity);
-      this.addActivity(newActivity);
-      this.setEditMode(false);
-      this.selectActivity(newActivity.id);
-      this.setLoading(false);
-    } catch (error) {
-      console.error(error);
-      this.setLoading(false);
+      date: parse(activity.date, 'yyyy-MM-dd', new Date()).toISOString(),
     }
-  };
+    try {
+      await agent.Activities.create(newActivity)
+      this.addActivity(newActivity)
+      this.setEditMode(false)
+      this.selectActivity(newActivity.id)
+      this.setLoading(false)
+    } catch (error) {
+      console.error(error)
+      this.setLoading(false)
+    }
+  }
 
   addActivity = (activity: Activity) => {
-    this.activityRegistry.set(activity.id, activity);
-  };
+    const activityWithFormattedDate = {
+      ...activity,
+      date: parseAndFormatISODateString(activity.date),
+    }
+    this.activityRegistry.set(activity.id, activityWithFormattedDate)
+  }
 
   updateActivity = async (activity: Activity) => {
-    this.setLoading(true);
+    this.setLoading(true)
     try {
-      await agent.Activities.update(activity);
+      await agent.Activities.update(activity)
       runInAction(() => {
-        this.addActivity(activity);
-        this.setEditMode(false);
-        this.selectActivity(activity.id);
-        this.setLoading(false);
-      });
+        this.addActivity(activity)
+        this.setEditMode(false)
+        this.selectActivity(activity.id)
+        this.setLoading(false)
+      })
     } catch (error) {
-      console.error(error);
-      this.setLoading(false);
+      console.error(error)
+      this.setLoading(false)
     }
-  };
+  }
 
   deleteActivity = async (id: string) => {
-    this.setLoading(true);
+    this.setLoading(true)
     try {
-      await agent.Activities.delete(id);
+      await agent.Activities.delete(id)
       runInAction(() => {
-        this.activityRegistry.delete(id);
-        this.setLoading(false);
-        this.deselectActivity();
-      });
+        this.activityRegistry.delete(id)
+        this.setLoading(false)
+        this.deselectActivity()
+      })
     } catch (error) {
-      console.error(error);
-      this.setLoading(false);
+      console.error(error)
+      this.setLoading(false)
     }
-  };
+  }
 
   setLoading = (state: boolean) => {
-    this.loading = state;
-  };
+    this.loading = state
+  }
 }
