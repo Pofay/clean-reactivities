@@ -1,4 +1,5 @@
 import { format, parseISO } from 'date-fns/fp'
+import { parse } from 'date-fns'
 import { pipe } from 'fp-ts/lib/function'
 import { makeAutoObservable, runInAction } from 'mobx'
 import agent from '../api/agent'
@@ -6,7 +7,7 @@ import { Activity } from '../models/interfaces/activity'
 import { v4 as uuid } from 'uuid'
 
 const parseAndFormatISODateString = (isoDateString: string) =>
-  pipe(isoDateString, parseISO, format('yyyy-mm-dd'))
+  pipe(isoDateString, parseISO, format('yyyy-MM-dd'))
 
 const formatDates = (activities: Activity[]) =>
   activities.map((a) => ({
@@ -44,6 +45,35 @@ export default class ActivityStore {
     }
   }
 
+  // WARNING: Violates CQS and is really a jarbled mess of responsibilities
+  loadActivity = async (id: string) => {
+    let activity = this.getActivity(id)
+    if (activity) {
+      this.selectActivity(activity.id)
+      return activity
+    } else {
+      this.setLoadingInitial(true)
+      try {
+        activity = await agent.Activities.details(id)
+        activity = {
+          ...activity,
+          date: parseAndFormatISODateString(activity.date),
+        }
+        this.addActivity(activity)
+        this.setLoadingInitial(false)
+        this.selectActivity(activity.id)
+        return activity
+      } catch (error) {
+        console.error(error)
+        this.setLoadingInitial(false)
+      }
+    }
+  }
+
+  private getActivity = (id: string) => {
+    return this.activityRegistry.get(id)
+  }
+
   setActivities = (activities: Activity[]) => {
     activities.forEach((a) => {
       this.activityRegistry.set(a.id, a)
@@ -55,7 +85,7 @@ export default class ActivityStore {
   }
 
   selectActivity = (id: string) => {
-    this.selectedActivity = this.activityRegistry.get(id)
+    this.selectedActivity = this.getActivity(id)
   }
 
   deselectActivity = () => {
@@ -66,14 +96,14 @@ export default class ActivityStore {
     this.editMode = state
   }
 
-  openForm = (activity?: Activity) => {
-    activity ? this.selectActivity(activity.id) : this.deselectActivity()
-    this.setEditMode(true)
-  }
-
   createActivity = async (activity: Activity) => {
     this.setLoading(true)
-    const newActivity = { ...activity, id: uuid() }
+    console.log(activity.date)
+    const newActivity = {
+      ...activity,
+      id: uuid(),
+      date: parse(activity.date, 'yyyy-MM-dd', new Date()).toISOString(),
+    }
     try {
       await agent.Activities.create(newActivity)
       this.addActivity(newActivity)
@@ -87,7 +117,11 @@ export default class ActivityStore {
   }
 
   addActivity = (activity: Activity) => {
-    this.activityRegistry.set(activity.id, activity)
+    const activityWithFormattedDate = {
+      ...activity,
+      date: parseAndFormatISODateString(activity.date),
+    }
+    this.activityRegistry.set(activity.id, activityWithFormattedDate)
   }
 
   updateActivity = async (activity: Activity) => {
@@ -123,9 +157,5 @@ export default class ActivityStore {
 
   setLoading = (state: boolean) => {
     this.loading = state
-  }
-
-  closeForm = () => {
-    this.setEditMode(false)
   }
 }
