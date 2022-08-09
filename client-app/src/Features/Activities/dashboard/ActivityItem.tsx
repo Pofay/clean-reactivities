@@ -9,11 +9,7 @@ interface Props {
   deleteActivity: (id: string) => void
 }
 
-function ActivityItem({
-  activity,
-  loading,
-  deleteActivity,
-}: Props) {
+function ActivityItem({ activity, loading, deleteActivity }: Props) {
   const [target, setTarget] = useState('')
 
   const handleDeleteActivity = (
@@ -40,7 +36,8 @@ function ActivityItem({
         </Item.Description>
         <Item.Extra>
           <Button
-            as={Link} to={`/activities/${activity.id}`}
+            as={Link}
+            to={`/activities/${activity.id}`}
             floated='right'
             content='View'
             color='blue'
