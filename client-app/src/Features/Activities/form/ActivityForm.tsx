@@ -19,7 +19,8 @@ const INITIAL_STATE = {
 function ActivityForm() {
   const { activityStore } = useStore()
   const navigate = useNavigate()
-  const { loadActivity, loading, loadingInitial } = activityStore
+  const { loadActivity, loading, loadingInitial, selectedActivity } =
+    activityStore
   const { id } = useParams<{ id: string }>()
 
   const [activity, setActivity] = useState<Activity>(INITIAL_STATE)
@@ -34,11 +35,14 @@ function ActivityForm() {
 
   const createOrEditActivity = (activity: Activity) => {
     if (activityStore.getActivitiesByDate().some((a) => a.id === activity.id)) {
-      activityStore.updateActivity(activity)
+      activityStore
+        .updateActivity(activity)
+        .then(() => navigate(`/activities/${selectedActivity!.id}`))
     } else {
-      activityStore.createActivity(activity)
+      activityStore
+        .createActivity(activity)
+        .then(() => navigate(`/activities/${selectedActivity!.id}`))
     }
-    navigate('/activities')
   }
 
   const handleSubmit = (event: React.FormEvent) => {

@@ -36,10 +36,6 @@ export default class ActivityStore {
     this.setLoadingInitial(true)
     try {
       await agent.Activities.list()
-        .then((a) => {
-          a.forEach((ac) => console.log(ac.date))
-          return a
-        })
         .then(formatDates)
         .then(this.setActivities)
         .then(() => this.setLoadingInitial(false))
