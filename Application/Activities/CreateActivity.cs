@@ -16,16 +16,16 @@ namespace Application.Activities
 
             public Activity Activity => _activity;
 
-            public Command(Activity activity) 
+            public Command(Activity activity)
             {
                 _activity = activity;
             }
 
-            public class Handler : IRequestHandler<Command> 
+            public class Handler : IRequestHandler<Command>
             {
                 private readonly DataContext _context;
 
-                public Handler(DataContext context) 
+                public Handler(DataContext context)
                 {
                     _context = context;
                 }

@@ -1,37 +1,53 @@
 import { observer } from 'mobx-react-lite'
-import React, { ChangeEvent, useState } from 'react'
+import React, { ChangeEvent, useEffect, useState } from 'react'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 import { Button, Form, Segment } from 'semantic-ui-react'
+import LoadingComponent from '../../../App/Layout/LoadingComponent'
 import { Activity } from '../../../App/models/interfaces/activity'
 import { useStore } from '../../../App/stores/store'
 
-interface Props {
-  onSubmit: (activity: Activity) => void
+const INITIAL_STATE = {
+  id: '',
+  title: '',
+  date: '',
+  description: '',
+  category: '',
+  city: '',
+  venue: '',
 }
 
-function ActivityForm(props: Props) {
+function ActivityForm() {
   const { activityStore } = useStore()
-  const { selectedActivity, loading, closeForm } = activityStore
+  const navigate = useNavigate()
+  const { loadActivity, loading, loadingInitial, selectedActivity } =
+    activityStore
+  const { id } = useParams<{ id: string }>()
 
-  const [activity, setActivity] = useState<Activity>(
-    selectedActivity ?? {
-      id: '',
-      title: '',
-      date: '',
-      description: '',
-      category: '',
-      city: '',
-      venue: '',
+  const [activity, setActivity] = useState<Activity>(INITIAL_STATE)
+
+  useEffect(() => {
+    if (id) {
+      loadActivity(id).then((a) => setActivity(a!))
+    } else {
+      setActivity(INITIAL_STATE)
     }
-  )
+  }, [id, loadActivity])
+
+  const createOrEditActivity = (activity: Activity) => {
+    if (activityStore.getActivitiesByDate().some((a) => a.id === activity.id)) {
+      activityStore
+        .updateActivity(activity)
+        .then(() => navigate(`/activities/${selectedActivity!.id}`))
+    } else {
+      activityStore
+        .createActivity(activity)
+        .then(() => navigate(`/activities/${selectedActivity!.id}`))
+    }
+  }
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault()
-    props.onSubmit(activity)
-  }
-
-  const handleClose = (event: React.SyntheticEvent) => {
-    event.preventDefault()
-    closeForm()
+    createOrEditActivity(activity)
   }
 
   const handleChange = (
@@ -40,6 +56,8 @@ function ActivityForm(props: Props) {
     const { name, value } = event.target
     setActivity({ ...activity, [name]: value })
   }
+
+  if (loadingInitial) return <LoadingComponent content='Loading activity...' />
 
   return (
     <Segment clearing>
@@ -95,10 +113,11 @@ function ActivityForm(props: Props) {
           content='Submit'
         />
         <Button
+          as={Link}
+          to='/activities'
           floated='right'
           type='button'
           content='Cancel'
-          onClick={handleClose}
         />
       </Form>
     </Segment>

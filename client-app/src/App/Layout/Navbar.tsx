@@ -1,17 +1,19 @@
-import React from 'react'
-import { Button, Container, Menu } from 'semantic-ui-react'
-import { useStore } from '../stores/store'
+import React from 'react';
+import { NavLink } from 'react-router-dom';
+import { Button, Container, Menu } from 'semantic-ui-react';
+import { useStore } from '../stores/store';
 
 export default function Navbar() {
-  const { activityStore } = useStore()
-  const handleCreate = (event: React.MouseEvent) => {
-    event.preventDefault()
-    activityStore.openForm()
-  }
+  const { activityStore } = useStore();
+  // const handleCreate = (event: React.MouseEvent) => {
+  //   event.preventDefault();
+  //   activityStore.openForm();
+  //   navigate('/createActivity')
+  // };
   return (
     <Menu inverted fixed='top'>
       <Container>
-        <Menu.Item header>
+        <Menu.Item as={NavLink} to='/' header>
           <img
             src='/assets/logo.png'
             alt='logo'
@@ -19,11 +21,16 @@ export default function Navbar() {
           />
           Reactivities
         </Menu.Item>
-        <Menu.Item name='Actitivies' />
+        <Menu.Item as={NavLink} to='/activities' name='Actitivies' />
         <Menu.Item>
-          <Button positive content='Create Activity' onClick={handleCreate} />
+          <Button
+            as={NavLink}
+            to='createActivity'
+            positive
+            content='Create Activity'
+          />
         </Menu.Item>
       </Container>
     </Menu>
-  )
+  );
 }
