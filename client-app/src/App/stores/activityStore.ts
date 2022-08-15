@@ -110,6 +110,7 @@ export default class ActivityStore {
       this.setEditMode(false)
       this.selectActivity(newActivity.id)
       this.setLoading(false)
+      return newActivity.id
     } catch (error) {
       console.error(error)
       this.setLoading(false)
@@ -133,6 +134,7 @@ export default class ActivityStore {
         this.setEditMode(false)
         this.selectActivity(activity.id)
         this.setLoading(false)
+        return activity.id
       })
     } catch (error) {
       console.error(error)
