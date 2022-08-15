@@ -31,7 +31,7 @@ function ActivityDetails() {
         <Button.Group widths='2'>
           <Button
             as={Link}
-            to={`/manage/${activity.id}`}
+            to={`/activities/manage/${activity.id}`}
             basic
             color='blue'
             content='Edit'

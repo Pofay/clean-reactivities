@@ -37,7 +37,7 @@ function ActivityItem({ activity, loading, deleteActivity }: Props) {
         <Item.Extra>
           <Button
             as={Link}
-            to={`/activities/${activity.id}`}
+            to={`${activity.id}`}
             floated='right'
             content='View'
             color='blue'
