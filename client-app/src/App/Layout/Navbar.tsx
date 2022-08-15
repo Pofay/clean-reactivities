@@ -1,15 +1,8 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { Button, Container, Menu } from 'semantic-ui-react';
-import { useStore } from '../stores/store';
 
 export default function Navbar() {
-  const { activityStore } = useStore();
-  // const handleCreate = (event: React.MouseEvent) => {
-  //   event.preventDefault();
-  //   activityStore.openForm();
-  //   navigate('/createActivity')
-  // };
   return (
     <Menu inverted fixed='top'>
       <Container>
