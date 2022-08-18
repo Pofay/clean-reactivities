@@ -6,14 +6,14 @@ import AcitivityListItem from './ActivityListItem';
 
 function ActivityList() {
   const { activityStore } = useStore();
-  const { loading, getActivitiesByDate, deleteActivity } = activityStore;
+  const { loading, activitiesByDate , deleteActivity } = activityStore;
 
   return (
     <Grid>
       <Grid.Column width='10'>
         <Segment>
           <Item.Group divided>
-            {getActivitiesByDate().map((a: Activity) => (
+            {activitiesByDate.map((a: Activity) => (
               <AcitivityListItem
                 deleteActivity={deleteActivity}
                 loading={loading}

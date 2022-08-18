@@ -34,7 +34,7 @@ function ActivityForm() {
   }, [id, loadActivity])
 
   const createOrEditActivity = (activity: Activity) => {
-    if (activityStore.getActivitiesByDate().some((a) => a.id === activity.id)) {
+    if (activityStore.activitiesByDate.some((a) => a.id === activity.id)) {
       activityStore
         .updateActivity(activity)
         .then((id) => navigate(`/activities/${id}`))
