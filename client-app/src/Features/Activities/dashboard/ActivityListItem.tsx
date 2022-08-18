@@ -9,7 +9,7 @@ interface Props {
   deleteActivity: (id: string) => void
 }
 
-function ActivityItem({ activity, loading, deleteActivity }: Props) {
+function AcitivityListItem({ activity, loading, deleteActivity }: Props) {
   const [target, setTarget] = useState('')
 
   const handleDeleteActivity = (
@@ -57,4 +57,4 @@ function ActivityItem({ activity, loading, deleteActivity }: Props) {
   )
 }
 
-export default ActivityItem
+export default AcitivityListItem
