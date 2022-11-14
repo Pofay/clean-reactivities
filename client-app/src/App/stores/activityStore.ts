@@ -129,13 +129,11 @@ export default class ActivityStore {
     this.setLoading(true)
     try {
       await agent.Activities.update(activity)
-      runInAction(() => {
-        this.addActivity(activity)
-        this.setEditMode(false)
-        this.selectActivity(activity.id)
-        this.setLoading(false)
-        return activity.id
-      })
+      this.addActivity(activity)
+      this.setEditMode(false)
+      this.selectActivity(activity.id)
+      this.setLoading(false)
+      return activity.id
     } catch (error) {
       console.error(error)
       this.setLoading(false)
