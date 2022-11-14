@@ -1,9 +1,9 @@
-import 'semantic-ui-css/semantic.min.css';
-import { Container } from 'semantic-ui-react';
-import ActivityDashboard from '../../Features/Activities/dashboard/ActivityDashboard';
-import { observer } from 'mobx-react-lite';
-import HomePage from '../../Features/home/HomePage';
-import { Route, Routes } from 'react-router-dom';
+import 'semantic-ui-css/semantic.min.css'
+import { Container } from 'semantic-ui-react'
+import ActivityDashboard from '../../Features/Activities/dashboard/ActivityDashboard'
+import { observer } from 'mobx-react-lite'
+import HomePage from '../../Features/home/HomePage'
+import { Route, Routes } from 'react-router-dom'
 
 function App() {
   return (
@@ -15,7 +15,7 @@ function App() {
         </Routes>
       </Container>
     </>
-  );
+  )
 }
 
-export default observer(App);
+export default observer(App)

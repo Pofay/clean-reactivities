@@ -1,6 +1,6 @@
-import React from 'react';
-import { NavLink } from 'react-router-dom';
-import { Button, Container, Menu } from 'semantic-ui-react';
+import React from 'react'
+import { NavLink } from 'react-router-dom'
+import { Button, Container, Menu } from 'semantic-ui-react'
 
 export default function Navbar() {
   return (
@@ -18,12 +18,12 @@ export default function Navbar() {
         <Menu.Item>
           <Button
             as={NavLink}
-            to='createActivity'
+            to='activities/createActivity'
             positive
             content='Create Activity'
           />
         </Menu.Item>
       </Container>
     </Menu>
-  );
+  )
 }
