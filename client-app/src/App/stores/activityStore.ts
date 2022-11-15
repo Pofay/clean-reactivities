@@ -1,6 +1,7 @@
 import { format, parseISO } from 'date-fns/fp'
 import { parse } from 'date-fns'
 import { pipe } from 'fp-ts/lib/function'
+import { map } from 'fp-ts/lib/Array'
 import { makeAutoObservable, runInAction } from 'mobx'
 import agent from '../api/agent'
 import { Activity } from '../models/interfaces/activity'
@@ -10,10 +11,10 @@ const parseAndFormatISODateString = (isoDateString: string) =>
   pipe(isoDateString, parseISO, format('yyyy-MM-dd'))
 
 const formatDates = (activities: Activity[]) =>
-  activities.map((a) => ({
-    ...a,
-    date: parseAndFormatISODateString(a.date),
-  }))
+  pipe(
+    activities,
+    map((a) => ({ ...a, date: parseAndFormatISODateString(a.date) }))
+  )
 
 export default class ActivityStore {
   activityRegistry = new Map<string, Activity>()
