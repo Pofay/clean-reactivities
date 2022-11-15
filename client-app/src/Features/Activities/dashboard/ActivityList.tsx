@@ -8,7 +8,6 @@ import AcitivityListItem from './ActivityListItem'
 function ActivityList() {
   const { activityStore } = useStore()
   const { groupedActivities } = activityStore
-  console.log(groupedActivities)
 
   return (
     <Grid>
