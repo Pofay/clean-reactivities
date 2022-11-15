@@ -2,14 +2,15 @@ import React, { SyntheticEvent, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Button, Item, Label } from 'semantic-ui-react'
 import { Activity } from '../../../App/models/interfaces/activity'
+import { useStore } from '../../../App/stores/store'
 
 interface Props {
   activity: Activity
-  loading: boolean
-  deleteActivity: (id: string) => void
 }
 
-function AcitivityListItem({ activity, loading, deleteActivity }: Props) {
+function AcitivityListItem({ activity }: Props) {
+  const { activityStore } = useStore()
+  const { deleteActivity, loading } = activityStore
   const [target, setTarget] = useState('')
 
   const handleDeleteActivity = (
