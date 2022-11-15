@@ -1,6 +1,6 @@
 import { observer } from 'mobx-react-lite'
 import { Fragment } from 'react'
-import { Grid, Header, Item, Segment } from 'semantic-ui-react'
+import { Grid, Header } from 'semantic-ui-react'
 import { Activity } from '../../../App/models/interfaces/activity'
 import { useStore } from '../../../App/stores/store'
 import AcitivityListItem from './ActivityListItem'
@@ -17,13 +17,9 @@ function ActivityList() {
             <Header sub color='teal'>
               {group}
             </Header>
-            <Segment>
-              <Item.Group divided>
-                {activities.map((a: Activity) => (
-                  <AcitivityListItem key={a.id} activity={a} />
-                ))}
-              </Item.Group>
-            </Segment>
+            {activities.map((a: Activity) => (
+              <AcitivityListItem key={a.id} activity={a} />
+            ))}
           </Fragment>
         ))}
       </Grid.Column>
