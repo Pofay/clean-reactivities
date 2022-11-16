@@ -3,6 +3,7 @@ import { Fragment } from 'react'
 import { Grid, Header } from 'semantic-ui-react'
 import { Activity } from '../../../App/models/interfaces/activity'
 import { useStore } from '../../../App/stores/store'
+import ActivityFilters from './ActivityFilters'
 import AcitivityListItem from './ActivityListItem'
 
 function ActivityList() {
@@ -22,6 +23,9 @@ function ActivityList() {
             ))}
           </Fragment>
         ))}
+      </Grid.Column>
+      <Grid.Column width='6'>
+        <ActivityFilters />
       </Grid.Column>
     </Grid>
   )
