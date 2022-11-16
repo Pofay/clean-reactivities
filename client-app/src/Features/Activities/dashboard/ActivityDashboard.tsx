@@ -1,6 +1,7 @@
 import { observer } from 'mobx-react-lite'
 import { useEffect } from 'react'
 import { Route, Routes } from 'react-router-dom'
+import { Container } from 'semantic-ui-react'
 import LoadingComponent from '../../../App/Layout/LoadingComponent'
 import Navbar from '../../../App/Layout/Navbar'
 import { useStore } from '../../../App/stores/store'
@@ -22,12 +23,14 @@ function ActivityDashboard() {
   return (
     <>
       <Navbar />
-      <Routes>
-        <Route index element={<ActivityList />} />
-        <Route path=':id' element={<ActivityDetails />} />
-        <Route path='createActivity' element={<ActivityForm />} />
-        <Route path='manage/:id' element={<ActivityForm />} />
-      </Routes>
+      <Container style={{ marginTop: '7em' }}>
+        <Routes>
+          <Route index element={<ActivityList />} />
+          <Route path=':id' element={<ActivityDetails />} />
+          <Route path='createActivity' element={<ActivityForm />} />
+          <Route path='manage/:id' element={<ActivityForm />} />
+        </Routes>
+      </Container>
     </>
   )
 }
