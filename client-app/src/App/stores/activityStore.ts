@@ -1,6 +1,7 @@
 import { format, parseISO } from 'date-fns/fp'
 import { parse } from 'date-fns'
 import { pipe } from 'fp-ts/lib/function'
+import { map } from 'fp-ts/lib/Array'
 import { makeAutoObservable, runInAction } from 'mobx'
 import agent from '../api/agent'
 import { Activity } from '../models/interfaces/activity'
@@ -10,10 +11,10 @@ const parseAndFormatISODateString = (isoDateString: string) =>
   pipe(isoDateString, parseISO, format('yyyy-MM-dd'))
 
 const formatDates = (activities: Activity[]) =>
-  activities.map((a) => ({
-    ...a,
-    date: parseAndFormatISODateString(a.date),
-  }))
+  pipe(
+    activities,
+    map((a) => ({ ...a, date: parseAndFormatISODateString(a.date) }))
+  )
 
 export default class ActivityStore {
   activityRegistry = new Map<string, Activity>()
@@ -26,9 +27,21 @@ export default class ActivityStore {
     makeAutoObservable(this)
   }
 
-  getActivitiesByDate = () => {
+  get activitiesByDate() {
     return Array.from(this.activityRegistry.values()).sort(
       (a, b) => Date.parse(a.date) - Date.parse(b.date)
+    )
+  }
+
+  get groupedActivities() {
+    return Object.entries(
+      this.activitiesByDate.reduce((activities, activity) => {
+        const { date } = activity
+        activities[date] = activities[date]
+          ? [...activities[date], activity]
+          : [activity]
+        return activities
+      }, {} as { [key: string]: Activity[] })
     )
   }
 
@@ -110,6 +123,7 @@ export default class ActivityStore {
       this.setEditMode(false)
       this.selectActivity(newActivity.id)
       this.setLoading(false)
+      return newActivity.id
     } catch (error) {
       console.error(error)
       this.setLoading(false)
@@ -128,12 +142,11 @@ export default class ActivityStore {
     this.setLoading(true)
     try {
       await agent.Activities.update(activity)
-      runInAction(() => {
-        this.addActivity(activity)
-        this.setEditMode(false)
-        this.selectActivity(activity.id)
-        this.setLoading(false)
-      })
+      this.addActivity(activity)
+      this.setEditMode(false)
+      this.selectActivity(activity.id)
+      this.setLoading(false)
+      return activity.id
     } catch (error) {
       console.error(error)
       this.setLoading(false)
