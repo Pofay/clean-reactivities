@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Domain;
+using FluentValidation;
 using MediatR;
 using Persistence;
 
@@ -20,6 +21,13 @@ namespace Application.Activities
             public Command(Activity activity)
             {
                 _activity = activity;
+            }
+            public class CommandValidator : AbstractValidator<Command>
+            {
+                public CommandValidator()
+                {
+                    RuleFor(a => a.Activity).SetValidator(new ActivityValidator());
+                }
             }
 
             public class Handler : IRequestHandler<Command>

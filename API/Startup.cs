@@ -4,6 +4,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Application.Activities;
 using Application.Settings;
+using FluentValidation;
+using FluentValidation.AspNetCore;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -33,6 +35,11 @@ namespace API
         {
 
             services.AddControllers();
+
+            services.AddFluentValidationAutoValidation();
+            services.AddFluentValidationClientsideAdapters();
+            services.AddValidatorsFromAssemblyContaining<CreateActivity>();
+
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "WebAPIv5", Version = "v1" });
