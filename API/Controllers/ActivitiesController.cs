@@ -33,9 +33,16 @@ namespace API.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Activity>> GetActivity(Guid id)
+        public async Task<IActionResult> GetActivity(Guid id)
         {
-            return await _mediator.Send(new GetActivity.Query(id));
+            var result = await _mediator.Send(new GetActivity.Query(id));
+
+            return result switch
+            {
+                { IsSuccess: true } => Ok(result.Value),
+                { IsFailed: true } => NotFound(),
+                _ => BadRequest()
+            };
         }
 
         [HttpPut("{id}")]
