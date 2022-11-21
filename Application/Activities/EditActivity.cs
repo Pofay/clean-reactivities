@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Domain;
+using FluentResults;
 using FluentValidation;
 using MediatR;
 using Persistence;
@@ -12,7 +13,7 @@ namespace Application.Activities
 {
     public class EditActivity
     {
-        public class Command : IRequest
+        public class Command : IRequest<Result<Unit>>
         {
             private readonly Activity _activity;
 
@@ -30,7 +31,7 @@ namespace Application.Activities
                 }
             }
 
-            public class Handler : IRequestHandler<Command>
+            public class Handler : IRequestHandler<Command, Result<Unit>>
             {
                 private readonly DataContext _context;
                 private readonly IMapper _mapper;
@@ -41,16 +42,26 @@ namespace Application.Activities
                     _mapper = mapper;
                 }
 
-                public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
+                public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
                 {
                     var activity = await _context.Activities.FindAsync(request.Activity.Id);
 
-                    // Change to use proper APIModel -> DomainModel -> PersistenceModel style
-                    _mapper.Map(request.Activity, activity);
+                    if (activity != null)
+                    {
+                        // Change to use proper APIModel -> DomainModel -> PersistenceModel style
+                        _mapper.Map(request.Activity, activity);
+                        var operations = await _context.SaveChangesAsync();
 
-                    await _context.SaveChangesAsync();
-
-                    return Unit.Value;
+                        if (operations > 0)
+                        {
+                            return Result.Ok(Unit.Value);
+                        }
+                        return Result.Fail("Failed to update Activity");
+                    }
+                    else
+                    {
+                        return Result.Fail("Could not find Activity to update");
+                    }
                 }
             }
         }

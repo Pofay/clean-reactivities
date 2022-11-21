@@ -44,7 +44,7 @@ namespace API.Controllers
         public async Task<IActionResult> EditActivity(Guid id, Activity activity)
         {
             activity.Id = id;
-            return Ok(await _mediator.Send(new EditActivity.Command(activity)));
+            return HandleResult(await _mediator.Send(new EditActivity.Command(activity)));
         }
 
         [HttpDelete("{id}")]
