@@ -23,13 +23,13 @@ namespace API.Controllers
         [HttpGet]
         public async Task<ActionResult<List<Activity>>> GetActivities()
         {
-            return await _mediator.Send(new ListActivities.Query());
+            return HandleResult(await _mediator.Send(new ListActivities.Query()));
         }
 
         [HttpPost]
         public async Task<IActionResult> CreateActivity(Activity activity)
         {
-            return Ok(await _mediator.Send(new CreateActivity.Command(activity)));
+            return HandleResult(await _mediator.Send(new CreateActivity.Command(activity)));
         }
 
         [HttpGet("{id}")]
