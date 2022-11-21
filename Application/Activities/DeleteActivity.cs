@@ -36,21 +36,15 @@ namespace Application.Activities
             {
                 var activity = await _context.Activities.FindAsync(request.Id);
 
-                if (activity != null)
+                var result = await Result.Ok(activity)
+                .Bind(activity => activity != null ? Result.Ok(activity) : Result.Fail("Cannot find activity to delete"))
+                .Bind(activity =>
                 {
                     _context.Remove<Activity>(activity);
-                    var result = await _context.SaveChangesAsync() > 0;
+                    return Result.Try(() => _context.SaveChangesAsync());
+                });
 
-                    if (!result)
-                    {
-                        return Result.Fail("Failed to delete activity");
-                    }
-                    return Result.Ok(Unit.Value);
-                }
-                else
-                {
-                    return Result.Fail("Could not find activity to delete");
-                }
+                return result.Bind(deletions => Result.OkIf(deletions > 0, "Failed to delete activity"));
             }
         }
     }
