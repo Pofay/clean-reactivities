@@ -37,12 +37,7 @@ namespace API.Controllers
         {
             var result = await _mediator.Send(new GetActivity.Query(id));
 
-            return result switch
-            {
-                { IsSuccess: true } => Ok(result.Value),
-                { IsFailed: true } => NotFound(),
-                _ => BadRequest()
-            };
+            return HandleResult(result);
         }
 
         [HttpPut("{id}")]
