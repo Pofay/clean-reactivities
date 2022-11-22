@@ -1,20 +1,23 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import 'react-calendar/dist/Calendar.css'
-import { BrowserRouter } from 'react-router-dom'
+import { unstable_HistoryRouter as HistoryRouter } from 'react-router-dom'
 import 'react-toastify/dist/ReactToastify.min.css'
 import App from './App/Layout/App'
 import './App/Layout/styles.css'
 import { store, StoreContext } from './App/stores/store'
 import reportWebVitals from './reportWebVitals'
+import { createBrowserHistory } from 'history'
+
+export const history = createBrowserHistory()
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement)
 root.render(
   <React.StrictMode>
     <StoreContext.Provider value={store}>
-      <BrowserRouter>
+      <HistoryRouter history={history}>
         <App />
-      </BrowserRouter>
+      </HistoryRouter>
     </StoreContext.Provider>
   </React.StrictMode>
 )
