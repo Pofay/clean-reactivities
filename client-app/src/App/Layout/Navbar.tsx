@@ -19,7 +19,7 @@ export default function Navbar() {
         <Menu.Item>
           <Button
             as={NavLink}
-            to='createActivity'
+            to='/activities/createActivity'
             positive
             content='Create Activity'
           />
