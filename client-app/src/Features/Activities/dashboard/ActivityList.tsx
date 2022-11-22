@@ -1,34 +1,34 @@
-import { Item, Segment } from 'semantic-ui-react'
+import { observer } from 'mobx-react-lite'
+import { Fragment } from 'react'
+import { Grid, Header } from 'semantic-ui-react'
 import { Activity } from '../../../App/models/interfaces/activity'
-import ActivityItem from './ActivityItem'
+import { useStore } from '../../../App/stores/store'
+import ActivityFilters from './ActivityFilters'
+import AcitivityListItem from './ActivityListItem'
 
-interface ActivityListProps {
-  activities: Activity[]
-  onSelectActivity: (activity: Activity) => void
-  submitting: boolean
-  deleteActivity: (id: string) => void
-}
-function ActivityList({
-  activities,
-  onSelectActivity,
-  submitting,
-  deleteActivity,
-}: ActivityListProps) {
+function ActivityList() {
+  const { activityStore } = useStore()
+  const { groupedActivities } = activityStore
+
   return (
-    <Segment>
-      <Item.Group divided>
-        {activities.map((a) => (
-          <ActivityItem
-            onSelectActivity={onSelectActivity}
-            deleteActivity={deleteActivity}
-            submitting={submitting}
-            key={a.id}
-            activity={a}
-          />
+    <Grid>
+      <Grid.Column width='10'>
+        {groupedActivities.map(([group, activities]) => (
+          <Fragment key={group}>
+            <Header sub color='teal'>
+              {group}
+            </Header>
+            {activities.map((a: Activity) => (
+              <AcitivityListItem key={a.id} activity={a} />
+            ))}
+          </Fragment>
         ))}
-      </Item.Group>
-    </Segment>
+      </Grid.Column>
+      <Grid.Column width='6'>
+        <ActivityFilters />
+      </Grid.Column>
+    </Grid>
   )
 }
 
-export default ActivityList
+export default observer(ActivityList)

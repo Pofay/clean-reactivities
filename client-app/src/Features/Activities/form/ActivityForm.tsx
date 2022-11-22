@@ -1,30 +1,53 @@
-import React, { ChangeEvent, useState } from 'react'
+import { observer } from 'mobx-react-lite'
+import React, { ChangeEvent, useEffect, useState } from 'react'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 import { Button, Form, Segment } from 'semantic-ui-react'
+import LoadingComponent from '../../../App/Layout/LoadingComponent'
 import { Activity } from '../../../App/models/interfaces/activity'
+import { useStore } from '../../../App/stores/store'
 
-interface Props {
-  activity: Activity | undefined
-  submitting: boolean
-  onSubmit: (activity: Activity) => void
-  onCancel: () => void
+const INITIAL_STATE = {
+  id: '',
+  title: '',
+  date: '',
+  description: '',
+  category: '',
+  city: '',
+  venue: '',
 }
 
-function ActivityForm(props: Props) {
-  const [activity, setActivity] = useState<Activity>(
-    props.activity ?? {
-      id: '',
-      title: '',
-      date: '',
-      description: '',
-      category: '',
-      city: '',
-      venue: '',
+function ActivityForm() {
+  const { activityStore } = useStore()
+  const navigate = useNavigate()
+  const { loadActivity, loading, loadingInitial } = activityStore
+  const { id } = useParams<{ id: string }>()
+
+  const [activity, setActivity] = useState<Activity>(INITIAL_STATE)
+
+  useEffect(() => {
+    if (id) {
+      loadActivity(id).then((a) => setActivity(a!))
+    } else {
+      setActivity(INITIAL_STATE)
     }
-  )
+  }, [id, loadActivity])
+
+  const createOrEditActivity = (activity: Activity) => {
+    if (activityStore.activitiesByDate.some((a) => a.id === activity.id)) {
+      console.log('Edit Activity')
+      activityStore
+        .updateActivity(activity)
+        .then((id) => navigate(`/activities/${id}`))
+    } else {
+      activityStore
+        .createActivity(activity)
+        .then((id) => navigate(`/activities/${id}`))
+    }
+  }
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault()
-    props.onSubmit(activity)
+    createOrEditActivity(activity)
   }
 
   const handleChange = (
@@ -33,6 +56,8 @@ function ActivityForm(props: Props) {
     const { name, value } = event.target
     setActivity({ ...activity, [name]: value })
   }
+
+  if (loadingInitial) return <LoadingComponent content='Loading activity...' />
 
   return (
     <Segment clearing>
@@ -81,21 +106,22 @@ function ActivityForm(props: Props) {
           onChange={handleChange}
         />
         <Button
-          loading={props.submitting}
+          loading={loading}
           floated='right'
           positive
           type='submit'
           content='Submit'
         />
         <Button
+          as={Link}
+          to='/activities'
           floated='right'
           type='button'
           content='Cancel'
-          onClick={props.onCancel}
         />
       </Form>
     </Segment>
   )
 }
 
-export default ActivityForm
+export default observer(ActivityForm)

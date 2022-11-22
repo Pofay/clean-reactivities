@@ -1,46 +1,37 @@
-import React from 'react'
-import { Image, Card, Button } from 'semantic-ui-react'
-import { Activity } from '../../../App/models/interfaces/activity'
+import { observer } from 'mobx-react-lite'
+import { useEffect } from 'react'
+import { useParams } from 'react-router-dom'
+import { Grid } from 'semantic-ui-react'
+import LoadingComponent from '../../../App/Layout/LoadingComponent'
+import { useStore } from '../../../App/stores/store'
+import ActivityDetailedChat from './ActivityDetailedChat'
+import ActivityDetailedHeader from './ActivityDetailedHeader'
+import ActivityDetailedInfo from './ActivityDetailedInfo'
+import ActivityDetailedSidebar from './ActivityDetailedSidebar'
 
-interface Props {
-  activity: Activity
-  onEditActivity: (activity: Activity) => void
-  onDeselectActivity: () => void
-}
+function ActivityDetails() {
+  const { activityStore } = useStore()
+  const { id } = useParams<{ id: string }>()
+  const { selectedActivity: activity } = activityStore
 
-function ActivityDetails({
-  activity,
-  onDeselectActivity,
-  onEditActivity,
-}: Props) {
-  const handleCancel = (event: React.MouseEvent) => {
-    event.preventDefault()
-    onDeselectActivity()
-  }
+  useEffect(() => {
+    if (id) activityStore.loadActivity(id)
+  }, [id, activityStore])
 
-  const handleClick = (event: React.MouseEvent) => {
-    event.preventDefault()
-    onEditActivity(activity)
-  }
+  if (!activity) return <LoadingComponent content='Loading Specific Activity' />
 
   return (
-    <Card fluid>
-      <Image src={`/assets/categoryImages/${activity.category}.jpg`} />
-      <Card.Content>
-        <Card.Header>{activity.title}</Card.Header>
-        <Card.Meta>
-          <span>{activity.date.toString()}</span>
-        </Card.Meta>
-        <Card.Description>{activity.description}</Card.Description>
-      </Card.Content>
-      <Card.Content extra>
-        <Button.Group widths='2'>
-          <Button basic color='blue' content='Edit' onClick={handleClick} />
-          <Button basic color='grey' content='Cancel' onClick={handleCancel} />
-        </Button.Group>
-      </Card.Content>
-    </Card>
+    <Grid>
+      <Grid.Column width={10}>
+        <ActivityDetailedHeader activity={activity} />
+        <ActivityDetailedInfo activity={activity} />
+        <ActivityDetailedChat />
+      </Grid.Column>
+      <Grid.Column width={6}>
+        <ActivityDetailedSidebar />
+      </Grid.Column>
+    </Grid>
   )
 }
 
-export default ActivityDetails
+export default observer(ActivityDetails)
