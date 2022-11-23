@@ -2,6 +2,7 @@ import axios, { AxiosError, AxiosResponse } from 'axios'
 import { toast } from 'react-toastify'
 import { history } from '../..'
 import { Activity } from '../models/interfaces/activity'
+import { store } from '../stores/store'
 
 const sleep = (delay: number) =>
   new Promise((resolve) => {
@@ -39,6 +40,9 @@ axios.interceptors.response.use(
         break
       case 500:
         toast.error('server error')
+        // @ts-ignore
+        store.commonStore.setServerError(data)
+        history.push('/server-error')
         break
     }
     return Promise.reject(error)

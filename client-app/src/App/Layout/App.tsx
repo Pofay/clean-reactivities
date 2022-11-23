@@ -6,6 +6,7 @@ import { Route, Routes } from 'react-router-dom'
 import TestErrors from '../../Features/Errors/TestError'
 import { ToastContainer } from 'react-toastify'
 import NotFound from '../../Features/Errors/NotFound'
+import ServerError from '../../Features/Errors/ServerError'
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
         <Route path='*' element={<NotFound />} />
         <Route path='/' element={<HomePage />} />
         <Route path='errors' element={<TestErrors />} />
+        <Route path='server-error' element={<ServerError />} />
         <Route path='activities/*' element={<ActivityDashboard />} />
       </Routes>
     </>
