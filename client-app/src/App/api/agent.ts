@@ -19,7 +19,16 @@ axios.interceptors.response.use(
     const { data, status } = error.response!
     switch (status) {
       case 400:
-        toast.error('bad request')
+        // @ts-ignore
+        if (data.errors) {
+          // @ts-ignore
+          const validationErrors = Object.values(data.errors)
+          // @ts-ignore
+          throw validationErrors.flat()
+        } else {
+          // @ts-ignore
+          toast.error(data)
+        }
         break
       case 401:
         toast.error('unauthorized')
