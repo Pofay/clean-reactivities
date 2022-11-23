@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Domain;
+using FluentResults;
 using MediatR;
 using Persistence;
 
@@ -10,7 +11,7 @@ namespace Application.Activities
 {
     public class DeleteActivity
     {
-        public class Command : IRequest
+        public class Command : IRequest<Result<Unit>>
         {
             private readonly Guid _id;
 
@@ -22,7 +23,7 @@ namespace Application.Activities
             }
         }
 
-        public class Handler : IRequestHandler<Command>
+        public class Handler : IRequestHandler<Command, Result<Unit>>
         {
             private readonly DataContext _context;
 
@@ -31,12 +32,19 @@ namespace Application.Activities
                 _context = context;
             }
 
-            public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
+            public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
             {
-               var activity =  await _context.Activities.FindAsync(request.Id);
-               _context.Remove<Activity>(activity);
-                await _context.SaveChangesAsync();
-                return Unit.Value;
+                var activity = await _context.Activities.FindAsync(request.Id);
+
+                var result = await Result.Ok(activity)
+                .Bind(activity => activity != null ? Result.Ok(activity) : Result.Fail("Cannot find activity to delete"))
+                .Bind(activity =>
+                {
+                    _context.Remove<Activity>(activity);
+                    return Result.Try(() => _context.SaveChangesAsync());
+                });
+
+                return result.Bind(deletions => Result.OkIf(deletions > 0, "Failed to delete activity"));
             }
         }
     }
