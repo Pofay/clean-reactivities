@@ -9,6 +9,8 @@ import { useStore } from '../../../App/stores/store'
 import * as Yup from 'yup'
 import MyTextInput from '../../../App/common/form/MyTextInput'
 import MyTextArea from '../../../App/common/form/MyTextArea'
+import MySelectInput from '../../../App/common/form/MySelectInput'
+import { categoryOptions } from '../../../App/common/options/CategoryOptions'
 
 const INITIAL_STATE = {
   id: '',
@@ -83,7 +85,11 @@ function ActivityForm() {
           <Form className='ui form' onSubmit={handleSubmit} autoComplete='off'>
             <MyTextInput placeholder='Title' name='title' />
             <MyTextArea rows={3} placeholder='Description' name='description' />
-            <MyTextInput placeholder='Category' name='category' />
+            <MySelectInput
+              options={categoryOptions}
+              placeholder='Category'
+              name='category'
+            />
             <MyTextInput placeholder='Date' name='date' />
             <MyTextInput placeholder='City' name='city' />
             <MyTextInput placeholder='Venue' name='venue' />
