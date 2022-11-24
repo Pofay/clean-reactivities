@@ -8,6 +8,7 @@ import { Activity } from '../../../App/models/interfaces/activity'
 import { useStore } from '../../../App/stores/store'
 import * as Yup from 'yup'
 import MyTextInput from '../../../App/common/form/MyTextInput'
+import MyTextArea from '../../../App/common/form/MyTextArea'
 
 const INITIAL_STATE = {
   id: '',
@@ -81,7 +82,7 @@ function ActivityForm() {
         {({ handleSubmit }) => (
           <Form className='ui form' onSubmit={handleSubmit} autoComplete='off'>
             <MyTextInput placeholder='Title' name='title' />
-            <MyTextInput placeholder='Description' name='description' />
+            <MyTextArea rows={3} placeholder='Description' name='description' />
             <MyTextInput placeholder='Category' name='category' />
             <MyTextInput placeholder='Date' name='date' />
             <MyTextInput placeholder='City' name='city' />
