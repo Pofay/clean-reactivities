@@ -15,6 +15,7 @@
     "@types/react-router-dom": "^5.3.3",
     "axios": "^0.27.2",
     "date-fns": "^2.29.1",
+    "formik": "^2.2.9",
     "fp-ts": "^2.12.1",
     "fp-ts-std": "^0.14.2",
     "mobx": "^6.6.1",
