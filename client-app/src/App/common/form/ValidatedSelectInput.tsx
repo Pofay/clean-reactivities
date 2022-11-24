@@ -7,7 +7,7 @@ interface Props {
   options: any
   label?: string
 }
-function MySelectInput(props: Props) {
+function ValidatedSelectInput(props: Props) {
   const [field, meta, helpers] = useField(props.name)
   return (
     <Form.Field error={meta.touched && !!meta.error}>
@@ -30,4 +30,4 @@ function MySelectInput(props: Props) {
   )
 }
 
-export default MySelectInput
+export default ValidatedSelectInput

@@ -6,7 +6,7 @@ interface Props {
   name: string
   label?: string
 }
-function MyTextInput(props: Props) {
+function ValidatedTextInput(props: Props) {
   const [field, meta] = useField(props.name)
   return (
     <Form.Field error={meta.touched && !!meta.error}>
@@ -21,4 +21,4 @@ function MyTextInput(props: Props) {
   )
 }
 
-export default MyTextInput
+export default ValidatedTextInput

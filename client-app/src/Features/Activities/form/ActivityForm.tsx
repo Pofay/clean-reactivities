@@ -7,9 +7,9 @@ import LoadingComponent from '../../../App/Layout/LoadingComponent'
 import { Activity } from '../../../App/models/interfaces/activity'
 import { useStore } from '../../../App/stores/store'
 import * as Yup from 'yup'
-import MyTextInput from '../../../App/common/form/MyTextInput'
-import MyTextArea from '../../../App/common/form/MyTextArea'
-import MySelectInput from '../../../App/common/form/MySelectInput'
+import ValidatedTextInput from '../../../App/common/form/ValidatedTextInput'
+import ValidatedTextArea from '../../../App/common/form/ValidatedTextArea'
+import ValidatedSelectInput from '../../../App/common/form/ValidatedSelectInput'
 import { categoryOptions } from '../../../App/common/options/CategoryOptions'
 
 const INITIAL_STATE = {
@@ -83,16 +83,20 @@ function ActivityForm() {
       >
         {({ handleSubmit }) => (
           <Form className='ui form' onSubmit={handleSubmit} autoComplete='off'>
-            <MyTextInput placeholder='Title' name='title' />
-            <MyTextArea rows={3} placeholder='Description' name='description' />
-            <MySelectInput
+            <ValidatedTextInput placeholder='Title' name='title' />
+            <ValidatedTextArea
+              rows={3}
+              placeholder='Description'
+              name='description'
+            />
+            <ValidatedSelectInput
               options={categoryOptions}
               placeholder='Category'
               name='category'
             />
-            <MyTextInput placeholder='Date' name='date' />
-            <MyTextInput placeholder='City' name='city' />
-            <MyTextInput placeholder='Venue' name='venue' />
+            <ValidatedTextInput placeholder='Date' name='date' />
+            <ValidatedTextInput placeholder='City' name='city' />
+            <ValidatedTextInput placeholder='Venue' name='venue' />
             <Button
               loading={loading}
               floated='right'

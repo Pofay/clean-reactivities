@@ -7,7 +7,7 @@ interface Props {
   rows: number
   label?: string
 }
-function MyTextArea(props: Props) {
+function ValidatedTextArea(props: Props) {
   const [field, meta] = useField(props.name)
   return (
     <Form.Field error={meta.touched && !!meta.error}>
@@ -22,4 +22,4 @@ function MyTextArea(props: Props) {
   )
 }
 
-export default MyTextArea
+export default ValidatedTextArea
