@@ -1,20 +1,20 @@
-import { format, parseISO } from 'date-fns/fp'
-import { parse } from 'date-fns'
-import { pipe } from 'fp-ts/lib/function'
-import { map } from 'fp-ts/lib/Array'
 import { makeAutoObservable, runInAction } from 'mobx'
-import agent from '../api/agent'
-import { Activity } from '../models/interfaces/activity'
 import { v4 as uuid } from 'uuid'
+import agent from '../api/agent'
+import { DateFormatter } from '../common/utils/date-formatter'
+import { Activity } from '../models/interfaces/activity'
 
+/*
 const parseAndFormatISODateString = (isoDateString: string) =>
   pipe(isoDateString, parseISO, format('yyyy-MM-dd'))
 
+console.table(a)
 const formatDates = (activities: Activity[]) =>
   pipe(
     activities,
     map((a) => ({ ...a, date: parseAndFormatISODateString(a.date) }))
   )
+  */
 
 export default class ActivityStore {
   activityRegistry = new Map<string, Activity>()
@@ -29,14 +29,14 @@ export default class ActivityStore {
 
   get activitiesByDate() {
     return Array.from(this.activityRegistry.values()).sort(
-      (a, b) => Date.parse(a.date) - Date.parse(b.date)
+      (a, b) => a.date!.getTime() - b.date!.getTime()
     )
   }
 
   get groupedActivities() {
     return Object.entries(
       this.activitiesByDate.reduce((activities, activity) => {
-        const { date } = activity
+        const date = DateFormatter.formatDate(activity.date!)
         activities[date] = activities[date]
           ? [...activities[date], activity]
           : [activity]
@@ -49,7 +49,6 @@ export default class ActivityStore {
     this.setLoadingInitial(true)
     try {
       await agent.Activities.list()
-        .then(formatDates)
         .then(this.setActivities)
         .then(() => this.setLoadingInitial(false))
     } catch (error) {
@@ -68,10 +67,6 @@ export default class ActivityStore {
       this.setLoadingInitial(true)
       try {
         activity = await agent.Activities.details(id)
-        activity = {
-          ...activity,
-          date: parseAndFormatISODateString(activity.date),
-        }
         this.addActivity(activity)
         this.setLoadingInitial(false)
         this.selectActivity(activity.id)
@@ -89,6 +84,7 @@ export default class ActivityStore {
 
   setActivities = (activities: Activity[]) => {
     activities.forEach((a) => {
+      a.date = new Date(a.date!)
       this.activityRegistry.set(a.id, a)
     })
   }
@@ -111,11 +107,9 @@ export default class ActivityStore {
 
   createActivity = async (activity: Activity) => {
     this.setLoading(true)
-    console.log(activity.date)
     const newActivity = {
       ...activity,
       id: uuid(),
-      date: parse(activity.date, 'yyyy-MM-dd', new Date()).toISOString(),
     }
     try {
       await agent.Activities.create(newActivity)
@@ -133,7 +127,7 @@ export default class ActivityStore {
   addActivity = (activity: Activity) => {
     const activityWithFormattedDate = {
       ...activity,
-      date: parseAndFormatISODateString(activity.date),
+      date: new Date(activity.date!),
     }
     this.activityRegistry.set(activity.id, activityWithFormattedDate)
   }
