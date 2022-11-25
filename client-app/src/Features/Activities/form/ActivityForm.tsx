@@ -1,17 +1,17 @@
-import { Formik, Form, ErrorMessage } from 'formik'
+import { Form, Formik } from 'formik'
 import { observer } from 'mobx-react-lite'
-import React, { ChangeEvent, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
-import { Button, FormField, Label, Segment } from 'semantic-ui-react'
+import { Button, Header, Segment } from 'semantic-ui-react'
+import * as Yup from 'yup'
+import ValidatedDateInput from '../../../App/common/form/ValidateDateInput'
+import ValidatedSelectInput from '../../../App/common/form/ValidatedSelectInput'
+import ValidatedTextArea from '../../../App/common/form/ValidatedTextArea'
+import ValidatedTextInput from '../../../App/common/form/ValidatedTextInput'
+import { categoryOptions } from '../../../App/common/options/CategoryOptions'
 import LoadingComponent from '../../../App/Layout/LoadingComponent'
 import { Activity } from '../../../App/models/interfaces/activity'
 import { useStore } from '../../../App/stores/store'
-import * as Yup from 'yup'
-import ValidatedTextInput from '../../../App/common/form/ValidatedTextInput'
-import ValidatedTextArea from '../../../App/common/form/ValidatedTextArea'
-import ValidatedSelectInput from '../../../App/common/form/ValidatedSelectInput'
-import { categoryOptions } from '../../../App/common/options/CategoryOptions'
-import ValidatedDateInput from '../../../App/common/form/ValidateDateInput'
 
 const INITIAL_STATE = {
   id: '',
@@ -35,7 +35,7 @@ function ActivityForm() {
     title: Yup.string().required('The activity title is required'),
     description: Yup.string().required('The activity description is required'),
     category: Yup.string().required(),
-    date: Yup.string().required(),
+    date: Yup.string().required('Date is required').nullable(),
     venue: Yup.string().required(),
     city: Yup.string().required(),
   })
@@ -50,7 +50,6 @@ function ActivityForm() {
 
   const createOrEditActivity = (activity: Activity) => {
     if (activityStore.activitiesByDate.some((a) => a.id === activity.id)) {
-      console.log('Edit Activity')
       activityStore
         .updateActivity(activity)
         .then((id) => navigate(`/activities/${id}`))
@@ -61,28 +60,22 @@ function ActivityForm() {
     }
   }
 
-  /*
-  const handleSubmit = (event: React.FormEvent) => {
-    event.preventDefault()
+  const handleFormSubmit = (activity: Activity) => {
     createOrEditActivity(activity)
   }
-
-  const handleChange = (
-    event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-  */
 
   if (loadingInitial) return <LoadingComponent content='Loading activity...' />
 
   return (
     <Segment clearing>
+      <Header content='Activity Details' sub color='teal' />
       <Formik
         validationSchema={validationSchema}
         enableReinitialize
         initialValues={activity}
-        onSubmit={(values) => console.log(values)}
+        onSubmit={(values) => handleFormSubmit(values)}
       >
-        {({ handleSubmit }) => (
+        {({ handleSubmit, isValid, isSubmitting, dirty }) => (
           <Form className='ui form' onSubmit={handleSubmit} autoComplete='off'>
             <ValidatedTextInput placeholder='Title' name='title' />
             <ValidatedTextArea
@@ -102,9 +95,11 @@ function ActivityForm() {
               timeCaption='time'
               dateFormat='MMMM d, yyyy hh:mm aa'
             />
+            <Header content='Location Details' sub color='teal' />
             <ValidatedTextInput placeholder='City' name='city' />
             <ValidatedTextInput placeholder='Venue' name='venue' />
             <Button
+              disabled={isSubmitting || !dirty || !isValid}
               loading={loading}
               floated='right'
               positive
