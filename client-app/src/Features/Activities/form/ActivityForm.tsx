@@ -16,7 +16,7 @@ import ValidatedDateInput from '../../../App/common/form/ValidateDateInput'
 const INITIAL_STATE = {
   id: '',
   title: '',
-  date: '',
+  date: null,
   description: '',
   category: '',
   city: '',
