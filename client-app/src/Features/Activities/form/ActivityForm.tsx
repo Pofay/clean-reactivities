@@ -11,6 +11,7 @@ import ValidatedTextInput from '../../../App/common/form/ValidatedTextInput'
 import ValidatedTextArea from '../../../App/common/form/ValidatedTextArea'
 import ValidatedSelectInput from '../../../App/common/form/ValidatedSelectInput'
 import { categoryOptions } from '../../../App/common/options/CategoryOptions'
+import ValidatedDateInput from '../../../App/common/form/ValidateDateInput'
 
 const INITIAL_STATE = {
   id: '',
@@ -94,7 +95,13 @@ function ActivityForm() {
               placeholder='Category'
               name='category'
             />
-            <ValidatedTextInput placeholder='Date' name='date' />
+            <ValidatedDateInput
+              placeholderText='Date'
+              name='date'
+              showTimeSelect
+              timeCaption='time'
+              dateFormat='MMMM d, yyyy hh:mm aa'
+            />
             <ValidatedTextInput placeholder='City' name='city' />
             <ValidatedTextInput placeholder='Venue' name='venue' />
             <Button

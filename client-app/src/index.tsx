@@ -8,6 +8,7 @@ import './App/Layout/styles.css'
 import { store, StoreContext } from './App/stores/store'
 import reportWebVitals from './reportWebVitals'
 import { createBrowserHistory } from 'history'
+import 'react-datepicker/dist/react-datepicker.css'
 
 export const history = createBrowserHistory()
 
