@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
 import { Button, Icon, Item, Segment } from 'semantic-ui-react'
+import { DateFormatter } from '../../../App/common/utils/date-formatter'
 import { Activity } from '../../../App/models/interfaces/activity'
 
 interface Props {
@@ -24,7 +25,7 @@ function AcitivityListItem({ activity }: Props) {
       </Segment>
       <Segment>
         <span>
-          <Icon name='clock' /> {activity.date}
+          <Icon name='clock' /> {DateFormatter.formatDateTime(activity.date!)}
           <Icon name='marker' /> {activity.venue}
         </span>
       </Segment>

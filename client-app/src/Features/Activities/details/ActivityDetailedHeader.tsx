@@ -1,7 +1,7 @@
 import { observer } from 'mobx-react-lite'
-import React from 'react'
 import { Link } from 'react-router-dom'
-import { Button, Header, Item, Segment, Image } from 'semantic-ui-react'
+import { Button, Header, Image, Item, Segment } from 'semantic-ui-react'
+import { DateFormatter } from '../../../App/common/utils/date-formatter'
 import { Activity } from '../../../App/models/interfaces/activity'
 
 const activityImageStyle = {
@@ -39,7 +39,7 @@ export default observer(function ActivityDetailedHeader({ activity }: Props) {
                   content={activity.title}
                   style={{ color: 'white' }}
                 />
-                <p>{activity.date}</p>
+                <p>{DateFormatter.formatDateTime(activity.date!)}</p>
                 <p>
                   Hosted by <strong>Bob</strong>
                 </p>
