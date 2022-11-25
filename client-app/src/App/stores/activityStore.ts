@@ -107,7 +107,6 @@ export default class ActivityStore {
 
   createActivity = async (activity: Activity) => {
     this.setLoading(true)
-    console.log(activity.date)
     const newActivity = {
       ...activity,
       id: uuid(),
