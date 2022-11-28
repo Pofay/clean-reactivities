@@ -1,5 +1,6 @@
 import { useField } from 'formik'
 import { Form, Label } from 'semantic-ui-react'
+import { Utils } from '../utils/utils'
 
 interface Props {
   placeholder: string
@@ -10,7 +11,7 @@ interface Props {
 function ValidatedTextArea(props: Props) {
   const [field, meta] = useField(props.name)
   return (
-    <Form.Field error={meta.touched && !!meta.error}>
+    <Form.Field error={meta.touched && !Utils.isNullOrUndefined(meta.error)}>
       <label>{props.label}</label>
       <textarea {...field} {...props} />
       {meta.touched && meta.error ? (

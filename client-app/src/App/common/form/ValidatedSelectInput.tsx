@@ -1,5 +1,6 @@
 import { useField } from 'formik'
 import { Form, Label, Select } from 'semantic-ui-react'
+import { Utils } from '../utils/utils'
 
 interface Props {
   placeholder: string
@@ -10,7 +11,7 @@ interface Props {
 function ValidatedSelectInput(props: Props) {
   const [field, meta, helpers] = useField(props.name)
   return (
-    <Form.Field error={meta.touched && !!meta.error}>
+    <Form.Field error={meta.touched && !Utils.isNullOrUndefined(meta.error)}>
       <label>{props.label}</label>
       <Select
         clearable
