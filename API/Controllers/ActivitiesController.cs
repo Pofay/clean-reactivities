@@ -33,7 +33,6 @@ namespace API.Controllers
             return HandleResult(await _mediator.Send(new CreateActivity.Command(activity)));
         }
 
-        [Authorize]
         [HttpGet("{id}")]
         public async Task<IActionResult> GetActivity(Guid id)
         {
