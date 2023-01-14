@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using API.DTOs;
 using API.Services;
 using Domain;
@@ -8,7 +9,6 @@ using Microsoft.EntityFrameworkCore;
 
 namespace API.Controllers
 {
-    [AllowAnonymous]
     [ApiController]
     [Route("api/[controller]")]
     public class AccountController : ControllerBase
@@ -22,6 +22,7 @@ namespace API.Controllers
             _userManager = userManager;
         }
 
+        [AllowAnonymous]
         [HttpPost("login")]
         public async Task<ActionResult<UserDto>> Login(LoginDto loginDto)
         {
@@ -31,20 +32,17 @@ namespace API.Controllers
 
             var result = await _userManager.CheckPasswordAsync(user, loginDto.Password);
 
-            if (result)
+            if (!result)
             {
-                return new UserDto
-                {
-                    DisplayName = user.DisplayName,
-                    Image = null,
-                    Token = _tokenService.CreateToken(user),
-                    Username = user.UserName
-                };
+                return Unauthorized();
             }
 
-            return Unauthorized();
+            return MapToDto(user);
         }
 
+
+
+        [AllowAnonymous]
         [HttpPost("register")]
         public async Task<ActionResult<UserDto>> Register(RegisterDto registerDto)
         {
@@ -53,7 +51,7 @@ namespace API.Controllers
                 return BadRequest("Username is already taken.");
             }
 
-            if (await _userManager.Users.AnyAsync(u => u.Email== registerDto.Email))
+            if (await _userManager.Users.AnyAsync(u => u.Email == registerDto.Email))
             {
                 return BadRequest("Email is already taken.");
             }
@@ -73,6 +71,11 @@ namespace API.Controllers
                 return BadRequest(result.Errors);
             }
 
+            return MapToDto(user);
+        }
+
+        private ActionResult<UserDto> MapToDto(AppUser user)
+        {
             return new UserDto
             {
                 DisplayName = user.DisplayName,
@@ -82,5 +85,13 @@ namespace API.Controllers
             };
         }
 
+        [Authorize]
+        [HttpGet]
+        public async Task<ActionResult<UserDto>> GetCurrentUser()
+        {
+            var user = await _userManager.FindByEmailAsync(User.FindFirstValue(ClaimTypes.Email));
+
+            return MapToDto(user);
+        }
     }
 }
