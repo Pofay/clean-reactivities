@@ -6,6 +6,7 @@ using API.Extensions;
 using API.Middleware;
 using Application.Activities;
 using Application.Settings;
+using dotenv.net;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using MediatR;
@@ -35,15 +36,14 @@ namespace API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
             services.AddControllers();
 
             services.AddFluentValidationAutoValidation();
             services.AddFluentValidationClientsideAdapters();
             services.AddValidatorsFromAssemblyContaining<CreateActivity>();
 
-            services.AddApplicationServices(Configuration);
-            services.AddIdentityServices(Configuration);
+            services.AddApplicationServices();
+            services.AddIdentityServices();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

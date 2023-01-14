@@ -1,5 +1,6 @@
 using Application.Activities;
 using Application.Settings;
+using dotenv.net.Utilities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -10,7 +11,7 @@ namespace API.Extensions
 {
     public static class ApplicationServiceExtensions
     {
-        public static IServiceCollection AddApplicationServices(this IServiceCollection services, IConfiguration config)
+        public static IServiceCollection AddApplicationServices(this IServiceCollection services)
         {
             services.AddSwaggerGen(c =>
                     {
@@ -18,7 +19,7 @@ namespace API.Extensions
                     });
             services.AddDbContext<DataContext>(opt =>
             {
-                opt.UseSqlite(config.GetConnectionString("DefaultConnection"));
+                opt.UseSqlite(EnvReader.GetStringValue("DB_CONNECTION"));
             });
             services.AddCors(opt =>
             {

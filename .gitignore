@@ -494,6 +494,9 @@ FodyWeavers.xsd
 
 # Environment Files
 appsettings.json
+.env
+.env.development
+.env.production
 
 ## SQLite Artifacts
 reactivities.db-shm
