@@ -1,7 +1,7 @@
 import { ErrorMessage, Form, Formik } from 'formik';
 import { observer } from 'mobx-react-lite';
 import { useNavigate } from 'react-router-dom';
-import { Button, Label } from 'semantic-ui-react';
+import { Button, Header, Label } from 'semantic-ui-react';
 import ValidatedTextInput from '../../App/common/form/ValidatedTextInput';
 import { useStore } from '../../App/stores/store';
 
@@ -20,6 +20,12 @@ function LoginForm() {
     >
       {({ handleSubmit, isSubmitting, errors }) => (
         <Form className='ui form' onSubmit={handleSubmit} autoComplete='off'>
+          <Header
+            as='h2'
+            content='Login to Reactivities'
+            color='teal'
+            textAlign='center'
+          />
           <ValidatedTextInput placeholder='Email' name='email' />
           <ValidatedTextInput
             placeholder='Password'
