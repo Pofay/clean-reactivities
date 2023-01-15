@@ -1,6 +1,8 @@
 using Application.Activities;
+using Application.Interfaces;
 using Application.Settings;
 using dotenv.net.Utilities;
+using Infrastructure;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -30,6 +32,8 @@ namespace API.Extensions
             });
             services.AddMediatR(typeof(ListActivities.Handler).Assembly);
             services.AddAutoMapper(typeof(MappingProfiles));
+            services.AddHttpContextAccessor();
+            services.AddScoped<IUserAccessor, UserAccessor>();
 
             return services;
         }
