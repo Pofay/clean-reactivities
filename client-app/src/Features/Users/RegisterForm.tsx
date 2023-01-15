@@ -1,9 +1,10 @@
-import { Formik, ErrorMessage } from 'formik';
+import { ErrorMessage, Formik } from 'formik';
 import { useNavigate } from 'react-router-dom';
-import { Form, Header, Label, Button } from 'semantic-ui-react';
+import { Button, Form, Header } from 'semantic-ui-react';
+import * as Yup from 'yup';
 import ValidatedTextInput from '../../App/common/form/ValidatedTextInput';
 import { useStore } from '../../App/stores/store';
-import * as Yup from 'yup';
+import ValidationErrors from '../Errors/ValidationErrors';
 
 function RegisterForm() {
   const { userStore } = useStore();
@@ -14,6 +15,7 @@ function RegisterForm() {
         displayName: '',
         userName: '',
         email: '',
+        bio: '',
         password: '',
         error: null,
       }}
@@ -21,17 +23,22 @@ function RegisterForm() {
         userStore
           .register(values)
           .then(() => navigate('/activities'))
-          .catch((error) => setErrors({ error: 'Invalid email or password' }))
+          .catch((error) => setErrors({ error }))
       }
       validationSchema={Yup.object({
         displayName: Yup.string().required(),
         userName: Yup.string().required(),
+        bio: Yup.string().required(),
         email: Yup.string().required(),
         password: Yup.string().required(),
       })}
     >
       {({ handleSubmit, isSubmitting, errors, isValid, dirty }) => (
-        <Form className='ui form' onSubmit={handleSubmit} autoComplete='off'>
+        <Form
+          className='ui form error'
+          onSubmit={handleSubmit}
+          autoComplete='off'
+        >
           <Header
             as='h2'
             content='Sign up to Reactivities'
@@ -40,6 +47,7 @@ function RegisterForm() {
           />
           <ValidatedTextInput placeholder='Display Name' name='displayName' />
           <ValidatedTextInput placeholder='Username' name='userName' />
+          <ValidatedTextInput placeholder='Bio' name='bio' />
           <ValidatedTextInput placeholder='Email' name='email' />
 
           <ValidatedTextInput
@@ -49,14 +57,7 @@ function RegisterForm() {
           />
           <ErrorMessage
             name='error'
-            render={() => (
-              <Label
-                style={{ marginBottom: 10 }}
-                basic
-                color='red'
-                content={errors.error}
-              />
-            )}
+            render={() => <ValidationErrors errors={errors.error} />}
           />
           <Button
             disabled={!isValid || !dirty || isSubmitting}
