@@ -18,12 +18,6 @@ namespace API
     {
         public static async Task Main(string[] args)
         {
-            DotEnv.Fluent()
-            .WithDefaultEncoding()
-            .WithExceptions()
-            .WithTrimValues()
-            .WithOverwriteExistingVars()
-            .Load();
             var host = CreateHostBuilder(args).Build();
 
             using var scope = host.Services.CreateScope();
@@ -45,11 +39,20 @@ namespace API
             await host.RunAsync();
         }
 
-        public static IHostBuilder CreateHostBuilder(string[] args) =>
-            Host.CreateDefaultBuilder(args)
-                .ConfigureWebHostDefaults(webBuilder =>
-                {
-                    webBuilder.UseStartup<Startup>();
-                });
+        public static IHostBuilder CreateHostBuilder(string[] args)
+        {
+            DotEnv.Fluent()
+            .WithDefaultEncoding()
+            .WithExceptions()
+            .WithTrimValues()
+            .WithOverwriteExistingVars()
+            .Load();
+
+            return Host.CreateDefaultBuilder(args)
+                            .ConfigureWebHostDefaults(webBuilder =>
+                            {
+                                webBuilder.UseStartup<Startup>();
+                            });
+        }
     }
 }
