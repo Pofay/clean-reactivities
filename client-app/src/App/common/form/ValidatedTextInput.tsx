@@ -6,6 +6,7 @@ interface Props {
   placeholder: string
   name: string
   label?: string
+  type?: string  
 }
 function ValidatedTextInput(props: Props) {
   const [field, meta] = useField(props.name)
