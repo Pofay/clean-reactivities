@@ -1,17 +1,20 @@
 import { ErrorMessage, Form, Formik } from 'formik';
 import { observer } from 'mobx-react-lite';
+import { useNavigate } from 'react-router-dom';
 import { Button, Label } from 'semantic-ui-react';
 import ValidatedTextInput from '../../App/common/form/ValidatedTextInput';
 import { useStore } from '../../App/stores/store';
 
 function LoginForm() {
   const { userStore } = useStore();
+  const navigate = useNavigate();
   return (
     <Formik
       initialValues={{ email: '', password: '', error: null }}
       onSubmit={(values, { setErrors }) =>
         userStore
           .login(values)
+          .then(() => navigate('/activities'))
           .catch((error) => setErrors({ error: 'Invalid email or password' }))
       }
     >
