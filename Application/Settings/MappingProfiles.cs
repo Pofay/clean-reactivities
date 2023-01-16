@@ -1,7 +1,4 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using Application.Activities;
 using AutoMapper;
 using Domain;
 
@@ -13,6 +10,7 @@ namespace Application.Settings
         {
             // Should have a APIModel -> Domain -> PersistenceModel conversion
             CreateMap<Activity, Activity>();
+            CreateMap<Activity, ActivityDto>();
         }
     }
 }
