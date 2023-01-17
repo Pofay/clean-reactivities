@@ -53,5 +53,11 @@ namespace API.Controllers
         {
             return HandleResult(await _mediator.Send(new DeleteActivity.Command(id)));
         }
+
+        [HttpPost("{id}/attend")]
+        public async Task<IActionResult> Attend(Guid id)
+        {
+            return HandleResult(await _mediator.Send(new UpdateAttendance.Command(id)));
+        }
     }
 }
