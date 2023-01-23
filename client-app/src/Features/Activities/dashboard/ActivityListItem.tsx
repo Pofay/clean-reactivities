@@ -1,10 +1,11 @@
-import { Link } from 'react-router-dom'
-import { Button, Icon, Item, Segment } from 'semantic-ui-react'
-import { DateFormatter } from '../../../App/common/utils/date-formatter'
-import { Activity } from '../../../App/models/interfaces/activity'
+import { Link } from 'react-router-dom';
+import { Button, Icon, Item, Segment } from 'semantic-ui-react';
+import { DateFormatter } from '../../../App/common/utils/date-formatter';
+import { Activity } from '../../../App/models/interfaces/activity';
+import ActivityListItemAttendee from './ActivityListItemAttendee';
 
 interface Props {
-  activity: Activity
+  activity: Activity;
 }
 
 function AcitivityListItem({ activity }: Props) {
@@ -29,7 +30,9 @@ function AcitivityListItem({ activity }: Props) {
           <Icon name='marker' /> {activity.venue}
         </span>
       </Segment>
-      <Segment secondary>Attendees go here</Segment>
+      <Segment secondary>
+        <ActivityListItemAttendee attendees={activity.attendees!}/>
+      </Segment>
       <Segment clearing>
         <span>{activity.description}</span>
         <Button
@@ -41,7 +44,7 @@ function AcitivityListItem({ activity }: Props) {
         />
       </Segment>
     </Segment.Group>
-  )
+  );
 }
 
-export default AcitivityListItem
+export default AcitivityListItem;
