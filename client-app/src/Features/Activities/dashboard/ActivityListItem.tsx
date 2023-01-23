@@ -1,5 +1,6 @@
+import { observer } from 'mobx-react-lite';
 import { Link } from 'react-router-dom';
-import { Button, Icon, Item, Segment } from 'semantic-ui-react';
+import { Button, Icon, Item, Label, Segment } from 'semantic-ui-react';
 import { DateFormatter } from '../../../App/common/utils/date-formatter';
 import { Activity } from '../../../App/models/interfaces/activity';
 import ActivityListItemAttendee from './ActivityListItemAttendee';
@@ -19,7 +20,24 @@ function AcitivityListItem({ activity }: Props) {
               <Item.Header as={Link} to={`${activity.id}`}>
                 {activity.title}
               </Item.Header>
-              <Item.Description>Hosted by Bob</Item.Description>
+              <Item.Description>
+                Hosted by {activity.host?.displayName}
+              </Item.Description>
+              {activity.isHost && (
+                <Item.Description>
+                  <Label basic color='orange'>
+                    You are hosting this activity
+                  </Label>
+                </Item.Description>
+              )}
+
+              {activity.isGoing && !activity.isHost && (
+                <Item.Description>
+                  <Label basic color='green'>
+                    You are going to this activity
+                  </Label>
+                </Item.Description>
+              )}
             </Item.Content>
           </Item>
         </Item.Group>
@@ -31,7 +49,7 @@ function AcitivityListItem({ activity }: Props) {
         </span>
       </Segment>
       <Segment secondary>
-        <ActivityListItemAttendee attendees={activity.attendees!}/>
+        <ActivityListItemAttendee attendees={activity.attendees!} />
       </Segment>
       <Segment clearing>
         <span>{activity.description}</span>
@@ -47,4 +65,4 @@ function AcitivityListItem({ activity }: Props) {
   );
 }
 
-export default AcitivityListItem;
+export default observer(AcitivityListItem);
