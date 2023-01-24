@@ -17,7 +17,7 @@ namespace Application.Settings
 
             CreateMap<ActivityAttendee, UserProfile>()
             .ForMember(d => d.DisplayName, o => o.MapFrom(s => s.AppUser.DisplayName))
-            .ForMember(d => d.Username, o => o.MapFrom(s => s.AppUser.UserName))
+            .ForMember(d => d.UserName, o => o.MapFrom(s => s.AppUser.UserName))
             .ForMember(d => d.Bio, o => o.MapFrom(s => s.AppUser.Bio));
         }
     }
