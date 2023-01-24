@@ -1,17 +1,20 @@
-import { Form, Formik } from 'formik'
-import { observer } from 'mobx-react-lite'
-import { useEffect, useState } from 'react'
-import { Link, useNavigate, useParams } from 'react-router-dom'
-import { Button, Header, Segment } from 'semantic-ui-react'
-import * as Yup from 'yup'
-import ValidatedDateInput from '../../../App/common/form/ValidateDateInput'
-import ValidatedSelectInput from '../../../App/common/form/ValidatedSelectInput'
-import ValidatedTextArea from '../../../App/common/form/ValidatedTextArea'
-import ValidatedTextInput from '../../../App/common/form/ValidatedTextInput'
-import { categoryOptions } from '../../../App/common/options/CategoryOptions'
-import LoadingComponent from '../../../App/Layout/LoadingComponent'
-import { Activity } from '../../../App/models/interfaces/activity'
-import { useStore } from '../../../App/stores/store'
+import { Form, Formik } from 'formik';
+import { observer } from 'mobx-react-lite';
+import { useEffect, useState } from 'react';
+import { Link, useNavigate, useParams } from 'react-router-dom';
+import { Button, Header, Segment } from 'semantic-ui-react';
+import * as Yup from 'yup';
+import ValidatedDateInput from '../../../App/common/form/ValidateDateInput';
+import ValidatedSelectInput from '../../../App/common/form/ValidatedSelectInput';
+import ValidatedTextArea from '../../../App/common/form/ValidatedTextArea';
+import ValidatedTextInput from '../../../App/common/form/ValidatedTextInput';
+import { categoryOptions } from '../../../App/common/options/CategoryOptions';
+import LoadingComponent from '../../../App/Layout/LoadingComponent';
+import {
+  ActivityFormValues,
+  mapToFormValues,
+} from '../../../App/models/interfaces/activity';
+import { useStore } from '../../../App/stores/store';
 
 const INITIAL_STATE = {
   id: '',
@@ -21,15 +24,15 @@ const INITIAL_STATE = {
   category: '',
   city: '',
   venue: '',
-}
+};
 
 function ActivityForm() {
-  const { activityStore } = useStore()
-  const navigate = useNavigate()
-  const { loadActivity, loading, loadingInitial } = activityStore
-  const { id } = useParams<{ id: string }>()
+  const { activityStore } = useStore();
+  const navigate = useNavigate();
+  const { loadActivity, loadingInitial } = activityStore;
+  const { id } = useParams<{ id: string }>();
 
-  const [activity, setActivity] = useState<Activity>(INITIAL_STATE)
+  const [activity, setActivity] = useState<ActivityFormValues>(INITIAL_STATE);
 
   const validationSchema = Yup.object({
     title: Yup.string().required('The activity title is required'),
@@ -38,33 +41,33 @@ function ActivityForm() {
     date: Yup.string().required('Date is required').nullable(),
     venue: Yup.string().required(),
     city: Yup.string().required(),
-  })
+  });
 
   useEffect(() => {
     if (id) {
-      loadActivity(id).then((a) => setActivity(a!))
+      loadActivity(id).then((a) => setActivity(mapToFormValues(a!)));
     } else {
-      setActivity(INITIAL_STATE)
+      setActivity(INITIAL_STATE);
     }
-  }, [id, loadActivity])
+  }, [id, loadActivity]);
 
-  const createOrEditActivity = (activity: Activity) => {
+  const createOrEditActivity = (activity: ActivityFormValues) => {
     if (activityStore.activitiesByDate.some((a) => a.id === activity.id)) {
       activityStore
         .updateActivity(activity)
-        .then((id) => navigate(`/activities/${id}`))
+        .then((id) => navigate(`/activities/${id}`));
     } else {
       activityStore
         .createActivity(activity)
-        .then((id) => navigate(`/activities/${id}`))
+        .then((id) => navigate(`/activities/${id}`));
     }
-  }
+  };
 
-  const handleFormSubmit = (activity: Activity) => {
-    createOrEditActivity(activity)
-  }
+  const handleFormSubmit = (formValues: ActivityFormValues) => {
+    createOrEditActivity(formValues);
+  };
 
-  if (loadingInitial) return <LoadingComponent content='Loading activity...' />
+  if (loadingInitial) return <LoadingComponent content='Loading activity...' />;
 
   return (
     <Segment clearing>
@@ -100,7 +103,7 @@ function ActivityForm() {
             <ValidatedTextInput placeholder='Venue' name='venue' />
             <Button
               disabled={isSubmitting || !dirty || !isValid}
-              loading={loading}
+              loading={isSubmitting}
               floated='right'
               positive
               type='submit'
@@ -117,7 +120,7 @@ function ActivityForm() {
         )}
       </Formik>
     </Segment>
-  )
+  );
 }
 
-export default observer(ActivityForm)
+export default observer(ActivityForm);

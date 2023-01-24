@@ -1,8 +1,12 @@
-import { makeAutoObservable, runInAction } from 'mobx';
+import { makeAutoObservable, runInAction, toJS } from 'mobx';
 import { v4 as uuid } from 'uuid';
 import agent from '../api/agent';
 import { DateFormatter } from '../common/utils/date-formatter';
-import { Activity } from '../models/interfaces/activity';
+import {
+  Activity,
+  ActivityFormValues,
+  createNewActivity,
+} from '../models/interfaces/activity';
 import { createProfileFromUser } from '../models/interfaces/profile';
 import { User } from '../models/interfaces/user';
 import { store } from './store';
@@ -70,7 +74,7 @@ export default class ActivityStore {
       this.setLoadingInitial(true);
       try {
         activity = await agent.Activities.details(id);
-        this.addActivity(activity);
+        this.setActivity(activity);
         this.setLoadingInitial(false);
         this.selectActivity(activity.id);
         return activity;
@@ -96,8 +100,7 @@ export default class ActivityStore {
         (x) => x.userName === activity.hostUsername
       );
     }
-    activity.date = new Date(activity.date!);
-    this.activityRegistry.set(activity.id, activity);
+    this.addActivity(activity);
   };
 
   setLoadingInitial = (state: boolean) => {
@@ -116,22 +119,25 @@ export default class ActivityStore {
     this.editMode = state;
   };
 
-  createActivity = async (activity: Activity) => {
-    this.setLoading(true);
-    const newActivity = {
+  createActivity = async (activity: ActivityFormValues) => {
+    const partialActivity: ActivityFormValues = {
       ...activity,
       id: uuid(),
     };
     try {
-      await agent.Activities.create(newActivity);
-      this.addActivity(newActivity);
+      const user = store.userStore.user;
+      const attendee = createProfileFromUser(user!);
+      console.log(attendee);
+      await agent.Activities.create(partialActivity);
+      const newActivity = createNewActivity(partialActivity, user!.userName, [
+        attendee,
+      ]);
+      this.setActivity(newActivity);
       this.setEditMode(false);
       this.selectActivity(newActivity.id);
-      this.setLoading(false);
       return newActivity.id;
     } catch (error) {
       console.error(error);
-      this.setLoading(false);
     }
   };
 
@@ -143,14 +149,18 @@ export default class ActivityStore {
     this.activityRegistry.set(activity.id, activityWithFormattedDate);
   };
 
-  updateActivity = async (activity: Activity) => {
-    this.setLoading(true);
+  updateActivity = async (activity: ActivityFormValues) => {
+    await agent.Activities.update(activity);
     try {
-      await agent.Activities.update(activity);
-      this.addActivity(activity);
-      this.setEditMode(false);
-      this.selectActivity(activity.id);
-      this.setLoading(false);
+      let updatedActivity = {
+        ...this.getActivity(activity.id),
+        ...activity,
+      };
+      runInAction(() => {
+        this.addActivity(updatedActivity as Activity);
+        this.setEditMode(false);
+        this.selectActivity(activity.id);
+      });
       return activity.id;
     } catch (error) {
       console.error(error);
