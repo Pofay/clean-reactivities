@@ -189,7 +189,7 @@ export default class ActivityStore {
 
   updateAttendance = async () => {
     const user = store.userStore.user;
-    this.loading = true;
+    this.setLoading(true);
     try {
       await agent.Activities.attend(this.selectedActivity!.id);
       runInAction(() => {
@@ -203,7 +203,23 @@ export default class ActivityStore {
     } catch (error) {
       console.error(error);
     } finally {
-      runInAction(() => (this.loading = false));
+      this.setLoading(false);
+    }
+  };
+
+  cancelActivityToggle = async () => {
+    this.setLoading(true);
+    try {
+      await agent.Activities.attend(this.selectedActivity!.id);
+      runInAction(() => {
+        this.selectedActivity!.isCancelled =
+          !this.selectedActivity?.isCancelled;
+        this.addActivity(this.selectedActivity!);
+      });
+    } catch (error) {
+      console.error(error);
+    } finally {
+      this.setLoading(false);
     }
   };
 

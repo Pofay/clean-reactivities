@@ -13,6 +13,14 @@ function AcitivityListItem({ activity }: Props) {
   return (
     <Segment.Group>
       <Segment>
+        {activity.isCancelled && (
+          <Label
+            attached='top'
+            color='red'
+            style={{ textAlign: 'center' }}
+            content='Cancelled'
+          />
+        )}
         <Item.Group>
           <Item>
             <Item.Image size='tiny' circular src='/assets/user.png' />
