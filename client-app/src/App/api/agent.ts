@@ -81,6 +81,7 @@ const Activities = {
   update: (activity: Activity) =>
     requests.put(`/activities/${activity.id}`, activity),
   delete: (id: string) => requests.delete(`/activities/${id}`),
+  attend: (id: string) => requests.post(`/activities/${id}/attend`, {}),
 };
 
 const Account = {
