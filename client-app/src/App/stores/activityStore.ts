@@ -3,6 +3,8 @@ import { v4 as uuid } from 'uuid';
 import agent from '../api/agent';
 import { DateFormatter } from '../common/utils/date-formatter';
 import { Activity } from '../models/interfaces/activity';
+import { createProfileFromUser } from '../models/interfaces/profile';
+import { User } from '../models/interfaces/user';
 import { store } from './store';
 
 /*
@@ -84,7 +86,7 @@ export default class ActivityStore {
   };
 
   setActivity = (activity: Activity) => {
-    const user = store.userStore.user
+    const user = store.userStore.user;
     if (user) {
       activity.isGoing = activity.attendees!.some(
         (a) => a.userName === user.userName
@@ -174,4 +176,37 @@ export default class ActivityStore {
   setLoading = (state: boolean) => {
     this.loading = state;
   };
+
+  updateAttendance = async () => {
+    const user = store.userStore.user;
+    this.loading = true;
+    try {
+      await agent.Activities.attend(this.selectedActivity!.id);
+      runInAction(() => {
+        if (this.selectedActivity?.isGoing) {
+          this.cancelAttendance(user);
+        } else {
+          this.addAttendance(user);
+        }
+        this.addActivity(this.selectedActivity!);
+      });
+    } catch (error) {
+      console.error(error);
+    } finally {
+      runInAction(() => (this.loading = false));
+    }
+  };
+
+  private addAttendance(user: User | null) {
+    const attendee = createProfileFromUser(user!);
+    this.selectedActivity?.attendees?.push(attendee);
+    this.selectedActivity!.isGoing = true;
+  }
+
+  private cancelAttendance(user: User | null) {
+    this.selectedActivity!.attendees = this.selectedActivity!.attendees?.filter(
+      (a) => a.userName !== user?.userName
+    );
+    this.selectedActivity!.isGoing = false;
+  }
 }
