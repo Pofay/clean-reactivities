@@ -23,7 +23,12 @@ function AcitivityListItem({ activity }: Props) {
         )}
         <Item.Group>
           <Item>
-            <Item.Image size='tiny' circular src='/assets/user.png' />
+            <Item.Image
+              style={{ marginBottom: 5 }}
+              size='tiny'
+              circular
+              src='/assets/user.png'
+            />
             <Item.Content>
               <Item.Header as={Link} to={`${activity.id}`}>
                 {activity.title}
