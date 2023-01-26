@@ -1,15 +1,15 @@
-import { useField } from 'formik'
-import { Form, Label } from 'semantic-ui-react'
-import { Utils } from '../utils/utils'
+import { Utils } from 'App/common/utils/utils';
+import { useField } from 'formik';
+import { Form, Label } from 'semantic-ui-react';
 
 interface Props {
-  placeholder: string
-  name: string
-  label?: string
-  type?: string  
+  placeholder: string;
+  name: string;
+  label?: string;
+  type?: string;
 }
 function ValidatedTextInput(props: Props) {
-  const [field, meta] = useField(props.name)
+  const [field, meta] = useField(props.name);
   return (
     <Form.Field error={meta.touched && !Utils.isNullOrUndefined(meta.error)}>
       <label>{props.label}</label>
@@ -20,7 +20,7 @@ function ValidatedTextInput(props: Props) {
         </Label>
       ) : null}
     </Form.Field>
-  )
+  );
 }
 
-export default ValidatedTextInput
+export default ValidatedTextInput;
