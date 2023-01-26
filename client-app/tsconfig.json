@@ -16,7 +16,8 @@
     "noEmit": true,
     "jsx": "react-jsx",
     "typeRoots": ["node_modules/yup"],
-    "types": ["@types/jest"]
+    "types": ["@types/jest"],
+    "baseUrl": "src"
   },
   "include": ["src"]
 }

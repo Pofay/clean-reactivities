@@ -1,8 +1,8 @@
+import agent from 'App/api/agent';
+import { Utils } from 'App/common/utils/utils';
+import { User, UserFormValues } from 'App/models/interfaces/user';
+import { store } from 'App/stores/store';
 import { makeAutoObservable, runInAction } from 'mobx';
-import agent from '../api/agent';
-import { Utils } from '../common/utils/utils';
-import { User, UserFormValues } from '../models/interfaces/user';
-import { store } from './store';
 
 export default class UserStore {
   user: User | null = null;

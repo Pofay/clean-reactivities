@@ -1,15 +1,15 @@
-import { makeAutoObservable, runInAction, toJS } from 'mobx';
+import { DateFormatter } from 'App/common/utils/date-formatter';
+import { createProfileFromUser } from 'App/models/interfaces/profile';
+import { User } from 'App/models/interfaces/user';
+import { makeAutoObservable, runInAction } from 'mobx';
 import { v4 as uuid } from 'uuid';
-import agent from '../api/agent';
-import { DateFormatter } from '../common/utils/date-formatter';
 import {
   Activity,
   ActivityFormValues,
   createNewActivity,
-} from '../models/interfaces/activity';
-import { createProfileFromUser } from '../models/interfaces/profile';
-import { User } from '../models/interfaces/user';
-import { store } from './store';
+} from 'App/models/interfaces/activity';
+import { store } from 'App/stores/store';
+import agent from 'App/api/agent';
 
 /*
 const parseAndFormatISODateString = (isoDateString: string) =>
