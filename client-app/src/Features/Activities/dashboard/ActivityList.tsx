@@ -1,14 +1,14 @@
-import { observer } from 'mobx-react-lite'
-import { Fragment } from 'react'
-import { Grid, Header } from 'semantic-ui-react'
-import { Activity } from '../../../App/models/interfaces/activity'
-import { useStore } from '../../../App/stores/store'
-import ActivityFilters from './ActivityFilters'
-import AcitivityListItem from './ActivityListItem'
+import { Activity } from 'App/models/interfaces/activity';
+import { useStore } from 'App/stores/store';
+import ActivityFilters from 'Features/Activities/dashboard/ActivityFilters';
+import ActivityListItem from 'Features/Activities/dashboard/ActivityListItem';
+import { observer } from 'mobx-react-lite';
+import { Fragment } from 'react';
+import { Grid, Header } from 'semantic-ui-react';
 
 function ActivityList() {
-  const { activityStore } = useStore()
-  const { groupedActivities } = activityStore
+  const { activityStore } = useStore();
+  const { groupedActivities } = activityStore;
 
   return (
     <Grid>
@@ -19,7 +19,7 @@ function ActivityList() {
               {group}
             </Header>
             {activities.map((a: Activity) => (
-              <AcitivityListItem key={a.id} activity={a} />
+              <ActivityListItem key={a.id} activity={a} />
             ))}
           </Fragment>
         ))}
@@ -28,7 +28,7 @@ function ActivityList() {
         <ActivityFilters />
       </Grid.Column>
     </Grid>
-  )
+  );
 }
 
-export default observer(ActivityList)
+export default observer(ActivityList);
