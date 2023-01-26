@@ -1,9 +1,9 @@
+import { history } from '../..';
+import { store } from 'App/stores/store';
 import axios, { AxiosError, AxiosResponse } from 'axios';
 import { toast } from 'react-toastify';
-import { history } from '../..';
 import { Activity, ActivityFormValues } from '../models/interfaces/activity';
 import { User, UserFormValues } from '../models/interfaces/user';
-import { store } from '../stores/store';
 
 const sleep = (delay: number) =>
   new Promise((resolve) => {
