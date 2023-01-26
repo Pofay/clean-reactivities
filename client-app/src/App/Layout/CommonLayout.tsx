@@ -1,8 +1,8 @@
-import { Container } from 'semantic-ui-react'
-import Navbar from './Navbar'
+import Navbar from 'App/Layout/Navbar';
+import { Container } from 'semantic-ui-react';
 
 interface LayoutProps {
-  children: React.ReactNode
+  children: React.ReactNode;
 }
 
 function CommonLayout({ children }: LayoutProps) {
@@ -11,7 +11,7 @@ function CommonLayout({ children }: LayoutProps) {
       <Navbar />
       <Container style={{ marginTop: '7em' }}>{children}</Container>
     </>
-  )
+  );
 }
 
-export default CommonLayout
+export default CommonLayout;

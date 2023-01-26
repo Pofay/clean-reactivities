@@ -1,18 +1,18 @@
 import 'semantic-ui-css/semantic.min.css';
-import ActivityDashboard from '../../Features/Activities/dashboard/ActivityDashboard';
-import { observer } from 'mobx-react-lite';
-import HomePage from '../../Features/home/HomePage';
-import { Outlet, Route, Routes } from 'react-router-dom';
-import TestErrors from '../../Features/Errors/TestError';
-import { ToastContainer } from 'react-toastify';
-import NotFound from '../../Features/Errors/NotFound';
-import ServerError from '../../Features/Errors/ServerError';
-import CommonLayout from './CommonLayout';
-import LoginForm from '../../Features/Users/LoginForm';
-import { useStore } from '../stores/store';
 import { useEffect } from 'react';
-import LoadingComponent from './LoadingComponent';
-import ModalContainer from '../common/modals/ModalContainer';
+import { useStore } from 'App/stores/store';
+import LoadingComponent from 'App/Layout/LoadingComponent';
+import ModalContainer from 'App/common/modals/ModalContainer';
+import { ToastContainer } from 'react-toastify';
+import { Outlet, Route, Routes } from 'react-router-dom';
+import CommonLayout from 'App/Layout/CommonLayout';
+import NotFound from 'Features/Errors/NotFound';
+import TestErrors from 'Features/Errors/TestError';
+import LoginForm from 'Features/Users/LoginForm';
+import ServerError from 'Features/Errors/ServerError';
+import ActivityDashboard from 'Features/Activities/dashboard/ActivityDashboard';
+import HomePage from 'Features/home/HomePage';
+import { observer } from 'mobx-react-lite';
 
 function App() {
   const { commonStore, userStore } = useStore();
