@@ -1,9 +1,9 @@
+import { DateFormatter } from 'App/common/utils/date-formatter';
+import { Activity } from 'App/models/interfaces/activity';
+import { useStore } from 'App/stores/store';
 import { observer } from 'mobx-react-lite';
 import { Link } from 'react-router-dom';
 import { Button, Header, Image, Item, Label, Segment } from 'semantic-ui-react';
-import { DateFormatter } from '../../../App/common/utils/date-formatter';
-import { Activity } from '../../../App/models/interfaces/activity';
-import { useStore } from '../../../App/stores/store';
 
 const activityImageStyle = {
   filter: 'brightness(30%)',

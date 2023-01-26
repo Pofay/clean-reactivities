@@ -1,9 +1,9 @@
+import { DateFormatter } from 'App/common/utils/date-formatter';
+import { Activity } from 'App/models/interfaces/activity';
+import ActivityListItemAttendee from 'Features/Activities/dashboard/ActivityListItemAttendee';
 import { observer } from 'mobx-react-lite';
 import { Link } from 'react-router-dom';
 import { Button, Icon, Item, Label, Segment } from 'semantic-ui-react';
-import { DateFormatter } from '../../../App/common/utils/date-formatter';
-import { Activity } from '../../../App/models/interfaces/activity';
-import ActivityListItemAttendee from './ActivityListItemAttendee';
 
 interface Props {
   activity: Activity;

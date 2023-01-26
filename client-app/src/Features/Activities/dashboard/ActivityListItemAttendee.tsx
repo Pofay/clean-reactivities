@@ -1,8 +1,8 @@
+import { UserProfile } from 'App/models/interfaces/profile';
+import UserProfileCard from 'Features/profiles/UserProfileCard';
 import { observer } from 'mobx-react-lite';
 import { Link } from 'react-router-dom';
 import { List, Image, Popup } from 'semantic-ui-react';
-import { UserProfile } from '../../../App/models/interfaces/profile';
-import UserProfileCard from '../../profiles/UserProfileCard';
 
 interface Props {
   attendees: UserProfile[];

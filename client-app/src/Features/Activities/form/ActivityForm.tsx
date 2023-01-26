@@ -1,20 +1,20 @@
+import ValidatedDateInput from 'App/common/form/ValidateDateInput';
+import ValidatedSelectInput from 'App/common/form/ValidatedSelectInput';
+import ValidatedTextArea from 'App/common/form/ValidatedTextArea';
+import ValidatedTextInput from 'App/common/form/ValidatedTextInput';
+import { categoryOptions } from 'App/common/options/CategoryOptions';
+import LoadingComponent from 'App/Layout/LoadingComponent';
+import {
+  ActivityFormValues,
+  mapToFormValues,
+} from 'App/models/interfaces/activity';
+import { useStore } from 'App/stores/store';
 import { Form, Formik } from 'formik';
 import { observer } from 'mobx-react-lite';
 import { useEffect, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { Button, Header, Segment } from 'semantic-ui-react';
 import * as Yup from 'yup';
-import ValidatedDateInput from '../../../App/common/form/ValidateDateInput';
-import ValidatedSelectInput from '../../../App/common/form/ValidatedSelectInput';
-import ValidatedTextArea from '../../../App/common/form/ValidatedTextArea';
-import ValidatedTextInput from '../../../App/common/form/ValidatedTextInput';
-import { categoryOptions } from '../../../App/common/options/CategoryOptions';
-import LoadingComponent from '../../../App/Layout/LoadingComponent';
-import {
-  ActivityFormValues,
-  mapToFormValues,
-} from '../../../App/models/interfaces/activity';
-import { useStore } from '../../../App/stores/store';
 
 const INITIAL_STATE = {
   id: '',

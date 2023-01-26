@@ -1,7 +1,7 @@
+import { useStore } from 'App/stores/store';
 import { observer } from 'mobx-react-lite';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { Button, Container, Dropdown, Image, Menu } from 'semantic-ui-react';
-import { useStore } from '../stores/store';
 
 export default observer(function Navbar() {
   const {

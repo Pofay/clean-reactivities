@@ -1,6 +1,6 @@
+import { Utils } from 'App/common/utils/utils'
 import { useField } from 'formik'
 import { Form, Label, Select } from 'semantic-ui-react'
-import { Utils } from '../utils/utils'
 
 interface Props {
   placeholder: string

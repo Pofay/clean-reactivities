@@ -1,10 +1,10 @@
+import ValidatedTextInput from 'App/common/form/ValidatedTextInput';
+import { useStore } from 'App/stores/store';
+import ValidationErrors from 'Features/Errors/ValidationErrors';
 import { ErrorMessage, Formik } from 'formik';
 import { useNavigate } from 'react-router-dom';
 import { Button, Form, Header } from 'semantic-ui-react';
 import * as Yup from 'yup';
-import ValidatedTextInput from '../../App/common/form/ValidatedTextInput';
-import { useStore } from '../../App/stores/store';
-import ValidationErrors from '../Errors/ValidationErrors';
 
 function RegisterForm() {
   const { userStore } = useStore();

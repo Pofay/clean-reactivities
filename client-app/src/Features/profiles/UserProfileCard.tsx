@@ -1,7 +1,7 @@
+import { UserProfile } from 'App/models/interfaces/profile';
 import { observer } from 'mobx-react-lite';
 import { Link } from 'react-router-dom';
 import { Card, Icon, Image } from 'semantic-ui-react';
-import { UserProfile } from '../../App/models/interfaces/profile';
 
 interface Props {
   profile: UserProfile;

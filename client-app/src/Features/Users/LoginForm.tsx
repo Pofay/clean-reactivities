@@ -1,9 +1,9 @@
+import ValidatedTextInput from 'App/common/form/ValidatedTextInput';
+import { useStore } from 'App/stores/store';
 import { ErrorMessage, Form, Formik } from 'formik';
 import { observer } from 'mobx-react-lite';
 import { useNavigate } from 'react-router-dom';
 import { Button, Header, Label } from 'semantic-ui-react';
-import ValidatedTextInput from '../../App/common/form/ValidatedTextInput';
-import { useStore } from '../../App/stores/store';
 
 function LoginForm() {
   const { userStore } = useStore();

@@ -1,7 +1,7 @@
 import { useField } from 'formik'
 import { Form, Label } from 'semantic-ui-react'
 import DatePicker, { ReactDatePickerProps } from 'react-datepicker'
-import { Utils } from '../utils/utils'
+import { Utils } from 'App/common/utils/utils'
 
 function ValidatedDateInput(props: Partial<ReactDatePickerProps>) {
   const [field, meta, helpers] = useField(props.name!)

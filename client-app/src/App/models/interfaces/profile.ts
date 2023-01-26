@@ -1,4 +1,4 @@
-import { User } from './user';
+import { User } from "App/models/interfaces/user";
 
 export interface UserProfile {
   userName: string;
