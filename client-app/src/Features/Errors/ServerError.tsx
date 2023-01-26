@@ -1,8 +1,8 @@
-import { Container, Header, Segment } from 'semantic-ui-react'
-import { useStore } from '../../App/stores/store'
+import { useStore } from 'App/stores/store';
+import { Container, Header, Segment } from 'semantic-ui-react';
 
 function ServerError() {
-  const { commonStore } = useStore()
+  const { commonStore } = useStore();
   return (
     <Container>
       <Header as='h1' content='Server Error' />
@@ -14,7 +14,7 @@ function ServerError() {
         </Segment>
       )}
     </Container>
-  )
+  );
 }
 
-export default ServerError
+export default ServerError;
