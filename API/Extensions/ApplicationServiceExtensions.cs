@@ -3,6 +3,7 @@ using Application.Interfaces;
 using Application.Settings;
 using dotenv.net.Utilities;
 using Infrastructure;
+using Infrastructure.Photos;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -34,6 +35,12 @@ namespace API.Extensions
             services.AddAutoMapper(typeof(MappingProfiles));
             services.AddHttpContextAccessor();
             services.AddScoped<IUserAccessor, UserAccessor>();
+            services.Configure<CloudinarySettings>(opt =>
+            {
+                opt.CloudName = EnvReader.GetStringValue("CLOUDINARY_CLOUDNAME");
+                opt.ApiKey = EnvReader.GetStringValue("CLOUDINARY_APIKEY");
+                opt.ApiSecret = EnvReader.GetStringValue("CLOUDINARY_APISECRET");
+            });
 
             return services;
         }
