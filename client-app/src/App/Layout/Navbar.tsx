@@ -1,3 +1,4 @@
+import { Images } from 'App/common/utils/images';
 import { useStore } from 'App/stores/store';
 import { observer } from 'mobx-react-lite';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
@@ -14,11 +15,7 @@ export default observer(function Navbar() {
     <Menu inverted fixed='top'>
       <Container>
         <Menu.Item as={NavLink} to='/' header>
-          <img
-            src='/assets/logo.png'
-            alt='logo'
-            style={{ marginRight: '10px' }}
-          />
+          <img src={Images.logo} alt='logo' style={{ marginRight: '10px' }} />
           Reactivities
         </Menu.Item>
         <Menu.Item as={NavLink} to='/activities' name='Actitivies' />
@@ -32,7 +29,7 @@ export default observer(function Navbar() {
           />
           <Menu.Item position='right'>
             <Image
-              src={user?.image || '/assets/user.png'}
+              src={user?.image || Images.baseUserImage}
               avatar
               spaced='right'
             ></Image>
