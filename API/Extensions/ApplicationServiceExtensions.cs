@@ -35,6 +35,7 @@ namespace API.Extensions
             services.AddAutoMapper(typeof(MappingProfiles));
             services.AddHttpContextAccessor();
             services.AddScoped<IUserAccessor, UserAccessor>();
+            services.AddScoped<IPhotoAccessor, PhotoAccessor>();
             services.Configure<CloudinarySettings>(opt =>
             {
                 opt.CloudName = EnvReader.GetStringValue("CLOUDINARY_CLOUDNAME");
