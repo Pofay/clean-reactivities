@@ -1,3 +1,4 @@
+import { Images } from 'App/common/utils/images';
 import { UserProfile } from 'App/models/interfaces/profile';
 import UserProfileCard from 'Features/profiles/UserProfileCard';
 import { observer } from 'mobx-react-lite';
@@ -24,7 +25,7 @@ function ActivityListItemAttendee(props: Props) {
               <Image
                 size='mini'
                 circular
-                src={attendee.image || '/assets/user.png'}
+                src={attendee.image || Images.baseUserImage}
               ></Image>
             </List.Item>
           }

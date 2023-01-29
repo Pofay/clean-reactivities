@@ -1,4 +1,5 @@
 import { DateFormatter } from 'App/common/utils/date-formatter';
+import { Images } from 'App/common/utils/images';
 import { Activity } from 'App/models/interfaces/activity';
 import { useStore } from 'App/stores/store';
 import { observer } from 'mobx-react-lite';
@@ -39,7 +40,7 @@ export default observer(function ActivityDetailedHeader({ activity }: Props) {
           />
         )}
         <Image
-          src={`/assets/categoryImages/${activity.category}.jpg`}
+          src={Images.categoryImage(activity.category)}
           fluid
           style={activityImageStyle}
         />

@@ -1,3 +1,4 @@
+import { Images } from 'App/common/utils/images';
 import { Activity } from 'App/models/interfaces/activity';
 import { observer } from 'mobx-react-lite';
 import { Link } from 'react-router-dom';
@@ -35,7 +36,7 @@ export default observer(function ActivityDetailedSidebar(props: Props) {
                   Host
                 </Label>
               )}
-              <Image size='tiny' src={attendee.image || '/assets/user.png'} />
+              <Image size='tiny' src={attendee.image || Images.baseUserImage} />
               <Item.Content verticalAlign='middle'>
                 <Item.Header as='h3'>
                   <Link to={`/profiles/${attendee.userName}`}>

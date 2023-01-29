@@ -1,4 +1,5 @@
 import { DateFormatter } from 'App/common/utils/date-formatter';
+import { Images } from 'App/common/utils/images';
 import { Activity } from 'App/models/interfaces/activity';
 import ActivityListItemAttendee from 'Features/Activities/dashboard/ActivityListItemAttendee';
 import { observer } from 'mobx-react-lite';
@@ -27,7 +28,7 @@ function AcitivityListItem({ activity }: Props) {
               style={{ marginBottom: 5 }}
               size='tiny'
               circular
-              src='/assets/user.png'
+              src={Images.baseUserImage}
             />
             <Item.Content>
               <Item.Header as={Link} to={`${activity.id}`}>

@@ -1,3 +1,4 @@
+import { Images } from 'App/common/utils/images';
 import { useStore } from 'App/stores/store';
 import LoginForm from 'Features/Users/LoginForm';
 import RegisterForm from 'Features/Users/RegisterForm';
@@ -13,7 +14,7 @@ export default observer(function HomePage() {
         <Header as='h1' inverted>
           <Image
             size='massive'
-            src='/assets/logo.png'
+            src={Images.logo}
             alt='logo'
             style={{ marginBottom: 12 }}
           />
