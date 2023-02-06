@@ -1,10 +1,11 @@
-import { User } from "App/models/interfaces/user";
+import { User } from 'App/models/interfaces/user';
 
 export interface UserProfile {
   userName: string;
   displayName: string;
   image?: string;
   bio?: string;
+  photos?: Photo[];
 }
 
 export const createProfileFromUser = (user: User): UserProfile => {
@@ -14,3 +15,9 @@ export const createProfileFromUser = (user: User): UserProfile => {
     image: user.image,
   };
 };
+
+export interface Photo {
+  id: string;
+  url: string;
+  isMain: boolean;
+}
