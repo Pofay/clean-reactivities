@@ -1,9 +1,10 @@
 import { Images } from 'App/common/utils/images';
+import { UserProfile } from 'App/models/interfaces/profile';
+import { observer } from 'mobx-react-lite';
 import {
   Button,
   Divider,
   Grid,
-  GridColumn,
   Header,
   Item,
   Reveal,
@@ -11,16 +12,25 @@ import {
   Statistic,
 } from 'semantic-ui-react';
 
-function UserProfileHeader() {
+export interface Props {
+  profile: UserProfile;
+}
+
+function UserProfileHeader(props: Props) {
+  const { profile } = props;
   return (
     <Segment>
       <Grid>
         <Grid.Column width={12}>
           <Item.Group>
             <Item>
-              <Item.Image avatar size='small' src={Images.baseUserImage} />
+              <Item.Image
+                avatar
+                size='small'
+                src={profile.image || Images.baseUserImage}
+              />
               <Item.Content verticalAlign='middle'>
-                <Header as='h1' content='DisplayName' />
+                <Header as='h1' content={profile.displayName} />
               </Item.Content>
             </Item>
           </Item.Group>
@@ -50,4 +60,4 @@ function UserProfileHeader() {
   );
 }
 
-export default UserProfileHeader;
+export default observer(UserProfileHeader);
