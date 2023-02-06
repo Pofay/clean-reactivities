@@ -22,8 +22,12 @@ function UserProfilePage() {
   return (
     <Grid>
       <Grid.Column width={16}>
-        {profile && <UserProfileHeader profile={profile} />}
-        <UserProfileContent />
+        {profile && (
+          <>
+            <UserProfileHeader profile={profile} />
+            <UserProfileContent profile={profile} />
+          </>
+        )}
       </Grid.Column>
     </Grid>
   );
