@@ -4,6 +4,7 @@ import axios, { AxiosError, AxiosResponse } from 'axios';
 import { toast } from 'react-toastify';
 import { Activity, ActivityFormValues } from '../models/interfaces/activity';
 import { User, UserFormValues } from '../models/interfaces/user';
+import { UserProfile } from 'App/models/interfaces/profile';
 
 const sleep = (delay: number) =>
   new Promise((resolve) => {
@@ -85,6 +86,10 @@ const Activities = {
   attend: (id: string) => requests.post(`/activities/${id}/attend`, {}),
 };
 
+const Profiles = {
+  get: (userName: string) => requests.get<UserProfile>(`/profiles/${userName}`),
+};
+
 const Account = {
   current: () => requests.get<User>('/account'),
   login: (user: UserFormValues) => requests.post<User>('/account/login', user),
@@ -95,6 +100,7 @@ const Account = {
 const agent = {
   Activities,
   Account,
+  Profiles,
 };
 
 export default agent;
