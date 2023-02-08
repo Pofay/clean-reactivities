@@ -1,3 +1,4 @@
+import PhotoUploadWidget from 'App/common/imageUpload/PhotoUploadWidget';
 import { Images } from 'App/common/utils/images';
 import { UserProfile } from 'App/models/interfaces/profile';
 import { useStore } from 'App/stores/store';
@@ -31,7 +32,7 @@ function UserProfilePhotos(props: Props) {
         </Grid.Column>
         <Grid.Column width={16}>
           {addPhotoMode ? (
-            <p>Photo widget goes here</p>
+            <PhotoUploadWidget />
           ) : (
             <Card.Group itemsPerRow={5}>
               {profile.photos?.map((photo) => (
