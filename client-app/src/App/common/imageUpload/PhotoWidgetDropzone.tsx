@@ -23,13 +23,13 @@ function PhotoWidgetDropzone(props: Props) {
 
   const onDrop = useCallback(
     (acceptedFiles: any) => {
-      const urls = acceptedFiles.map((file: any) =>
+      const blobFiles = acceptedFiles.map((file: any) =>
         Object.assign(file, {
           preview: URL.createObjectURL(file),
         })
       );
-      console.table(urls)
-      setFiles(urls);
+      console.table(blobFiles)
+      setFiles(blobFiles);
     },
     [setFiles]
   );
