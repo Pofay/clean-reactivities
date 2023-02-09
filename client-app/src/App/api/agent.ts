@@ -4,7 +4,7 @@ import axios, { AxiosError, AxiosResponse } from 'axios';
 import { toast } from 'react-toastify';
 import { Activity, ActivityFormValues } from '../models/interfaces/activity';
 import { User, UserFormValues } from '../models/interfaces/user';
-import { UserProfile } from 'App/models/interfaces/profile';
+import { Photo, UserProfile } from 'App/models/interfaces/profile';
 
 const sleep = (delay: number) =>
   new Promise((resolve) => {
@@ -88,6 +88,13 @@ const Activities = {
 
 const Profiles = {
   get: (userName: string) => requests.get<UserProfile>(`/profiles/${userName}`),
+  uploadPhoto: (file: Blob) => {
+    let formData = new FormData();
+    formData.append('File', file);
+    return axios.post<Photo>('photos', formData, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+    });
+  },
 };
 
 const Account = {
