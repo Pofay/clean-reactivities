@@ -13,6 +13,7 @@ import ServerError from 'Features/Errors/ServerError';
 import ActivityDashboard from 'Features/Activities/dashboard/ActivityDashboard';
 import HomePage from 'Features/home/HomePage';
 import { observer } from 'mobx-react-lite';
+import UserProfilePage from 'Features/profiles/UserProfilePage';
 
 function App() {
   const { commonStore, userStore } = useStore();
@@ -45,6 +46,7 @@ function App() {
           <Route path='login' element={<LoginForm />} />
           <Route path='server-error' element={<ServerError />} />
           <Route path='activities/*' element={<ActivityDashboard />} />
+          <Route path='profiles/:username' element={<UserProfilePage />} />
         </Route>
         <Route path='/' element={<HomePage />} />
       </Routes>

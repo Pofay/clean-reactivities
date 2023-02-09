@@ -28,14 +28,17 @@ function AcitivityListItem({ activity }: Props) {
               style={{ marginBottom: 5 }}
               size='tiny'
               circular
-              src={Images.baseUserImage}
+              src={activity.host?.image || Images.baseUserImage}
             />
             <Item.Content>
               <Item.Header as={Link} to={`${activity.id}`}>
                 {activity.title}
               </Item.Header>
               <Item.Description>
-                Hosted by {activity.host?.displayName}
+                Hosted by{' '}
+                <Link to={`/profiles/${activity.hostUsername}`}>
+                  {activity.host?.displayName}
+                </Link>
               </Item.Description>
               {activity.isHost && (
                 <Item.Description>
