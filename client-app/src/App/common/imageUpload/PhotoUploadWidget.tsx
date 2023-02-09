@@ -4,19 +4,27 @@ import { Button, Grid, Header, Image } from 'semantic-ui-react';
 import { Cropper } from 'react-cropper';
 import PhotoImageCropper from 'App/common/imageUpload/PhotoImageCropper';
 
-function PhotoUploadWidget() {
+interface Props {
+  uploadPhoto: (file: Blob) => void;
+  loading: boolean;
+}
+
+const cleanUpFileUrl = (file: any) => URL.revokeObjectURL(file.preview);
+
+function PhotoUploadWidget(props: Props) {
+  const { loading, uploadPhoto } = props;
   const [files, setFiles] = useState<any>([]);
   const [cropper, setCropper] = useState<Cropper>();
 
   const onCrop = () => {
     if (cropper) {
-      cropper.getCroppedCanvas().toBlob((blob) => console.log(blob));
+      cropper.getCroppedCanvas().toBlob((blob) => uploadPhoto(blob!));
     }
   };
 
   useEffect(() => {
     return () => {
-      files.forEach((file: any) => URL.revokeObjectURL(file.preview));
+      files.forEach(cleanUpFileUrl);
     };
   }, [files]);
 
@@ -46,8 +54,17 @@ function PhotoUploadWidget() {
               style={{ minHeight: 200, overflow: 'hidden' }}
             />
             <Button.Group widths={2}>
-              <Button onClick={onCrop} positive icon='check' />
-              <Button onClick={() => setFiles([])} icon='close' />
+              <Button
+                loading={loading}
+                onClick={onCrop}
+                positive
+                icon='check'
+              />
+              <Button
+                disabled={loading}
+                onClick={() => setFiles([])}
+                icon='close'
+              />
             </Button.Group>
           </>
         )}
