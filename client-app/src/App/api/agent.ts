@@ -95,6 +95,8 @@ const Profiles = {
       headers: { 'Content-Type': 'multipart/form-data' },
     });
   },
+  setMainPhoto: (id: string) => requests.post(`/photos/${id}/setMain`, {}),
+  deletePhoto: (id: string) => requests.delete(`/photos/${id}`),
 };
 
 const Account = {
