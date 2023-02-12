@@ -5,7 +5,7 @@ import { useStore } from 'App/stores/store';
 import { Formik } from 'formik';
 import { observer } from 'mobx-react-lite';
 import { useState } from 'react';
-import { Button, Form, Grid, GridColumn, Header } from 'semantic-ui-react';
+import { Button, Form, Grid, GridColumn, Header, Tab } from 'semantic-ui-react';
 import * as Yup from 'yup';
 
 interface Props {
@@ -43,58 +43,64 @@ function UserProfileAbout(props: Props) {
   };
 
   return (
-    <Grid>
-      <Grid.Column width={16}>
-        <Header
-          floated='left'
-          icon='user'
-          content={`About ${profile.displayName}`}
-        />
-        {isCurrentUser && (
-          <Button
-            floated='right'
-            basic
-            content={editAboutMode ? 'Cancel' : 'Edit Profile'}
-            onClick={() => setEditAboutMode(!editAboutMode)}
+    <Tab.Pane>
+      <Grid>
+        <Grid.Column width={16}>
+          <Header
+            floated='left'
+            icon='user'
+            content={`About ${profile.displayName}`}
           />
-        )}
-      </Grid.Column>
-
-      <Grid.Column width={16}>
-        <Formik
-          validationSchema={validationSchema}
-          enableReinitialize
-          initialValues={formValues}
-          onSubmit={(values) => handleFormSubmit(values)}
-        >
-          {({ handleSubmit, isValid, isSubmitting, dirty }) => (
-            <Form
-              className='ui form'
-              onSubmit={handleSubmit}
-              autoComplete='off'
-            >
-              <ValidatedTextInput
-                placeholder='Display Name'
-                name='displayName'
-              />
-              <ValidatedTextArea
-                rows={3}
-                placeholder='Add your Bio'
-                name='bio'
-              />
-              <Button
-                disabled={isSubmitting || !dirty || !isValid}
-                loading={isSubmitting}
-                floated='right'
-                positive
-                type='submit'
-                content='Update Profile'
-              />
-            </Form>
+          {isCurrentUser && (
+            <Button
+              floated='right'
+              basic
+              content={editAboutMode ? 'Cancel' : 'Edit Profile'}
+              onClick={() => setEditAboutMode(!editAboutMode)}
+            />
           )}
-        </Formik>
-      </Grid.Column>
-    </Grid>
+        </Grid.Column>
+
+        <Grid.Column width={16}>
+          {editAboutMode ? (
+            <Formik
+              validationSchema={validationSchema}
+              enableReinitialize
+              initialValues={formValues}
+              onSubmit={(values) => handleFormSubmit(values)}
+            >
+              {({ handleSubmit, isValid, isSubmitting, dirty }) => (
+                <Form
+                  className='ui form'
+                  onSubmit={handleSubmit}
+                  autoComplete='off'
+                >
+                  <ValidatedTextInput
+                    placeholder='Display Name'
+                    name='displayName'
+                  />
+                  <ValidatedTextArea
+                    rows={3}
+                    placeholder='Add your Bio'
+                    name='bio'
+                  />
+                  <Button
+                    disabled={isSubmitting || !dirty || !isValid}
+                    loading={isSubmitting}
+                    floated='right'
+                    positive
+                    type='submit'
+                    content='Update Profile'
+                  />
+                </Form>
+              )}
+            </Formik>
+          ) : (
+            <p>{profile.bio}</p>
+          )}
+        </Grid.Column>
+      </Grid>
+    </Tab.Pane>
   );
 }
 
