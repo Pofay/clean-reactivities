@@ -19,6 +19,7 @@ function UserProfileAbout() {
   const {
     userProfileStore: { isCurrentUser, updateProfile, profile },
   } = useStore();
+
   const [editMode, setEditMode] = useState(false);
 
   const [formValues, setFormValues] = useState<UserProfileFormValues>({
