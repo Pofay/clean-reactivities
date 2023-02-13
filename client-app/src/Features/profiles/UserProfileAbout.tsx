@@ -1,45 +1,46 @@
 import ValidatedTextArea from 'App/common/form/ValidatedTextArea';
 import ValidatedTextInput from 'App/common/form/ValidatedTextInput';
-import { UserProfile } from 'App/models/interfaces/profile';
+import {
+  UserProfile,
+  UserProfileFormValues,
+} from 'App/models/interfaces/profile';
 import { useStore } from 'App/stores/store';
 import { Formik } from 'formik';
 import { observer } from 'mobx-react-lite';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Button, Form, Grid, GridColumn, Header, Tab } from 'semantic-ui-react';
 import * as Yup from 'yup';
 
-interface Props {
-  profile: UserProfile;
-}
-
-interface AboutFormValues {
-  displayName: string;
-  bio?: string | undefined;
-}
-
-const mapToFormValues = (profile: UserProfile): AboutFormValues => {
+const mapToFormValues = (profile: UserProfile): UserProfileFormValues => {
   return {
     bio: profile.bio,
     displayName: profile.displayName,
   };
 };
 
-function UserProfileAbout(props: Props) {
-  const { profile } = props;
+function UserProfileAbout() {
   const {
-    userProfileStore: { isCurrentUser },
+    userProfileStore: { isCurrentUser, updateProfile, profile, loading },
   } = useStore();
-  const [editAboutMode, setEditAboutMode] = useState(false);
-  const [formValues, setFormValues] = useState<AboutFormValues>(
-    mapToFormValues(profile)
-  );
+  const [editMode, setEditMode] = useState(false);
+
+  const [formValues, setFormValues] = useState<UserProfileFormValues>({
+    displayName: '',
+    bio: '',
+  });
+
+  useEffect(() => {
+    if (profile) {
+      setFormValues(mapToFormValues(profile));
+    }
+  }, [profile]);
 
   const validationSchema = Yup.object({
     displayName: Yup.string().required('The displayName property is required.'),
   });
 
-  const handleFormSubmit = (values: AboutFormValues) => {
-    console.log(values);
+  const handleFormSubmit = (values: UserProfileFormValues) => {
+    updateProfile(values).then(() => setEditMode(!editMode));
   };
 
   return (
@@ -49,20 +50,20 @@ function UserProfileAbout(props: Props) {
           <Header
             floated='left'
             icon='user'
-            content={`About ${profile.displayName}`}
+            content={`About ${profile?.displayName}`}
           />
           {isCurrentUser && (
             <Button
               floated='right'
               basic
-              content={editAboutMode ? 'Cancel' : 'Edit Profile'}
-              onClick={() => setEditAboutMode(!editAboutMode)}
+              content={editMode ? 'Cancel' : 'Edit Profile'}
+              onClick={() => setEditMode(!editMode)}
             />
           )}
         </Grid.Column>
 
         <Grid.Column width={16}>
-          {editAboutMode ? (
+          {editMode ? (
             <Formik
               validationSchema={validationSchema}
               enableReinitialize
@@ -96,7 +97,7 @@ function UserProfileAbout(props: Props) {
               )}
             </Formik>
           ) : (
-            <p>{profile.bio}</p>
+            <p>{profile?.bio}</p>
           )}
         </Grid.Column>
       </Grid>
