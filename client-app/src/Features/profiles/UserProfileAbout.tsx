@@ -3,7 +3,7 @@ import {
   UserProfileFormValues,
 } from 'App/models/interfaces/profile';
 import { useStore } from 'App/stores/store';
-import UserProfileForm from 'Features/profiles/form/UserProfileForm';
+import UserProfileForm from 'Features/profiles/form/UserProfileEditForm';
 import { observer } from 'mobx-react-lite';
 import { useEffect, useState } from 'react';
 import { Button, Grid, Header, Tab } from 'semantic-ui-react';

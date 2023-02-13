@@ -10,7 +10,7 @@ interface Props {
   handleSubmit: (formValues: UserProfileFormValues) => void;
 }
 
-function UserProfileForm(props: Props) {
+function UserProfileEditForm(props: Props) {
   const { formValues, handleSubmit } = props;
 
   const validationSchema = Yup.object({
@@ -42,4 +42,4 @@ function UserProfileForm(props: Props) {
   );
 }
 
-export default UserProfileForm;
+export default UserProfileEditForm;
