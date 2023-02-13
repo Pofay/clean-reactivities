@@ -7,6 +7,10 @@ export interface UserProfile {
   bio?: string;
   photos?: Photo[];
 }
+export interface UserProfileFormValues {
+  displayName: string;
+  bio?: string | undefined;
+}
 
 export const createProfileFromUser = (user: User): UserProfile => {
   return {

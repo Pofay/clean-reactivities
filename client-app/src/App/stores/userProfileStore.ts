@@ -1,5 +1,9 @@
 import agent from 'App/api/agent';
-import { Photo, UserProfile } from 'App/models/interfaces/profile';
+import {
+  Photo,
+  UserProfile,
+  UserProfileFormValues,
+} from 'App/models/interfaces/profile';
 import { store } from 'App/stores/store';
 import { makeAutoObservable, runInAction } from 'mobx';
 
@@ -82,6 +86,30 @@ export default class UserProfileStore {
           );
           this.loading = false;
         }
+      });
+    } catch (error) {
+      console.error(error);
+      runInAction(() => (this.loading = false));
+    }
+  };
+
+  updateProfile = async (formValues: UserProfileFormValues) => {
+    this.loading = true;
+    try {
+      await agent.Profiles.updateProfile(
+        formValues.displayName,
+        formValues.bio
+      );
+      runInAction(() => {
+        if (this.profile) {
+          this.profile = {
+            ...this.profile,
+            displayName: formValues.displayName,
+            bio: formValues.bio,
+          };
+        }
+        store.userStore.setDisplayName(formValues.displayName);
+        this.loading = false;
       });
     } catch (error) {
       console.error(error);

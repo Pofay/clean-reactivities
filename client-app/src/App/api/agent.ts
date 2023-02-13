@@ -5,6 +5,7 @@ import { toast } from 'react-toastify';
 import { Activity, ActivityFormValues } from '../models/interfaces/activity';
 import { User, UserFormValues } from '../models/interfaces/user';
 import { Photo, UserProfile } from 'App/models/interfaces/profile';
+import { string } from 'yup';
 
 const sleep = (delay: number) =>
   new Promise((resolve) => {
@@ -88,6 +89,9 @@ const Activities = {
 
 const Profiles = {
   get: (userName: string) => requests.get<UserProfile>(`/profiles/${userName}`),
+  updateProfile: (displayName: string, bio?: string | undefined) =>
+    requests.put(`/profiles`, { displayName, bio }),
+
   uploadPhoto: (file: Blob) => {
     let formData = new FormData();
     formData.append('File', file);

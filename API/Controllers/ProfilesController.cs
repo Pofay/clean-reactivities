@@ -1,3 +1,4 @@
+using API.DTOs;
 using Application.Profiles;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -17,6 +18,12 @@ namespace API.Controllers
         public async Task<IActionResult> GetProfile(string userName)
         {
             return HandleResult(await _mediator.Send(new GetUserProfile.Query(userName)));
+        }
+
+        [HttpPut]
+        public async Task<IActionResult> UpdateProfile(UpdateProfileDto dto)
+        {
+            return HandleResult(await _mediator.Send(new UpdateUserProfile.Command(dto.DisplayName, dto.Bio)));
         }
     }
 }
