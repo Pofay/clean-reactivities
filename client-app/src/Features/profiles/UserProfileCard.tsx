@@ -7,6 +7,13 @@ import { Card, Icon, Image } from 'semantic-ui-react';
 interface Props {
   profile: UserProfile;
 }
+
+const truncateText = (text: string | undefined) => {
+  if (text) {
+    return text.length > 40 ? text.substring(0, 37) + '...' : text;
+  }
+};
+
 function UserProfileCard(props: Props) {
   const { profile } = props;
   return (
@@ -14,7 +21,7 @@ function UserProfileCard(props: Props) {
       <Image src={profile.image || Images.baseUserImage} />
       <Card.Content>
         <Card.Header>{profile.displayName}</Card.Header>
-        <Card.Description>{profile.bio}</Card.Description>
+        <Card.Description>{truncateText(profile.bio)}</Card.Description>
       </Card.Content>
       <Card.Content extra>
         <Icon name='user' />

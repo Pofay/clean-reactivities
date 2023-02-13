@@ -63,7 +63,7 @@ function UserProfileAbout() {
               formValues={formValues}
             />
           ) : (
-            <p>{profile?.bio}</p>
+            <span style={{ whiteSpace: 'pre-wrap' }}>{profile?.bio}</span>
           )}
         </Grid.Column>
       </Grid>
