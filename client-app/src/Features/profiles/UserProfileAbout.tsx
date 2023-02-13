@@ -1,15 +1,12 @@
-import ValidatedTextArea from 'App/common/form/ValidatedTextArea';
-import ValidatedTextInput from 'App/common/form/ValidatedTextInput';
 import {
   UserProfile,
   UserProfileFormValues,
 } from 'App/models/interfaces/profile';
 import { useStore } from 'App/stores/store';
-import { Formik } from 'formik';
+import UserProfileForm from 'Features/profiles/form/UserProfileForm';
 import { observer } from 'mobx-react-lite';
 import { useEffect, useState } from 'react';
-import { Button, Form, Grid, GridColumn, Header, Tab } from 'semantic-ui-react';
-import * as Yup from 'yup';
+import { Button, Grid, Header, Tab } from 'semantic-ui-react';
 
 const mapToFormValues = (profile: UserProfile): UserProfileFormValues => {
   return {
@@ -20,7 +17,7 @@ const mapToFormValues = (profile: UserProfile): UserProfileFormValues => {
 
 function UserProfileAbout() {
   const {
-    userProfileStore: { isCurrentUser, updateProfile, profile, loading },
+    userProfileStore: { isCurrentUser, updateProfile, profile },
   } = useStore();
   const [editMode, setEditMode] = useState(false);
 
@@ -34,10 +31,6 @@ function UserProfileAbout() {
       setFormValues(mapToFormValues(profile));
     }
   }, [profile]);
-
-  const validationSchema = Yup.object({
-    displayName: Yup.string().required('The displayName property is required.'),
-  });
 
   const handleFormSubmit = (values: UserProfileFormValues) => {
     updateProfile(values).then(() => setEditMode(!editMode));
@@ -64,38 +57,10 @@ function UserProfileAbout() {
 
         <Grid.Column width={16}>
           {editMode ? (
-            <Formik
-              validationSchema={validationSchema}
-              enableReinitialize
-              initialValues={formValues}
-              onSubmit={(values) => handleFormSubmit(values)}
-            >
-              {({ handleSubmit, isValid, isSubmitting, dirty }) => (
-                <Form
-                  className='ui form'
-                  onSubmit={handleSubmit}
-                  autoComplete='off'
-                >
-                  <ValidatedTextInput
-                    placeholder='Display Name'
-                    name='displayName'
-                  />
-                  <ValidatedTextArea
-                    rows={3}
-                    placeholder='Add your Bio'
-                    name='bio'
-                  />
-                  <Button
-                    disabled={isSubmitting || !dirty || !isValid}
-                    loading={isSubmitting}
-                    floated='right'
-                    positive
-                    type='submit'
-                    content='Update Profile'
-                  />
-                </Form>
-              )}
-            </Formik>
+            <UserProfileForm
+              handleSubmit={handleFormSubmit}
+              formValues={formValues}
+            />
           ) : (
             <p>{profile?.bio}</p>
           )}
