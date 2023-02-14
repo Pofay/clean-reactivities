@@ -1,12 +1,10 @@
 using Application.Activities;
 using Application.Interfaces;
 using Application.Settings;
-using dotenv.net.Utilities;
 using Infrastructure;
 using Infrastructure.Photos;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using Microsoft.OpenApi.Models;
 using Persistence;
 
@@ -14,7 +12,7 @@ namespace API.Extensions
 {
     public static class ApplicationServiceExtensions
     {
-        public static IServiceCollection AddApplicationServices(this IServiceCollection services)
+        public static IServiceCollection AddApplicationServices(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddSwaggerGen(c =>
                     {
@@ -22,7 +20,8 @@ namespace API.Extensions
                     });
             services.AddDbContext<DataContext>(opt =>
             {
-                opt.UseSqlite(EnvReader.GetStringValue("DB_CONNECTION"));
+                var connString = configuration.GetValue<string>("DB_CONNECTION");
+                opt.UseSqlite(connString);
             });
             services.AddCors(opt =>
             {
@@ -38,9 +37,9 @@ namespace API.Extensions
             services.AddScoped<IPhotoAccessor, PhotoAccessor>();
             services.Configure<CloudinarySettings>(opt =>
             {
-                opt.CloudName = EnvReader.GetStringValue("CLOUDINARY_CLOUDNAME");
-                opt.ApiKey = EnvReader.GetStringValue("CLOUDINARY_APIKEY");
-                opt.ApiSecret = EnvReader.GetStringValue("CLOUDINARY_APISECRET");
+                opt.CloudName = configuration.GetValue<string>("CLOUDINARY_CLOUDNAME");
+                opt.ApiKey = configuration.GetValue<string>("CLOUDINARY_APIKEY");
+                opt.ApiSecret = configuration.GetValue<string>("CLOUDINARY_APISECRET");
             });
 
             return services;
