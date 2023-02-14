@@ -38,14 +38,20 @@ namespace API
                             {
                                 webBuilder.UseStartup<Startup>();
                             })
-                            .ConfigureAppConfiguration(hostConfig =>
+                            .ConfigureAppConfiguration((context, hostConfig) =>
                             {
-                                DotEnv.Fluent()
-                                      .WithDefaultEncoding()
-                                      .WithExceptions()
-                                      .WithTrimValues()
-                                      .WithOverwriteExistingVars()
-                                      .Load();
+                                var env = context.HostingEnvironment;
+
+                                if (env.IsDevelopment())
+                                {
+                                    DotEnv.Fluent()
+                                          .WithDefaultEncoding()
+                                          .WithoutExceptions()
+                                          .WithTrimValues()
+                                          .WithOverwriteExistingVars()
+                                          .Load();
+                                }
+                                hostConfig.AddEnvironmentVariables();
                             });
         }
     }
