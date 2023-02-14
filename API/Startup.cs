@@ -48,8 +48,8 @@ namespace API
             services.AddFluentValidationClientsideAdapters();
             services.AddValidatorsFromAssemblyContaining<CreateActivity>();
 
-            services.AddApplicationServices();
-            services.AddIdentityServices();
+            services.AddApplicationServices(Configuration);
+            services.AddIdentityServices(Configuration);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
