@@ -1,3 +1,4 @@
+using API.Extensions;
 using Domain;
 using dotenv.net;
 using Microsoft.AspNetCore.Identity;
@@ -40,17 +41,7 @@ namespace API
                             })
                             .ConfigureAppConfiguration((context, hostConfig) =>
                             {
-                                var env = context.HostingEnvironment;
-
-                                if (env.IsDevelopment())
-                                {
-                                    DotEnv.Fluent()
-                                          .WithDefaultEncoding()
-                                          .WithoutExceptions()
-                                          .WithTrimValues()
-                                          .WithOverwriteExistingVars()
-                                          .Load();
-                                }
+                                hostConfig.AddDotEnv(context.HostingEnvironment);
                                 hostConfig.AddEnvironmentVariables();
                             });
         }
