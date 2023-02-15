@@ -41,6 +41,7 @@ namespace API.Extensions
                 opt.ApiKey = configuration.GetValue<string>("CLOUDINARY_APIKEY");
                 opt.ApiSecret = configuration.GetValue<string>("CLOUDINARY_APISECRET");
             });
+            services.AddSignalR();
 
             return services;
         }
