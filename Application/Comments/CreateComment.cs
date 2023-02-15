@@ -15,20 +15,10 @@ namespace Application.Comments
 {
     public class CreateComment
     {
-        public class Command : IRequest<Result<CommentDto>>
+        public record class Command : IRequest<Result<CommentDto>>
         {
-            private readonly Guid _activityId;
-            private readonly string _commentBody;
-
-            public string CommentBody => _commentBody;
-            public Guid ActivityId => _activityId;
-
-            public Command(Guid activityId, string commentBody)
-
-            {
-                _commentBody = commentBody;
-                _activityId = activityId;
-            }
+            public string CommentBody { get; init; }
+            public Guid ActivityId { get; init; }
         }
 
         public class CommandValidator : AbstractValidator<Command>
