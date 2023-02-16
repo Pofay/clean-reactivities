@@ -11,14 +11,20 @@ import { Grid } from 'semantic-ui-react';
 
 function ActivityDetails() {
   const { activityStore } = useStore();
-  const { id } = useParams<{ id: string }>();
-  const { selectedActivity: activity } = activityStore;
+  const { id } = useParams();
+  const {
+    selectedActivity: activity,
+    loadActivity,
+    loadingInitial,
+    deselectActivity,
+  } = activityStore;
 
   useEffect(() => {
-    if (id) activityStore.loadActivity(id);
-  }, [id, activityStore]);
+    if (id) loadActivity(id);
+    return () => deselectActivity();
+  }, [id, loadActivity, deselectActivity]);
 
-  if (!activity)
+  if (loadingInitial || !activity)
     return <LoadingComponent content='Loading Specific Activity' />;
 
   return (

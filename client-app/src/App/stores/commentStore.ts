@@ -5,6 +5,7 @@ import {
 } from '@microsoft/signalr';
 import { ChatComment } from 'App/models/interfaces/comment';
 import { store } from 'App/stores/store';
+import { parse, parseISO, parseJSON } from 'date-fns';
 import { makeAutoObservable, runInAction } from 'mobx';
 
 class CommentStore {
@@ -51,11 +52,20 @@ class CommentStore {
 
   private configureHubConnection(hubConnection: HubConnection) {
     hubConnection.on('LoadComments', (comments: ChatComment[]) => {
-      runInAction(() => (this.comments = comments));
+      runInAction(() => {
+        comments.forEach((comment) => {
+          comment.createdAt = new Date(comment.createdAt + 'Z');
+        });
+
+        this.comments = comments;
+      });
     });
 
     hubConnection.on('ReceiveComment', (comment: ChatComment) => {
-      runInAction(() => this.comments.push(comment));
+      runInAction(() => {
+        comment.createdAt = new Date(comment.createdAt);
+        this.comments.unshift(comment);
+      });
     });
   }
 

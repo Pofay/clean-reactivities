@@ -1,6 +1,7 @@
 import ValidatedTextArea from 'App/common/form/ValidatedTextArea';
 import { Images } from 'App/common/utils/images';
 import { useStore } from 'App/stores/store';
+import { formatDistanceToNow } from 'date-fns';
 import ValidationErrors from 'Features/Errors/ValidationErrors';
 import { Formik, Form, yupToFormErrors, FieldProps, Field } from 'formik';
 import { observer } from 'mobx-react-lite';
@@ -49,25 +50,6 @@ export default observer(function ActivityDetailedChat({ activityId }: Props) {
         <Header>Chat about this event</Header>
       </Segment>
       <Segment attached clearing>
-        <Comment.Group>
-          {commentStore.comments.map((comment) => (
-            <Comment key={comment.id}>
-              <Comment.Avatar src={comment.image || Images.baseUserImage} />
-              <Comment.Content>
-                <Comment.Author as={Link} to={`/profiles/${comment.userName}`}>
-                  {comment.displayName}
-                </Comment.Author>
-                <Comment.Metadata>
-                  <div>{comment.createdAt}</div>
-                </Comment.Metadata>
-                <Comment.Text style={{ whiteSpace: 'pre-wrap' }}>
-                  {comment.body}
-                </Comment.Text>
-              </Comment.Content>
-            </Comment>
-          ))}
-        </Comment.Group>
-
         <Formik
           onSubmit={(values, { resetForm }) => {
             commentStore.addComment(values).then(() => resetForm());
@@ -101,6 +83,25 @@ export default observer(function ActivityDetailedChat({ activityId }: Props) {
             </Form>
           )}
         </Formik>
+
+        <Comment.Group>
+          {commentStore.comments.map((comment) => (
+            <Comment key={comment.id}>
+              <Comment.Avatar src={comment.image || Images.baseUserImage} />
+              <Comment.Content>
+                <Comment.Author as={Link} to={`/profiles/${comment.userName}`}>
+                  {comment.displayName}
+                </Comment.Author>
+                <Comment.Metadata>
+                  <div>{formatDistanceToNow(comment.createdAt)} ago</div>
+                </Comment.Metadata>
+                <Comment.Text style={{ whiteSpace: 'pre-wrap' }}>
+                  {comment.body}
+                </Comment.Text>
+              </Comment.Content>
+            </Comment>
+          ))}
+        </Comment.Group>
       </Segment>
     </>
   );
