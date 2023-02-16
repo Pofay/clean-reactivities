@@ -2,15 +2,27 @@ import ValidatedTextArea from 'App/common/form/ValidatedTextArea';
 import { Images } from 'App/common/utils/images';
 import { useStore } from 'App/stores/store';
 import ValidationErrors from 'Features/Errors/ValidationErrors';
-import { Formik, Form, yupToFormErrors } from 'formik';
+import { Formik, Form, yupToFormErrors, FieldProps, Field } from 'formik';
 import { observer } from 'mobx-react-lite';
 import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Segment, Header, Comment, Button } from 'semantic-ui-react';
+import { Segment, Header, Comment, Button, Loader } from 'semantic-ui-react';
 import * as Yup from 'yup';
 
 interface Props {
   activityId: string;
+}
+
+const validationSchema = Yup.object({
+  body: Yup.string().required(),
+});
+
+function enterPressed(e: React.KeyboardEvent<HTMLTextAreaElement>) {
+  return e.key === 'Enter' && !e.shiftKey;
+}
+
+function newlineKeysPressed(e: React.KeyboardEvent<HTMLTextAreaElement>) {
+  return e.key === 'Enter' && e.shiftKey;
 }
 
 export default observer(function ActivityDetailedChat({ activityId }: Props) {
@@ -48,7 +60,9 @@ export default observer(function ActivityDetailedChat({ activityId }: Props) {
                 <Comment.Metadata>
                   <div>{comment.createdAt}</div>
                 </Comment.Metadata>
-                <Comment.Text>{comment.body}</Comment.Text>
+                <Comment.Text style={{ whiteSpace: 'pre-wrap' }}>
+                  {comment.body}
+                </Comment.Text>
               </Comment.Content>
             </Comment>
           ))}
@@ -56,29 +70,34 @@ export default observer(function ActivityDetailedChat({ activityId }: Props) {
 
         <Formik
           onSubmit={(values, { resetForm }) => {
-            console.log(values);
             commentStore.addComment(values).then(() => resetForm());
           }}
           initialValues={{ body: '' }}
-          validationSchema={Yup.object({ body: Yup.string().required() })}
+          validationSchema={validationSchema}
         >
-          {({ isSubmitting, isValid }) => (
+          {({ isSubmitting, isValid, handleSubmit }) => (
             <Form className='ui form'>
-              <ValidatedTextArea
-                placeholder='Add Comment'
-                name='body'
-                rows={2}
-              />
-              <Button
-                loading={isSubmitting}
-                disabled={isSubmitting || !isValid}
-                content='Add Reply'
-                labelPosition='left'
-                icon='edit'
-                primary
-                type='submit'
-                floated='right'
-              />
+              <Field name='body'>
+                {(props: FieldProps) => (
+                  <div style={{ position: 'relative' }}>
+                    <Loader active={isSubmitting} />
+                    <textarea
+                      placeholder='Enter your comment (Enter to submit, SHIFT + ENTER for new line)'
+                      rows={2}
+                      {...props.field}
+                      onKeyDownCapture={(e) => {
+                        if (newlineKeysPressed(e)) {
+                          return;
+                        }
+                        if (enterPressed(e)) {
+                          e.preventDefault();
+                          isValid && handleSubmit();
+                        }
+                      }}
+                    />
+                  </div>
+                )}
+              </Field>
             </Form>
           )}
         </Formik>
