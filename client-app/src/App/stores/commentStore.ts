@@ -62,7 +62,7 @@ class CommentStore {
   private createHubConnection(activityId: string) {
     console.log(activityId);
     return new HubConnectionBuilder()
-      .withUrl(`http://localhost:5272/chat?activityId=` + activityId, {
+      .withUrl(`http://localhost:5272/chat?activityId=${activityId}`, {
         accessTokenFactory: () => store.userStore.user?.token!,
       })
       .withAutomaticReconnect()
