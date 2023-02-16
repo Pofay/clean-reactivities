@@ -17,11 +17,11 @@ const validationSchema = Yup.object({
   body: Yup.string().required(),
 });
 
-function enterPressed(e: React.KeyboardEvent<HTMLTextAreaElement>) {
+function isSubmitKey(e: React.KeyboardEvent<HTMLTextAreaElement>) {
   return e.key === 'Enter' && !e.shiftKey;
 }
 
-function newlineKeysPressed(e: React.KeyboardEvent<HTMLTextAreaElement>) {
+function isPressingNewLineKeys(e: React.KeyboardEvent<HTMLTextAreaElement>) {
   return e.key === 'Enter' && e.shiftKey;
 }
 
@@ -86,10 +86,10 @@ export default observer(function ActivityDetailedChat({ activityId }: Props) {
                       rows={2}
                       {...props.field}
                       onKeyDownCapture={(e) => {
-                        if (newlineKeysPressed(e)) {
+                        if (isPressingNewLineKeys(e)) {
                           return;
                         }
-                        if (enterPressed(e)) {
+                        if (isSubmitKey(e)) {
                           e.preventDefault();
                           isValid && handleSubmit();
                         }
