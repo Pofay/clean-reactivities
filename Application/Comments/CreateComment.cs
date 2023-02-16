@@ -17,7 +17,7 @@ namespace Application.Comments
     {
         public record class Command : IRequest<Result<CommentDto>>
         {
-            public string CommentBody { get; init; }
+            public string Body { get; init; }
             public Guid ActivityId { get; init; }
         }
 
@@ -25,7 +25,7 @@ namespace Application.Comments
         {
             public CommandValidator()
             {
-                RuleFor(x => x.CommentBody).NotEmpty();
+                RuleFor(x => x.Body).NotEmpty();
             }
         }
 
@@ -54,7 +54,7 @@ namespace Application.Comments
                 {
                     Author = user,
                     Activity = activity,
-                    Body = request.CommentBody,
+                    Body = request.Body,
                 };
 
                 activity.Comments.Add(comment);
