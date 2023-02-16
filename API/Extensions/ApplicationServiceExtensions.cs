@@ -27,7 +27,7 @@ namespace API.Extensions
             {
                 opt.AddPolicy("CorsPolicy", policy =>
                 {
-                    policy.AllowAnyMethod().AllowAnyHeader().WithOrigins("http://localhost:3000");
+                    policy.AllowAnyMethod().AllowAnyHeader().AllowCredentials().WithOrigins("http://localhost:3000");
                 });
             });
             services.AddMediatR(typeof(ListActivities.Handler).Assembly);
@@ -41,6 +41,7 @@ namespace API.Extensions
                 opt.ApiKey = configuration.GetValue<string>("CLOUDINARY_APIKEY");
                 opt.ApiSecret = configuration.GetValue<string>("CLOUDINARY_APISECRET");
             });
+            services.AddSignalR();
 
             return services;
         }

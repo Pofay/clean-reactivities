@@ -5,6 +5,7 @@ using Infrastructure.Security;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Primitives;
 using Microsoft.IdentityModel.Tokens;
 using Persistence;
 
@@ -35,6 +36,18 @@ namespace API.Extensions
                     ValidateIssuer = false,
                     ValidateAudience = false
                 };
+                opt.Events = new JwtBearerEvents
+                {
+                    OnMessageReceived = context =>
+                    {
+                        if (IsRoutingToSignalRPath(context, "/chat"))
+                        {
+                            var accessToken = context.Request.Query["access_token"];
+                            context.Token = accessToken;
+                        }
+                        return Task.CompletedTask;
+                    }
+                };
             });
             services.AddAuthorization(opt =>
             {
@@ -46,6 +59,14 @@ namespace API.Extensions
             services.AddTransient<IAuthorizationHandler, IsHostRequirementHandler>();
             services.AddScoped<TokenService>();
             return services;
+        }
+
+        private static bool IsRoutingToSignalRPath(MessageReceivedContext context, string hubRoute)
+        {
+            var accessToken = context.Request.Query["access_token"];
+            var path = context.HttpContext.Request.Path;
+
+            return !string.IsNullOrEmpty(accessToken) && (path.StartsWithSegments(hubRoute));
         }
     }
 }
