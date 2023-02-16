@@ -40,6 +40,15 @@ class CommentStore {
     this.stopHubConnection();
   };
 
+  addComment = async (values: any) => {
+    values.activityId = store.activityStore.selectedActivity?.id;
+    try {
+      await this.hubConnection?.invoke<ChatComment>('SendComment', values);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   private configureHubConnection(hubConnection: HubConnection) {
     hubConnection.on('LoadComments', (comments: ChatComment[]) => {
       runInAction(() => (this.comments = comments));
@@ -51,8 +60,9 @@ class CommentStore {
   }
 
   private createHubConnection(activityId: string) {
+    console.log(activityId);
     return new HubConnectionBuilder()
-      .withUrl(`http://localhost:5272/chat?activityId=${activityId}`, {
+      .withUrl(`http://localhost:5272/chat?activityId=` + activityId, {
         accessTokenFactory: () => store.userStore.user?.token!,
       })
       .withAutomaticReconnect()
