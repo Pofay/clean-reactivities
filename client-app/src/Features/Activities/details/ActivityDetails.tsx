@@ -22,7 +22,6 @@ function ActivityDetails() {
   useEffect(() => {
     if (id) {
       loadActivity(id);
-      console.log('Loading');
     }
     return () => deselectActivity();
   }, [id, loadActivity, deselectActivity]);
