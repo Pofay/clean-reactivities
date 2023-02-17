@@ -11,7 +11,7 @@ import { Grid } from 'semantic-ui-react';
 
 function ActivityDetails() {
   const { activityStore } = useStore();
-  const { id } = useParams();
+  const { id } = useParams<{ id: string }>();
   const {
     selectedActivity: activity,
     loadActivity,
@@ -20,7 +20,10 @@ function ActivityDetails() {
   } = activityStore;
 
   useEffect(() => {
-    if (id) loadActivity(id);
+    if (id) {
+      loadActivity(id);
+      console.log('Loading');
+    }
     return () => deselectActivity();
   }, [id, loadActivity, deselectActivity]);
 
@@ -32,7 +35,7 @@ function ActivityDetails() {
       <Grid.Column width={10}>
         <ActivityDetailedHeader activity={activity} />
         <ActivityDetailedInfo activity={activity} />
-        <ActivityDetailedChat activityId={activity.id} />
+        <ActivityDetailedChat activity={activity} />
       </Grid.Column>
       <Grid.Column width={6}>
         <ActivityDetailedSidebar activity={activity} />

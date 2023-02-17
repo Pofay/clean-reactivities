@@ -1,5 +1,6 @@
 import ValidatedTextArea from 'App/common/form/ValidatedTextArea';
 import { Images } from 'App/common/utils/images';
+import { Activity } from 'App/models/interfaces/activity';
 import { useStore } from 'App/stores/store';
 import { formatDistanceToNow } from 'date-fns';
 import ValidationErrors from 'Features/Errors/ValidationErrors';
@@ -11,7 +12,7 @@ import { Segment, Header, Comment, Button, Loader } from 'semantic-ui-react';
 import * as Yup from 'yup';
 
 interface Props {
-  activityId: string;
+  activity: Activity;
 }
 
 const validationSchema = Yup.object({
@@ -26,17 +27,17 @@ function isPressingNewLineKeys(e: React.KeyboardEvent<HTMLTextAreaElement>) {
   return e.key === 'Enter' && e.shiftKey;
 }
 
-export default observer(function ActivityDetailedChat({ activityId }: Props) {
-  const { commentStore } = useStore();
+export default observer(function ActivityDetailedChat({ activity }: Props) {
+  const { commentStore, activityStore } = useStore();
 
   useEffect(() => {
-    if (activityId) {
-      commentStore.createAndStartHubConnection(activityId);
+    if (activity) {
+      commentStore.createAndStartHubConnection(activity.id);
     }
     return () => {
       commentStore.clearComments();
     };
-  }, [commentStore, activityId]);
+  }, [activity, commentStore]);
 
   return (
     <>
