@@ -3,6 +3,7 @@ import { Images } from 'App/common/utils/images';
 import { Activity } from 'App/models/interfaces/activity';
 import { useStore } from 'App/stores/store';
 import { formatDistanceToNow } from 'date-fns';
+import ActivityDetailedComments from 'Features/Activities/details/ActivityDetailedComments';
 import ValidationErrors from 'Features/Errors/ValidationErrors';
 import { Formik, Form, yupToFormErrors, FieldProps, Field } from 'formik';
 import { observer } from 'mobx-react-lite';
@@ -12,7 +13,7 @@ import { Segment, Header, Comment, Button, Loader } from 'semantic-ui-react';
 import * as Yup from 'yup';
 
 interface Props {
-  activity: Activity;
+  activityId: string;
 }
 
 const validationSchema = Yup.object({
@@ -27,17 +28,17 @@ function isPressingNewLineKeys(e: React.KeyboardEvent<HTMLTextAreaElement>) {
   return e.key === 'Enter' && e.shiftKey;
 }
 
-export default observer(function ActivityDetailedChat({ activity }: Props) {
+export default observer(function ActivityDetailedChat({ activityId }: Props) {
   const { commentStore, activityStore } = useStore();
 
   useEffect(() => {
-    if (activity) {
-      commentStore.createAndStartHubConnection(activity.id);
+    if (activityId) {
+      commentStore.createAndStartHubConnection(activityId);
     }
     return () => {
       commentStore.clearComments();
     };
-  }, [activity, commentStore]);
+  }, [activityId, commentStore]);
 
   return (
     <>
@@ -84,25 +85,7 @@ export default observer(function ActivityDetailedChat({ activity }: Props) {
             </Form>
           )}
         </Formik>
-
-        <Comment.Group>
-          {commentStore.comments.map((comment) => (
-            <Comment key={comment.id}>
-              <Comment.Avatar src={comment.image || Images.baseUserImage} />
-              <Comment.Content>
-                <Comment.Author as={Link} to={`/profiles/${comment.userName}`}>
-                  {comment.displayName}
-                </Comment.Author>
-                <Comment.Metadata>
-                  <div>{formatDistanceToNow(comment.createdAt)} ago</div>
-                </Comment.Metadata>
-                <Comment.Text style={{ whiteSpace: 'pre-wrap' }}>
-                  {comment.body}
-                </Comment.Text>
-              </Comment.Content>
-            </Comment>
-          ))}
-        </Comment.Group>
+        <ActivityDetailedComments comments={commentStore.comments} />
       </Segment>
     </>
   );
