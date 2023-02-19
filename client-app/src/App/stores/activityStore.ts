@@ -78,8 +78,7 @@ export default class ActivityStore {
         runInAction(() => {
           this.setActivity(formattedActivity);
           this.setLoadingInitial(false);
-          // this.selectActivity(formattedActivity);
-          this.selectedActivity = formattedActivity;
+          this.selectActivity(formattedActivity);
         });
         return formattedActivity;
       } catch (error) {
