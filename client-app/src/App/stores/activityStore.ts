@@ -68,16 +68,19 @@ export default class ActivityStore {
   loadActivity = async (id: string) => {
     let activity = this.getActivity(id);
     if (activity) {
-      this.selectActivity(activity.id);
+      this.selectActivity(activity);
       return activity;
     } else {
       this.setLoadingInitial(true);
       try {
-        activity = await agent.Activities.details(id);
-        this.setActivity(activity);
-        this.setLoadingInitial(false);
-        this.selectActivity(activity.id);
-        return activity;
+        let loadedActivity = await agent.Activities.details(id);
+        let formattedActivity = this.formatDate(loadedActivity);
+        runInAction(() => {
+          this.setActivity(formattedActivity);
+          this.setLoadingInitial(false);
+          this.selectActivity(formattedActivity);
+        });
+        return formattedActivity;
       } catch (error) {
         console.error(error);
         this.setLoadingInitial(false);
@@ -107,8 +110,8 @@ export default class ActivityStore {
     this.loadingInitial = state;
   };
 
-  selectActivity = (id: string) => {
-    this.selectedActivity = this.getActivity(id);
+  selectActivity = (activity: Activity) => {
+    this.selectedActivity = activity;
   };
 
   deselectActivity = () => {
@@ -134,7 +137,7 @@ export default class ActivityStore {
       ]);
       this.setActivity(newActivity);
       this.setEditMode(false);
-      this.selectActivity(newActivity.id);
+      this.selectActivity(newActivity);
       return newActivity.id;
     } catch (error) {
       console.error(error);
@@ -142,24 +145,21 @@ export default class ActivityStore {
   };
 
   addActivity = (activity: Activity) => {
-    const activityWithFormattedDate = {
-      ...activity,
-      date: new Date(activity.date!),
-    };
+    const activityWithFormattedDate = this.formatDate(activity);
     this.activityRegistry.set(activity.id, activityWithFormattedDate);
   };
 
   updateActivity = async (activity: ActivityFormValues) => {
     await agent.Activities.update(activity);
     try {
-      let updatedActivity = {
-        ...this.getActivity(activity.id),
-        ...activity,
-      };
       runInAction(() => {
+        let updatedActivity = {
+          ...this.getActivity(activity.id),
+          ...activity,
+        };
         this.addActivity(updatedActivity as Activity);
         this.setEditMode(false);
-        this.selectActivity(activity.id);
+        this.selectActivity(updatedActivity as Activity);
       });
       return activity.id;
     } catch (error) {
@@ -222,6 +222,13 @@ export default class ActivityStore {
       this.setLoading(false);
     }
   };
+
+  private formatDate(activity: Activity) {
+    return {
+      ...activity,
+      date: new Date(activity.date!),
+    };
+  }
 
   private addAttendance(user: User | null) {
     const attendee = createProfileFromUser(user!);

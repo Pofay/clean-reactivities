@@ -3,6 +3,7 @@ import {
   HubConnectionBuilder,
   LogLevel,
 } from '@microsoft/signalr';
+import { Activity } from 'App/models/interfaces/activity';
 import { ChatComment } from 'App/models/interfaces/comment';
 import { store } from 'App/stores/store';
 import { parse, parseISO, parseJSON } from 'date-fns';
