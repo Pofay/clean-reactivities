@@ -12,7 +12,7 @@ import { Segment, Header, Comment, Button, Loader } from 'semantic-ui-react';
 import * as Yup from 'yup';
 
 interface Props {
-  activity: Activity;
+  activityId: string;
 }
 
 const validationSchema = Yup.object({
@@ -27,17 +27,17 @@ function isPressingNewLineKeys(e: React.KeyboardEvent<HTMLTextAreaElement>) {
   return e.key === 'Enter' && e.shiftKey;
 }
 
-export default observer(function ActivityDetailedChat({ activity }: Props) {
+export default observer(function ActivityDetailedChat({ activityId }: Props) {
   const { commentStore, activityStore } = useStore();
 
   useEffect(() => {
-    if (activity) {
-      commentStore.createAndStartHubConnection(activity.id);
+    if (activityId) {
+      commentStore.createAndStartHubConnection(activityId);
     }
     return () => {
       commentStore.clearComments();
     };
-  }, [activity, commentStore]);
+  }, [activityId, commentStore]);
 
   return (
     <>
