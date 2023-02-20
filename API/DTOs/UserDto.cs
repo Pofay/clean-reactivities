@@ -1,10 +1,10 @@
 namespace API.DTOs
 {
-    public class UserDto
+    public record class UserDto
     {
-        public string DisplayName { get; set; }
-        public string Token { get; set; }
-        public string Image { get; set; }
-        public string UserName { get; set; }
+        public string DisplayName { get; init; }
+        public string Token { get; init; }
+        public string Image { get; init; }
+        public string UserName { get; init; }
     }
 }

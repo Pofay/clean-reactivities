@@ -5,13 +5,13 @@ using System.Threading.Tasks;
 
 namespace Application.Comments
 {
-    public class CommentDto
+    public record class CommentDto
     {
-        public int Id { get; set; }
-        public DateTime CreatedAt { get; set; }
-        public string Body { get; set; }
-        public string UserName { get; set; }
-        public string DisplayName { get; set; }
-        public string Image { get; set; }
+        public int Id { get; init; }
+        public DateTime CreatedAt { get; init; }
+        public string Body { get; init; }
+        public string UserName { get; init; }
+        public string DisplayName { get; init; }
+        public string Image { get; init; }
     }
 }

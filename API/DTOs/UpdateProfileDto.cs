@@ -5,9 +5,9 @@ using System.Threading.Tasks;
 
 namespace API.DTOs
 {
-    public class UpdateProfileDto
+    public record class UpdateProfileDto
     {
-        public string DisplayName { get; set; }
-        public string Bio { get; set; }
+        public string DisplayName { get; init; }
+        public string Bio { get; init; }
     }
 }
