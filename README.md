@@ -14,4 +14,4 @@ Aside from that I do have other learning goals in mind:
 - Using Plain SQL Reads on Certain Queries (Bypassing Domain Layer)
 
 
-I do have some plans for this repository to mimic the [RealWorld](https://github.com/gothinkster/realworld) in that the application will function in the same way regardless if you swap the backend or frontend with something different.
+I do have some plans for this repository to mimic the [RealWorld](https://github.com/gothinkster/realworld) in that the application will function in the same way regardless if you swap the backend or frontend with a different framework.
