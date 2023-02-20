@@ -2,17 +2,17 @@ using Application.Profiles;
 
 namespace Application.Activities
 {
-    public class ActivityDto
+    public record class ActivityDto
     {
-        public Guid Id { get; set; }
-        public string? Title { get; set; }
-        public DateTime Date { get; set; }
-        public string? Description { get; set; }
-        public string? Category { get; set; }
-        public string? City { get; set; }
-        public string? Venue { get; set; }
-        public string HostUsername { get; set; }
-        public bool IsCancelled { get; set; }
-        public ICollection<AttendeeDto> Attendees { get; set; }
+        public Guid Id { get; init; }
+        public string? Title { get; init; }
+        public DateTime Date { get; init; }
+        public string? Description { get; init; }
+        public string? Category { get; init; }
+        public string? City { get; init; }
+        public string? Venue { get; init; }
+        public string HostUsername { get; init; }
+        public bool IsCancelled { get; init; }
+        public ICollection<AttendeeDto> Attendees { get; init; }
     }
 }

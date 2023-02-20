@@ -2,12 +2,12 @@ using Domain;
 
 namespace Application.Profiles
 {
-    public class UserProfile
+    public record class UserProfile
     {
-        public string UserName { get; set; }
-        public string DisplayName { get; set; }
-        public string Bio { get; set; }
-        public string Image { get; set; }
-        public ICollection<Photo> Photos { get; set; }
+        public string UserName { get; init; }
+        public string DisplayName { get; init; }
+        public string Bio { get; init; }
+        public string Image { get; init; }
+        public ICollection<Photo> Photos { get; init; }
     }
 }
