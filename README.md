@@ -1,6 +1,6 @@
 # Reactivities Application
 
-This is my output on following along this [Udemy course using .NET Core, React and MobX][1]
+This is my output on following along this [Udemy course using .NET Core, React and MobX](https://www.udemy.com/course/complete-guide-to-building-an-app-with-net-core-and-react/)
 
 The `master` contains the code that deviates only a little from what is shown in the course as this serves both a refresher for .NET and its new features.
 
@@ -14,8 +14,4 @@ Aside from that I do have other learning goals in mind:
 - Using Plain SQL Reads on Certain Queries (Bypassing Domain Layer)
 
 
-I do have some plans for this repository to mimic the [RealWorld][2] in that the application will function in the same way regardless if you swap the backend or frontend with something different.
-
-
-[1]:[https://www.udemy.com/course/complete-guide-to-building-an-app-with-net-core-and-react/]
-[2]:[https://github.com/gothinkster/realworld]
+I do have some plans for this repository to mimic the [RealWorld](https://github.com/gothinkster/realworld) in that the application will function in the same way regardless if you swap the backend or frontend with something different.
