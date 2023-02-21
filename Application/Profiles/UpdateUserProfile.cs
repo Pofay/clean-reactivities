@@ -15,19 +15,11 @@ namespace Application.Profiles
 {
     public class UpdateUserProfile
     {
-        public class Command : IRequest<Result<Unit>>
+        public record Command : IRequest<Result<Unit>>
         {
-            private readonly string _bio;
-            private readonly string _displayName;
+            public string DisplayName { get; init; }
+            public string Bio { get; init; }
 
-            public string DisplayName => _displayName;
-            public string Bio => _bio;
-
-            public Command(string displayName, string bio)
-            {
-                _displayName = displayName;
-                _bio = bio;
-            }
             public class CommandValidator : AbstractValidator<Command>
             {
                 public CommandValidator()

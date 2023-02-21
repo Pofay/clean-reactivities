@@ -2,7 +2,7 @@ using Domain;
 
 namespace Application.Profiles
 {
-    public record class UserProfile
+    public record UserProfile
     {
         public string UserName { get; init; }
         public string DisplayName { get; init; }
