@@ -13,7 +13,7 @@ namespace Application.Comments
 {
     public class ListComments
     {
-        public record class Query : IRequest<Result<List<CommentDto>>>
+        public record Query : IRequest<Result<List<CommentDto>>>
         {
             public Guid ActivityId { get; init; }
         }

@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace API.DTOs
 {
-    public record class RegisterDto
+    public record RegisterDto
     {
         [Required]
         [EmailAddress]

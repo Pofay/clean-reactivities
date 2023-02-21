@@ -15,7 +15,7 @@ namespace Application.Comments
 {
     public class CreateComment
     {
-        public record class Command : IRequest<Result<CommentDto>>
+        public record Command : IRequest<Result<CommentDto>>
         {
             public string Body { get; init; }
             public Guid ActivityId { get; init; }

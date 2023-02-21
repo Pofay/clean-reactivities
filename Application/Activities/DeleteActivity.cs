@@ -11,16 +11,9 @@ namespace Application.Activities
 {
     public class DeleteActivity
     {
-        public class Command : IRequest<Result<Unit>>
+        public record Command : IRequest<Result<Unit>>
         {
-            private readonly Guid _id;
-
-            public Guid Id => _id;
-
-            public Command(Guid activityId)
-            {
-                _id = activityId;
-            }
+            public Guid Id { get; init; }
         }
 
         public class Handler : IRequestHandler<Command, Result<Unit>>

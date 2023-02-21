@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Application.Comments
 {
-    public record class CommentDto
+    public record CommentDto
     {
         public int Id { get; init; }
         public DateTime CreatedAt { get; init; }

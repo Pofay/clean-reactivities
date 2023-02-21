@@ -9,15 +9,9 @@ namespace Application.Activities
 {
     public class UpdateAttendance
     {
-        public class Command : IRequest<Result<Unit>>
+        public record Command : IRequest<Result<Unit>>
         {
-            private readonly Guid _id;
-            public Guid Id => _id;
-
-            public Command(Guid id)
-            {
-                _id = id;
-            }
+            public Guid Id { get; init; }
         }
 
         public class Handler : IRequestHandler<Command, Result<Unit>>
@@ -55,7 +49,7 @@ namespace Application.Activities
                 // This code sucks big time. Should be Isolated into different Commands 
                 // Since these are business rules in place.
                 // Should probably have AttendActivity, CancelAttendance CancelActivity commands.
-                
+
                 // Should be divided into CancelActivity
                 // and EnableActivity?
                 if (attendance != null && hostUsername == user.UserName)

@@ -8,16 +8,9 @@ namespace Application.Photos
 {
     public class SetMainPhoto
     {
-        public class Command : IRequest<Result<Unit>>
+        public record Command : IRequest<Result<Unit>>
         {
-            private readonly string _id;
-
-            public string Id => _id;
-
-            public Command(string id)
-            {
-                _id = id;
-            }
+            public string Id { get; init; }
         }
 
         public class Handler : IRequestHandler<Command, Result<Unit>>
