@@ -1,15 +1,9 @@
-import ValidatedTextArea from 'App/common/form/ValidatedTextArea';
-import { Images } from 'App/common/utils/images';
-import { Activity } from 'App/models/interfaces/activity';
 import { useStore } from 'App/stores/store';
-import { formatDistanceToNow } from 'date-fns';
 import ActivityDetailedComments from 'Features/Activities/details/ActivityDetailedComments';
-import ValidationErrors from 'Features/Errors/ValidationErrors';
-import { Formik, Form, yupToFormErrors, FieldProps, Field } from 'formik';
+import { Field, FieldProps, Form, Formik } from 'formik';
 import { observer } from 'mobx-react-lite';
 import React, { useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import { Segment, Header, Comment, Button, Loader } from 'semantic-ui-react';
+import { Header, Loader, Segment } from 'semantic-ui-react';
 import * as Yup from 'yup';
 
 interface Props {
