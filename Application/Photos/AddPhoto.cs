@@ -10,16 +10,9 @@ namespace Application.Photos
 {
     public class AddPhoto
     {
-        public class Command : IRequest<Result<Photo>>
+        public record Command : IRequest<Result<Photo>>
         {
-            private readonly IFormFile _file;
-
-            public IFormFile File => _file;
-
-            public Command(IFormFile file)
-            {
-                this._file = file;
-            }
+            public IFormFile File { get; init; }
         }
 
         public class Handler : IRequestHandler<Command, Result<Photo>>
