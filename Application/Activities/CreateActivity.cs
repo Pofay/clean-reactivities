@@ -14,15 +14,9 @@ namespace Application.Activities
 {
     public class CreateActivity
     {
-        public class Command : IRequest<Result<Unit>>
+        public record Command : IRequest<Result<Unit>>
         {
-            private readonly Activity _activity;
-            public Activity Activity => _activity;
-
-            public Command(Activity activity)
-            {
-                _activity = activity;
-            }
+            public Activity Activity { get; init; }
 
             public class CommandValidator : AbstractValidator<Command>
             {

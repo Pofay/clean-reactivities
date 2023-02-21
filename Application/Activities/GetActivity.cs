@@ -14,16 +14,9 @@ namespace Application.Activities
 {
     public class GetActivity
     {
-        public class Query : IRequest<Result<ActivityDto>>
+        public record Query : IRequest<Result<ActivityDto>>
         {
-            private readonly Guid _id;
-
-            public Guid Id => _id;
-
-            public Query(Guid Id)
-            {
-                _id = Id;
-            }
+            public Guid Id { get; init; }
         }
 
         public class Handler : IRequestHandler<Query, Result<ActivityDto>>

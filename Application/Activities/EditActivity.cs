@@ -13,16 +13,10 @@ namespace Application.Activities
 {
     public class EditActivity
     {
-        public class Command : IRequest<Result<Unit>>
+        public record Command : IRequest<Result<Unit>>
         {
-            private readonly Activity _activity;
+            public Activity Activity { get; init; }
 
-            public Activity Activity => _activity;
-
-            public Command(Activity activity)
-            {
-                _activity = activity;
-            }
             public class CommandValidator : AbstractValidator<Command>
             {
                 public CommandValidator()

@@ -2,7 +2,7 @@ using Application.Profiles;
 
 namespace Application.Activities
 {
-    public record class ActivityDto
+    public record ActivityDto
     {
         public Guid Id { get; init; }
         public string? Title { get; init; }
