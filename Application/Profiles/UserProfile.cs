@@ -9,5 +9,8 @@ namespace Application.Profiles
         public string Bio { get; init; }
         public string Image { get; init; }
         public ICollection<Photo> Photos { get; init; }
+        public bool Following { get; set; }
+        public int FollowersCount { get; set; }
+        public int FollowingCount { get; set; }
     }
 }
