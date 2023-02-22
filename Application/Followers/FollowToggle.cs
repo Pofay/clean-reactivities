@@ -7,6 +7,7 @@ using Domain;
 using FluentResults;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Persistence;
 
 namespace Application.Followers
@@ -44,17 +45,11 @@ namespace Application.Followers
 
                 if (following == null)
                 {
-                    following = new UserFollowing
-                    {
-                        Observer = observer,
-                        Target = target
-                    };
-
-                    _context.UserFollowings.Add(following);
+                    FollowTargetUser(observer, target);
                 }
                 else
                 {
-                    _context.UserFollowings.Remove(following);
+                    UnfollowTargetUser(following);
                 }
 
                 var success = await _context.SaveChangesAsync() > 0;
@@ -64,6 +59,21 @@ namespace Application.Followers
                 }
 
                 return Result.Fail("Failed to update following.");
+            }
+
+            private EntityEntry<UserFollowing> UnfollowTargetUser(UserFollowing following)
+            {
+                return _context.UserFollowings.Remove(following);
+            }
+
+            private void FollowTargetUser(AppUser observer, AppUser target)
+            {
+                UserFollowing following = new UserFollowing
+                {
+                    Observer = observer,
+                    Target = target
+                };
+                _context.UserFollowings.Add(following);
             }
         }
     }
