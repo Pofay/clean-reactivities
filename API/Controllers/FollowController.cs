@@ -25,5 +25,15 @@ namespace API.Controllers
             }));
         }
 
+        [HttpGet("{userName}")]
+        public async Task<IActionResult> GetFollowing(string userName, string predicate)
+        {
+            return HandleResult(await _mediator.Send(new ListFollowersOrFollowings.Query
+            {
+                UserName = userName,
+                Predicate = predicate
+            }));
+        }
+
     }
 }
