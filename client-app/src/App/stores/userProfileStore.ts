@@ -12,6 +12,7 @@ export default class UserProfileStore {
   loadingProfile = false;
   loading = false;
   uploading = false;
+  followings: UserProfile[] = [];
 
   constructor() {
     makeAutoObservable(this);
@@ -110,6 +111,37 @@ export default class UserProfileStore {
         }
         store.userStore.setDisplayName(formValues.displayName);
         this.loading = false;
+      });
+    } catch (error) {
+      console.error(error);
+      runInAction(() => (this.loading = false));
+    }
+  };
+
+  updateFollowing = async (userName: string, following: boolean) => {
+    this.loading = true;
+    try {
+      await agent.Profiles.updateFollowing(userName);
+      store.activityStore.updateAttendeeFollowing(userName);
+      runInAction(() => {
+        if (
+          this.profile &&
+          this.profile.userName !== store.userStore.user?.userName
+        ) {
+          following
+            ? this.profile.followersCount++
+            : this.profile.followersCount--;
+          this.profile.following = !this.profile.following;
+        }
+        this.followings.forEach((profile) => {
+          if (profile.userName === userName) {
+            profile.following
+              ? profile.followersCount--
+              : profile.followersCount++;
+            profile.following = !profile.following;
+          }
+          this.loading = false;
+        });
       });
     } catch (error) {
       console.error(error);
