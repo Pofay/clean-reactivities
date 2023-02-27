@@ -6,6 +6,7 @@ import {
 } from 'App/models/interfaces/profile';
 import { store } from 'App/stores/store';
 import { makeAutoObservable, runInAction } from 'mobx';
+import { collapseTextChangeRangesAcrossMultipleVersions } from 'typescript';
 
 export default class UserProfileStore {
   profile: UserProfile | null = null;
@@ -13,6 +14,7 @@ export default class UserProfileStore {
   loading = false;
   uploading = false;
   followings: UserProfile[] = [];
+  loadingFollowings: boolean = false;
 
   constructor() {
     makeAutoObservable(this);
@@ -146,6 +148,20 @@ export default class UserProfileStore {
     } catch (error) {
       console.error(error);
       runInAction(() => (this.loading = false));
+    }
+  };
+
+  loadFollowings = async (predicate: string) => {
+    this.loadingFollowings = true;
+    try {
+      const followings = await agent.Profiles.listFollowings(this.profile!.userName, predicate);
+      runInAction(() => {
+        this.followings = followings;
+        this.loadingFollowings = false;
+      })
+    } catch (error) {
+      console.error(error);
+      runInAction(() => (this.loadingFollowings = true));
     }
   };
 }

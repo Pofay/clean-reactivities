@@ -103,6 +103,8 @@ const Profiles = {
   deletePhoto: (id: string) => requests.delete(`/photos/${id}`),
   updateFollowing: (userName: string) =>
     requests.post(`/follow/${userName}`, {}),
+  listFollowings: (userName: string, predicate: string) =>
+    requests.get<UserProfile[]>(`/follow/${userName}?predicate=${predicate}`),
 };
 
 const Account = {
