@@ -1,4 +1,5 @@
 import { UserProfile } from 'App/models/interfaces/profile';
+import { useStore } from 'App/stores/store';
 import UserProfileAbout from 'Features/profiles/UserProfileAbout';
 import UserProfileFollowings from 'Features/profiles/UserProfileFollowings';
 import UserProfilePhotos from 'Features/profiles/UserProfilePhotos';
@@ -11,6 +12,7 @@ export interface Props {
 
 function UserProfileContent(props: Props) {
   const { profile } = props;
+  const { userProfileStore } = useStore();
   const panes = [
     { menuItem: 'About', render: () => <UserProfileAbout /> },
     {
@@ -20,7 +22,7 @@ function UserProfileContent(props: Props) {
     { menuItem: 'Events', render: () => <Tab.Pane>Events Content</Tab.Pane> },
     {
       menuItem: 'Followers',
-      render: () => <Tab.Pane>Followers Content</Tab.Pane>,
+      render: () => <UserProfileFollowings />,
     },
     {
       menuItem: 'Following',
@@ -32,6 +34,7 @@ function UserProfileContent(props: Props) {
       menu={{ fluid: true, vertical: true }}
       menuPosition='right'
       panes={panes}
+      onTabChange={(e, data) => userProfileStore.setActiveTab(data.activeIndex)}
     />
   );
 }

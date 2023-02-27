@@ -11,10 +11,14 @@ function UserProfilePage() {
   const { username } = useParams<{ username: string }>();
   const { userProfileStore } = useStore();
 
-  const { loadingProfile, loadProfile, profile } = userProfileStore;
+  const { loadingProfile, loadProfile, profile, setActiveTab } =
+    userProfileStore;
 
   useEffect(() => {
     if (username) loadProfile(username);
+    return () => {
+      setActiveTab(0);
+    };
   }, [loadProfile, username]);
 
   if (loadingProfile) return <LoadingComponent content='Loading profile...' />;
