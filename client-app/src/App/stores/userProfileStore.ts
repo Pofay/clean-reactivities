@@ -140,8 +140,8 @@ export default class UserProfileStore {
               : profile.followersCount++;
             profile.following = !profile.following;
           }
-          this.loading = false;
         });
+        this.loading = false;
       });
     } catch (error) {
       console.error(error);

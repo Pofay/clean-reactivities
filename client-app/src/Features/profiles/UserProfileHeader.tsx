@@ -1,5 +1,6 @@
 import { Images } from 'App/common/utils/images';
 import { UserProfile } from 'App/models/interfaces/profile';
+import UserProfileFollowButton from 'Features/profiles/UserProfileFollowButton';
 import { observer } from 'mobx-react-lite';
 import {
   Button,
@@ -41,19 +42,7 @@ function UserProfileHeader(props: Props) {
             <Statistic label='Following' value={profile.followingCount} />
           </Statistic.Group>
           <Divider />
-          <Reveal animated='move'>
-            <Reveal.Content visible style={{ width: '100%' }}>
-              <Button fluid color='teal' content='Following' />
-            </Reveal.Content>
-            <Reveal.Content hidden style={{ width: '100%' }}>
-              <Button
-                fluid
-                basic
-                color={true ? 'red' : 'green'}
-                content={true ? 'Unfollow' : 'Follow'}
-              />
-            </Reveal.Content>
-          </Reveal>
+          <UserProfileFollowButton profile={profile} />
         </Grid.Column>
       </Grid>
     </Segment>
