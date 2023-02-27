@@ -5,17 +5,42 @@ import {
   UserProfileFormValues,
 } from 'App/models/interfaces/profile';
 import { store } from 'App/stores/store';
-import { makeAutoObservable, runInAction } from 'mobx';
+import { isThursday } from 'date-fns';
+import { makeAutoObservable, reaction, runInAction } from 'mobx';
+import { collapseTextChangeRangesAcrossMultipleVersions } from 'typescript';
 
 export default class UserProfileStore {
   profile: UserProfile | null = null;
   loadingProfile = false;
   loading = false;
   uploading = false;
+  followings: UserProfile[] = [];
+  loadingFollowings = false;
+  activeTab = 0;
+  predicates = {
+    3: 'followers',
+    4: 'following',
+  };
 
   constructor() {
     makeAutoObservable(this);
+
+    reaction(
+      () => this.activeTab,
+      (activeTab: number) => {
+        if (activeTab === 3 || activeTab === 4) {
+          const predicate = this.predicates[activeTab];
+          this.loadFollowings(predicate);
+        } else {
+          this.followings = [];
+        }
+      }
+    );
   }
+
+  setActiveTab = (activeTab: any) => {
+    this.activeTab = activeTab;
+  };
 
   get isCurrentUser() {
     return store.userStore.user!.userName === this.profile!.userName;
@@ -114,6 +139,63 @@ export default class UserProfileStore {
     } catch (error) {
       console.error(error);
       runInAction(() => (this.loading = false));
+    }
+  };
+
+  updateFollowing = async (userName: string, following: boolean) => {
+    this.loading = true;
+    try {
+      await agent.Profiles.updateFollowing(userName);
+      store.activityStore.updateAttendeeFollowing(userName);
+      runInAction(() => {
+        if (
+          this.profile &&
+          this.profile.userName !== store.userStore.user?.userName &&
+          this.profile.userName === userName
+        ) {
+          following
+            ? this.profile.followersCount++
+            : this.profile.followersCount--;
+          this.profile.following = !this.profile.following;
+        }
+        if (
+          this.profile &&
+          this.profile.userName === store.userStore.user?.userName
+        ) {
+          following
+            ? this.profile.followingCount++
+            : this.profile.followingCount--;
+        }
+        this.followings.forEach((profile) => {
+          if (profile.userName === userName) {
+            profile.following
+              ? profile.followersCount--
+              : profile.followersCount++;
+            profile.following = !profile.following;
+          }
+        });
+        this.loading = false;
+      });
+    } catch (error) {
+      console.error(error);
+      runInAction(() => (this.loading = false));
+    }
+  };
+
+  loadFollowings = async (predicate: string) => {
+    this.loadingFollowings = true;
+    try {
+      const followings = await agent.Profiles.listFollowings(
+        this.profile!.userName,
+        predicate
+      );
+      runInAction(() => {
+        this.followings = followings;
+        this.loadingFollowings = false;
+      });
+    } catch (error) {
+      console.error(error);
+      runInAction(() => (this.loadingFollowings = true));
     }
   };
 }

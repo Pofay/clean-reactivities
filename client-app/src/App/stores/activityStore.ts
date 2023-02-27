@@ -1,5 +1,8 @@
 import { DateFormatter } from 'App/common/utils/date-formatter';
-import { createProfileFromUser } from 'App/models/interfaces/profile';
+import {
+  createProfileFromUser,
+  UserProfile,
+} from 'App/models/interfaces/profile';
 import { User } from 'App/models/interfaces/user';
 import { makeAutoObservable, runInAction } from 'mobx';
 import { v4 as uuid } from 'uuid';
@@ -133,7 +136,7 @@ export default class ActivityStore {
       console.log(attendee);
       await agent.Activities.create(partialActivity);
       const newActivity = createNewActivity(partialActivity, user!.userName, [
-        attendee,
+        attendee as UserProfile,
       ]);
       this.setActivity(newActivity);
       this.setEditMode(false);
@@ -223,6 +226,19 @@ export default class ActivityStore {
     }
   };
 
+  updateAttendeeFollowing = (userName: string) => {
+    this.activityRegistry.forEach((activity) => {
+      activity.attendees.forEach((attendee) => {
+        if (attendee.userName === userName) {
+          attendee.following
+            ? attendee.followersCount--
+            : attendee.followersCount++;
+          attendee.following = !attendee.following;
+        }
+      });
+    });
+  };
+
   private formatDate(activity: Activity) {
     return {
       ...activity,
@@ -232,7 +248,7 @@ export default class ActivityStore {
 
   private addAttendance(user: User | null) {
     const attendee = createProfileFromUser(user!);
-    this.selectedActivity?.attendees?.push(attendee);
+    this.selectedActivity?.attendees?.push(attendee as UserProfile);
     this.selectedActivity!.isGoing = true;
   }
 

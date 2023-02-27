@@ -5,6 +5,9 @@ export interface UserProfile {
   displayName: string;
   image?: string;
   bio?: string;
+  followersCount: number;
+  followingCount: number;
+  following: boolean;
   photos?: Photo[];
 }
 export interface UserProfileFormValues {
@@ -12,7 +15,7 @@ export interface UserProfileFormValues {
   bio?: string | undefined;
 }
 
-export const createProfileFromUser = (user: User): UserProfile => {
+export const createProfileFromUser = (user: User): Partial<UserProfile> => {
   return {
     userName: user.userName,
     displayName: user.displayName,

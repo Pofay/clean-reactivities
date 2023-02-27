@@ -1,5 +1,6 @@
 import { Images } from 'App/common/utils/images';
 import { UserProfile } from 'App/models/interfaces/profile';
+import UserProfileFollowButton from 'Features/profiles/UserProfileFollowButton';
 import { observer } from 'mobx-react-lite';
 import { Link } from 'react-router-dom';
 import { Card, Icon, Image } from 'semantic-ui-react';
@@ -25,8 +26,9 @@ function UserProfileCard(props: Props) {
       </Card.Content>
       <Card.Content extra>
         <Icon name='user' />
-        20 followers
+        {profile.followersCount} followers
       </Card.Content>
+      <UserProfileFollowButton profile={profile} />
     </Card>
   );
 }
