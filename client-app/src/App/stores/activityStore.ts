@@ -13,6 +13,7 @@ import {
 } from 'App/models/interfaces/activity';
 import { store } from 'App/stores/store';
 import agent from 'App/api/agent';
+import { Pagination } from 'App/models/interfaces/pagination';
 
 /*
 const parseAndFormatISODateString = (isoDateString: string) =>
@@ -32,6 +33,7 @@ export default class ActivityStore {
   editMode = false;
   loading = false;
   loadingInitial = false;
+  pagination: Pagination | null = null;
 
   constructor() {
     makeAutoObservable(this);
@@ -59,12 +61,17 @@ export default class ActivityStore {
     this.setLoadingInitial(true);
     try {
       const result = await agent.Activities.list();
-      result.forEach((activity) => this.setActivity(activity));
+      result.data.forEach((activity) => this.setActivity(activity));
+      this.setPagination(result.pagination);
       this.setLoadingInitial(false);
     } catch (error) {
       console.error(error);
       this.setLoadingInitial(false);
     }
+  };
+
+  setPagination = (pagination: Pagination) => {
+    this.pagination = pagination;
   };
 
   // WARNING: Violates CQS and is really a jarbled mess of responsibilities

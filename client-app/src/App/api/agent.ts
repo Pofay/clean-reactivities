@@ -6,6 +6,7 @@ import { Activity, ActivityFormValues } from '../models/interfaces/activity';
 import { User, UserFormValues } from '../models/interfaces/user';
 import { Photo, UserProfile } from 'App/models/interfaces/profile';
 import { string } from 'yup';
+import { PaginatedResult } from 'App/models/interfaces/pagination';
 
 const sleep = (delay: number) =>
   new Promise((resolve) => {
@@ -23,6 +24,14 @@ axios.interceptors.request.use((config) => {
 axios.interceptors.response.use(
   async (response) => {
     await sleep(1000);
+    const pagination = response.headers['pagination'];
+    if (pagination) {
+      response.data = new PaginatedResult(
+        response.data,
+        JSON.parse(pagination)
+      );
+      return response as AxiosResponse<PaginatedResult<any>>;
+    }
     return response;
   },
   (error: AxiosError) => {
@@ -77,7 +86,7 @@ const requests = {
 };
 
 const Activities = {
-  list: () => requests.get<Activity[]>('/activities'),
+  list: () => requests.get<PaginatedResult<Activity[]>>('/activities'),
   details: (id: string) => requests.get<Activity>(`/activities/${id}`),
   create: (activity: ActivityFormValues) =>
     requests.post<void>('/activities', activity),
