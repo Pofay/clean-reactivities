@@ -9,7 +9,7 @@ namespace Application.Pagination
     {
         // should be set in the .env
         private const int MaxPageSize = 50;
-        private int _pageSize = 2;
+        private int _pageSize = 10;
         public int PageNumber { get; set; } = 1;
         public int PageSize
         {
