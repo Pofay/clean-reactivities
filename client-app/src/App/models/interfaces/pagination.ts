@@ -14,3 +14,18 @@ export class PaginatedResult<T> {
     this.pagination = pagination;
   }
 }
+
+export interface PagingParams {
+  pageNumber: number;
+  pageSize: number;
+}
+
+export function createPagingParams(
+  pageNumber: number = 1,
+  pageSize = 2
+): PagingParams {
+  return {
+    pageNumber,
+    pageSize,
+  };
+}

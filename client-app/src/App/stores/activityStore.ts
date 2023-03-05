@@ -13,7 +13,11 @@ import {
 } from 'App/models/interfaces/activity';
 import { store } from 'App/stores/store';
 import agent from 'App/api/agent';
-import { Pagination } from 'App/models/interfaces/pagination';
+import {
+  createPagingParams,
+  Pagination,
+  PagingParams,
+} from 'App/models/interfaces/pagination';
 
 /*
 const parseAndFormatISODateString = (isoDateString: string) =>
@@ -34,6 +38,7 @@ export default class ActivityStore {
   loading = false;
   loadingInitial = false;
   pagination: Pagination | null = null;
+  pagingParams = createPagingParams();
 
   constructor() {
     makeAutoObservable(this);
@@ -43,6 +48,17 @@ export default class ActivityStore {
     return Array.from(this.activityRegistry.values()).sort(
       (a, b) => a.date!.getTime() - b.date!.getTime()
     );
+  }
+
+  setPagingParams = (pagingParams: PagingParams) => {
+    this.pagingParams = pagingParams;
+  };
+
+  get axiosParams() {
+    const params = new URLSearchParams();
+    params.append('pageNumber', this.pagingParams.pageNumber.toString());
+    params.append('pageSize', this.pagingParams.pageSize.toString());
+    return params;
   }
 
   get groupedActivities() {
@@ -60,7 +76,7 @@ export default class ActivityStore {
   loadActivities = async () => {
     this.setLoadingInitial(true);
     try {
-      const result = await agent.Activities.list();
+      const result = await agent.Activities.list(this.axiosParams);
       result.data.forEach((activity) => this.setActivity(activity));
       this.setPagination(result.pagination);
       this.setLoadingInitial(false);

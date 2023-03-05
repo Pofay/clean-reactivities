@@ -1,12 +1,11 @@
-import { history } from '../..';
+import { PaginatedResult } from 'App/models/interfaces/pagination';
+import { Photo, UserProfile } from 'App/models/interfaces/profile';
 import { store } from 'App/stores/store';
 import axios, { AxiosError, AxiosResponse } from 'axios';
 import { toast } from 'react-toastify';
+import { history } from '../..';
 import { Activity, ActivityFormValues } from '../models/interfaces/activity';
 import { User, UserFormValues } from '../models/interfaces/user';
-import { Photo, UserProfile } from 'App/models/interfaces/profile';
-import { string } from 'yup';
-import { PaginatedResult } from 'App/models/interfaces/pagination';
 
 const sleep = (delay: number) =>
   new Promise((resolve) => {
@@ -86,7 +85,10 @@ const requests = {
 };
 
 const Activities = {
-  list: () => requests.get<PaginatedResult<Activity[]>>('/activities'),
+  list: (params: URLSearchParams) =>
+    axios
+      .get<PaginatedResult<Activity[]>>('/activities', { params })
+      .then(responseBody),
   details: (id: string) => requests.get<Activity>(`/activities/${id}`),
   create: (activity: ActivityFormValues) =>
     requests.post<void>('/activities', activity),
