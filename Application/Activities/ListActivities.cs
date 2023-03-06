@@ -13,7 +13,7 @@ namespace Application.Activities
     {
         public record Query : IRequest<Result<PagedList<ActivityDto>>>
         {
-            public PagingParams Params { get; init; }
+            public ActivityParams Params { get; init; }
         }
 
         public class Handler : IRequestHandler<Query, Result<PagedList<ActivityDto>>>
@@ -32,9 +32,23 @@ namespace Application.Activities
             public async Task<Result<PagedList<ActivityDto>>> Handle(Query request, CancellationToken cancellationToken)
             {
                 var query = _context.Activities
+                .Where(d => d.Date >= request.Params.StartDate)
                 .OrderBy(d => d.Date)
                 .ProjectTo<ActivityDto>(_mapper.ConfigurationProvider, new { currentUsername = _userAccessor.GetUsername() })
                 .AsQueryable();
+
+                // To Refactor into methods
+                // Get activities that current user is attending
+                if (request.Params.IsGoing && !request.Params.IsHost)
+                {
+                    query = query.Where(x => x.Attendees.Any(a => a.UserName == _userAccessor.GetUsername()));
+                }
+
+                // Get activites that current user is hosting
+                if (request.Params.IsHost && !request.Params.IsGoing)
+                {
+                    query = query.Where(x => x.HostUsername == _userAccessor.GetUsername());
+                }
 
                 return Result.Ok<PagedList<ActivityDto>>(
                     await PagedList<ActivityDto>.CreateAsync(query, request.Params.PageNumber, request.Params.PageSize)
