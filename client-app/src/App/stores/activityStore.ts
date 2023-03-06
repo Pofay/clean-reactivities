@@ -1,24 +1,23 @@
+import agent from 'App/api/agent';
 import { DateFormatter } from 'App/common/utils/date-formatter';
-import {
-  createProfileFromUser,
-  UserProfile,
-} from 'App/models/interfaces/profile';
-import { User } from 'App/models/interfaces/user';
-import { makeAutoObservable, reaction, runInAction } from 'mobx';
-import { v4 as uuid } from 'uuid';
 import {
   Activity,
   ActivityFormValues,
   createNewActivity,
 } from 'App/models/interfaces/activity';
-import { store } from 'App/stores/store';
-import agent from 'App/api/agent';
 import {
   createPagingParams,
   Pagination,
   PagingParams,
 } from 'App/models/interfaces/pagination';
-import { toISOString } from 'fp-ts-std/Date';
+import {
+  createProfileFromUser,
+  UserProfile,
+} from 'App/models/interfaces/profile';
+import { User } from 'App/models/interfaces/user';
+import { store } from 'App/stores/store';
+import { makeAutoObservable, reaction, runInAction } from 'mobx';
+import { v4 as uuid } from 'uuid';
 
 /*
 const parseAndFormatISODateString = (isoDateString: string) =>
