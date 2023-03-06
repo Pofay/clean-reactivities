@@ -4,7 +4,7 @@ import {
   UserProfile,
 } from 'App/models/interfaces/profile';
 import { User } from 'App/models/interfaces/user';
-import { makeAutoObservable, runInAction } from 'mobx';
+import { makeAutoObservable, reaction, runInAction } from 'mobx';
 import { v4 as uuid } from 'uuid';
 import {
   Activity,
@@ -18,6 +18,7 @@ import {
   Pagination,
   PagingParams,
 } from 'App/models/interfaces/pagination';
+import { toISOString } from 'fp-ts-std/Date';
 
 /*
 const parseAndFormatISODateString = (isoDateString: string) =>
@@ -39,9 +40,19 @@ export default class ActivityStore {
   loadingInitial = false;
   pagination: Pagination | null = null;
   pagingParams = createPagingParams();
+  predicate = new Map().set('all', true);
 
   constructor() {
     makeAutoObservable(this);
+
+    reaction(
+      () => this.predicate.keys(),
+      () => {
+        this.pagingParams = createPagingParams();
+        this.activityRegistry.clear();
+        this.loadActivities();
+      }
+    );
   }
 
   get activitiesByDate() {
@@ -54,10 +65,44 @@ export default class ActivityStore {
     this.pagingParams = pagingParams;
   };
 
+  setPredicate = (predicate: string, value: string | Date) => {
+    const resetPredicate = () => {
+      this.predicate.forEach((value, key) => {
+        if (key !== 'startDate') {
+          this.predicate.delete(key);
+        }
+      });
+    };
+    switch (predicate) {
+      case 'all':
+        resetPredicate();
+        this.predicate.set('all', true);
+        break;
+      case 'isGoing':
+        resetPredicate();
+        this.predicate.set('isGoing', true);
+        break;
+      case 'isHost':
+        resetPredicate();
+        this.predicate.set('isHost', true);
+        break;
+      case 'startDate':
+        this.predicate.delete('startDate');
+        this.predicate.set('startDate', value);
+    }
+  };
+
   get axiosParams() {
     const params = new URLSearchParams();
     params.append('pageNumber', this.pagingParams.pageNumber.toString());
     params.append('pageSize', this.pagingParams.pageSize.toString());
+    this.predicate.forEach((value, key) => {
+      if (key === 'startDate') {
+        params.append(key, (value as Date).toISOString());
+      } else {
+        params.append(key, value);
+      }
+    });
     return params;
   }
 
