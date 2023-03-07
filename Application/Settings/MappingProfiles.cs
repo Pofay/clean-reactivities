@@ -27,7 +27,7 @@ namespace Application.Settings
             .ForMember(d => d.Following, o => o.MapFrom(s => s.AppUser.Followers.Any(x => x.Observer.UserName == currentUsername)));
 
             CreateMap<ActivityAttendee, UserActivityDto>()
-            .ForMember(d => d.HostUserName, o => o.MapFrom(s => s.AppUser.UserName))
+            .ForMember(d => d.HostUserName, o => o.MapFrom(s => s.Activity.Attendees.FirstOrDefault(x => x.IsHost).AppUser.UserName))
             .ForMember(d => d.Id, o => o.MapFrom(s => s.ActivityId))
             .ForMember(d => d.Category, o => o.MapFrom(s => s.Activity.Category))
             .ForMember(d => d.Title, o => o.MapFrom(s => s.Activity.Title))
