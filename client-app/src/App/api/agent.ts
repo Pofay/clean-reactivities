@@ -4,7 +4,11 @@ import { store } from 'App/stores/store';
 import axios, { AxiosError, AxiosResponse } from 'axios';
 import { toast } from 'react-toastify';
 import { history } from '../..';
-import { Activity, ActivityFormValues } from '../models/interfaces/activity';
+import {
+  Activity,
+  ActivityFormValues,
+  UserActivity,
+} from '../models/interfaces/activity';
 import { User, UserFormValues } from '../models/interfaces/user';
 
 const sleep = (delay: number) =>
@@ -116,6 +120,10 @@ const Profiles = {
     requests.post(`/follow/${userName}`, {}),
   listFollowings: (userName: string, predicate: string) =>
     requests.get<UserProfile[]>(`/follow/${userName}?predicate=${predicate}`),
+  listUserActivities: (userName: string, predicate: string) =>
+    requests.get<UserActivity>(
+      `/profiles/${userName}/activities?predicate=${predicate}`
+    ),
 };
 
 const Account = {
