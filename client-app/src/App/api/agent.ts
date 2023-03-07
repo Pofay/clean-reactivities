@@ -121,7 +121,7 @@ const Profiles = {
   listFollowings: (userName: string, predicate: string) =>
     requests.get<UserProfile[]>(`/follow/${userName}?predicate=${predicate}`),
   listUserActivities: (userName: string, predicate: string) =>
-    requests.get<UserActivity>(
+    requests.get<UserActivity[]>(
       `/profiles/${userName}/activities?predicate=${predicate}`
     ),
 };
