@@ -23,32 +23,31 @@ namespace Application.Profiles
         public class Handler : IRequestHandler<Query, Result<List<UserActivityDto>>>
         {
             private readonly DataContext _context;
-            private readonly IUserAccessor _userAccessor;
             private readonly IMapper _mapper;
 
             public Handler(DataContext context, IUserAccessor userAccessor, IMapper mapper)
             {
                 _mapper = mapper;
-                _userAccessor = userAccessor;
                 _context = context;
             }
 
             public async Task<Result<List<UserActivityDto>>> Handle(Query request, CancellationToken cancellationToken)
             {
-                var now = DateTime.Now;
                 var query = _context.ActivityAttendees
+                                .Where(a => a.AppUser.UserName == request.UserName)
+                                .OrderBy(a => a.Activity.Date)
                                 .ProjectTo<UserActivityDto>(_mapper.ConfigurationProvider)
                                 .AsQueryable();
                 switch (request.Predicate)
                 {
                     case "past":
-                        query = query.Where(d => d.Date < now);
+                        query = query.Where(d => d.Date <= DateTime.Now);
                         break;
                     case "hosting":
                         query = query.Where(d => d.HostUserName == request.UserName);
                         break;
                     default:
-                        query = query.Where(d => d.Date > now);
+                        query = query.Where(d => d.Date >= DateTime.Now);
                         break;
                 }
                 var userActivities = await query.ToListAsync();
