@@ -9,6 +9,7 @@ using Persistence;
 using MediatR;
 using Application.Activities;
 using Microsoft.AspNetCore.Authorization;
+using Application.Pagination;
 
 namespace API.Controllers
 {
@@ -22,9 +23,9 @@ namespace API.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<Activity>>> GetActivities()
+        public async Task<ActionResult<List<Activity>>> GetActivities([FromQuery] ActivityParams pagingParams)
         {
-            return HandleResult(await _mediator.Send(new ListActivities.Query()));
+            return HandlePagedResult(await _mediator.Send(new ListActivities.Query { Params = pagingParams }));
         }
 
         [HttpPost]

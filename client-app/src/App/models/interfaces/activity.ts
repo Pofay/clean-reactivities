@@ -16,6 +16,13 @@ export interface Activity {
   attendees: UserProfile[];
 }
 
+export interface UserActivity {
+  id: string;
+  title: string;
+  category: string;
+  date: Date;
+}
+
 export const createNewActivity = (
   formValues: ActivityFormValues,
   hostUsername: string,

@@ -1,4 +1,5 @@
 import agent from 'App/api/agent';
+import { UserActivity } from 'App/models/interfaces/activity';
 import {
   Photo,
   UserProfile,
@@ -21,6 +22,8 @@ export default class UserProfileStore {
     3: 'followers',
     4: 'following',
   };
+  userActivities: UserActivity[] = [];
+  loadingUserActivities = false;
 
   constructor() {
     makeAutoObservable(this);
@@ -195,7 +198,27 @@ export default class UserProfileStore {
       });
     } catch (error) {
       console.error(error);
-      runInAction(() => (this.loadingFollowings = true));
+      runInAction(() => (this.loadingFollowings = false));
+    }
+  };
+
+  loadUserActivities = async (
+    userName: string,
+    predicate: string = 'future'
+  ) => {
+    this.loadingUserActivities = true;
+    try {
+      const userActivities = await agent.Profiles.listUserActivities(
+        userName,
+        predicate
+      );
+      runInAction(() => {
+        this.userActivities = userActivities;
+        this.loadingUserActivities = false;
+      });
+    } catch (error) {
+      console.error(error);
+      runInAction(() => (this.loadingUserActivities = false));
     }
   };
 }
