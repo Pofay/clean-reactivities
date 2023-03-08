@@ -14,6 +14,7 @@ import ActivityDashboard from 'Features/Activities/dashboard/ActivityDashboard';
 import HomePage from 'Features/home/HomePage';
 import { observer } from 'mobx-react-lite';
 import UserProfilePage from 'Features/profiles/UserProfilePage';
+import ScrollToTop from 'App/Layout/ScrollToTop';
 
 function App() {
   const { commonStore, userStore } = useStore();
@@ -31,6 +32,7 @@ function App() {
 
   return (
     <>
+      <ScrollToTop />
       <ModalContainer />
       <ToastContainer position='bottom-right' hideProgressBar />
       <Routes>
