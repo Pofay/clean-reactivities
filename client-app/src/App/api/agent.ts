@@ -1,9 +1,9 @@
 import { PaginatedResult } from 'App/models/interfaces/pagination';
 import { Photo, UserProfile } from 'App/models/interfaces/profile';
+import { router } from 'App/router/Routes';
 import { store } from 'App/stores/store';
 import axios, { AxiosError, AxiosResponse } from 'axios';
 import { toast } from 'react-toastify';
-import { history } from '../..';
 import {
   Activity,
   ActivityFormValues,
@@ -47,7 +47,7 @@ axios.interceptors.response.use(
         }
         // @ts-ignore
         if (config.method === 'get' && data.errors.hasOwnProperty('id')) {
-          history.push('/not-found');
+          router.navigate('/not-found');
         }
         // @ts-ignore
         if (data.errors) {
@@ -65,13 +65,13 @@ axios.interceptors.response.use(
         break;
       case 404:
         toast.error('not found');
-        history.push('/not-found');
+        router.navigate('/not-found');
         break;
       case 500:
         toast.error('server error');
         // @ts-ignore
         store.commonStore.setServerError(data);
-        history.push('/server-error');
+        router.navigate('/server-error');
         break;
     }
     return Promise.reject(error);
