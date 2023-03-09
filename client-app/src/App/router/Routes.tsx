@@ -37,12 +37,3 @@ export const routes: RouteObject[] = [
 ];
 
 export const router = createBrowserRouter(routes);
-
-/* <Route path='*' element={<NotFound />} />
-          <Route path='errors' element={<TestErrors />} />
-          <Route path='login' element={<LoginForm />} />
-          <Route path='server-error' element={<ServerError />} />
-          <Route path='activities/*' element={<ActivityDashboard />} />
-          <Route path='profiles/:username' element={<UserProfilePage />} />
-        </Route>
-        <Route path='/' element={<HomePage />} /> */
