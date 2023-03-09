@@ -1,16 +1,28 @@
-import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
-import viteTsconfigPaths from 'vite-tsconfig-paths';
+import { resolve } from 'path';
+import { defineConfig, splitVendorChunkPlugin } from 'vite';
 import svgrPlugin from 'vite-plugin-svgr';
+import viteTsconfigPaths from 'vite-tsconfig-paths';
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [react(), viteTsconfigPaths(), svgrPlugin()],
+  plugins: [
+    react(),
+    viteTsconfigPaths(),
+    svgrPlugin(),
+    splitVendorChunkPlugin(),
+  ],
   build: {
-    outDir: 'build',
+    outDir: '../API/wwwroot',
+    emptyOutDir: true,
+    rollupOptions: {
+      input: {
+        main: resolve(__dirname, 'index.html'),
+      },
+    },
   },
   server: {
     open: true,
-    port: 3000
+    port: 3000,
   },
 });
