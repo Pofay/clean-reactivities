@@ -3,11 +3,11 @@ import {
   HubConnectionBuilder,
   LogLevel,
 } from '@microsoft/signalr';
-import { Activity } from 'App/models/interfaces/activity';
 import { ChatComment } from 'App/models/interfaces/comment';
 import { store } from 'App/stores/store';
-import { parse, parseISO, parseJSON } from 'date-fns';
 import { makeAutoObservable, runInAction } from 'mobx';
+
+const chatUrl = import.meta.env.VITE_CHAT_URL;
 
 class CommentStore {
   comments: ChatComment[] = [];
@@ -71,9 +71,8 @@ class CommentStore {
   }
 
   private createHubConnection(activityId: string) {
-    console.log(activityId);
     return new HubConnectionBuilder()
-      .withUrl(`http://localhost:5272/chat?activityId=${activityId}`, {
+      .withUrl(`${chatUrl}?activityId=${activityId}`, {
         accessTokenFactory: () => store.userStore.user?.token!,
       })
       .withAutomaticReconnect()
