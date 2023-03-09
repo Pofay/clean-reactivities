@@ -1,25 +1,19 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import 'react-calendar/dist/Calendar.css';
-import { unstable_HistoryRouter as HistoryRouter } from 'react-router-dom';
-import 'react-toastify/dist/ReactToastify.min.css';
-import App from 'App/Layout/App';
 import 'App/Layout/styles.css';
+import { router } from 'App/router/Routes';
 import { store, StoreContext } from 'App/stores/store';
-import reportWebVitals from './reportWebVitals';
-import { createBrowserHistory } from 'history';
+import 'react-calendar/dist/Calendar.css';
 import 'react-datepicker/dist/react-datepicker.css';
-
-export const history = createBrowserHistory();
+import ReactDOM from 'react-dom/client';
+import { RouterProvider } from 'react-router-dom';
+import 'react-toastify/dist/ReactToastify.min.css';
+import reportWebVitals from './reportWebVitals';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
 root.render(
   <StoreContext.Provider value={store}>
-    <HistoryRouter history={history}>
-      <App />
-    </HistoryRouter>
+    <RouterProvider router={router} />
   </StoreContext.Provider>
 );
 

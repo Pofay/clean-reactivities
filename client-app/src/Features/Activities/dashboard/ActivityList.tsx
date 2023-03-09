@@ -5,18 +5,13 @@ import ActivityFilters from 'Features/Activities/dashboard/ActivityFilters';
 import ActivityListItem from 'Features/Activities/dashboard/ActivityListItem';
 import ActivityListItemPlaceholder from 'Features/Activities/dashboard/ActivityListItemPlaceholder';
 import { observer } from 'mobx-react-lite';
-import { Fragment } from 'react';
+import { Fragment, useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroller';
 import { Grid, Header, Loader } from 'semantic-ui-react';
 
-interface Props {
-  loadingNext: boolean;
-  setLoadingNext: (arg: boolean) => void;
-}
-
-function ActivityList(props: Props) {
+function ActivityList() {
   const { activityStore } = useStore();
-  const { loadingNext, setLoadingNext } = props;
+  const [loadingNext, setLoadingNext] = useState(false);
   const { groupedActivities, pagination, setPagingParams, loadActivities } =
     activityStore;
 
