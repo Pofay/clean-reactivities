@@ -1,4 +1,5 @@
 import App from 'App/Layout/App';
+import RequireAuth from 'App/router/RequireAuth';
 import ActivityDashboard from 'Features/Activities/dashboard/ActivityDashboard';
 import ActivityList from 'Features/Activities/dashboard/ActivityList';
 import ActivityDetails from 'Features/Activities/details/ActivityDetails';
@@ -17,18 +18,23 @@ export const routes: RouteObject[] = [
     element: <App />,
     children: [
       {
-        path: 'activities',
-        element: <ActivityDashboard />,
+        element: <RequireAuth />,
         children: [
-          { path: ':id', element: <ActivityDetails /> },
-          { path: 'createActivity', element: <ActivityForm /> },
-          { path: 'manage/:id', element: <ActivityForm /> },
-          { path: '', element: <ActivityList /> },
+          {
+            path: 'activities',
+            element: <ActivityDashboard />,
+            children: [
+              { path: ':id', element: <ActivityDetails /> },
+              { path: 'createActivity', element: <ActivityForm /> },
+              { path: 'manage/:id', element: <ActivityForm /> },
+              { path: '', element: <ActivityList /> },
+            ],
+          },
+          { path: 'profiles/:username', element: <UserProfilePage /> },
+          { path: 'login', element: <LoginForm /> },
+          { path: 'errors', element: <TestErrors /> },
         ],
       },
-      { path: 'profiles/:username', element: <UserProfilePage /> },
-      { path: 'login', element: <LoginForm /> },
-      { path: 'errors', element: <TestErrors /> },
       { path: 'not-found', element: <NotFound /> },
       { path: 'server-error', element: <ServerError /> },
       { path: '*', element: <Navigate replace to='/not-found' /> },
