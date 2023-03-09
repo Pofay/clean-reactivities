@@ -18,7 +18,7 @@ export default observer(function Navbar() {
           <img src={Images.logo} alt='logo' style={{ marginRight: '10px' }} />
           Reactivities
         </Menu.Item>
-        <Menu.Item as={NavLink} to='/activities' name='Actitivies' />
+        <Menu.Item as={NavLink} to='/activities' name='Activities' />
         <Menu.Item as={NavLink} to='/errors' name='Errors' />
         <Menu.Item>
           <Button
