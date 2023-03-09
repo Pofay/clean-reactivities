@@ -16,7 +16,6 @@ function UserProfileFollowButton(props: Props) {
 
   const handleFollow = (e: SyntheticEvent, userName: string) => {
     e.preventDefault();
-    console.log('Follow');
     profile.following
       ? updateFollowing(userName, false)
       : updateFollowing(userName, true);

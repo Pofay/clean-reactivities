@@ -200,7 +200,6 @@ export default class ActivityStore {
     try {
       const user = store.userStore.user;
       const attendee = createProfileFromUser(user!);
-      console.log(attendee);
       await agent.Activities.create(partialActivity);
       const newActivity = createNewActivity(partialActivity, user!.userName, [
         attendee as UserProfile,
