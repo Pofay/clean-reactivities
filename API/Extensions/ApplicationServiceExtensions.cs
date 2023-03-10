@@ -21,7 +21,7 @@ namespace API.Extensions
             services.AddDbContext<DataContext>(opt =>
             {
                 var connString = configuration.GetValue<string>("DB_CONNECTION");
-                opt.UseSqlite(connString);
+                opt.UseNpgsql(connString);
             });
             services.AddCors(opt =>
             {
