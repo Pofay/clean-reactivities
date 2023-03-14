@@ -55,7 +55,7 @@ namespace API.Extensions
         private static string GetConnString(IConfiguration configuration, string environment)
         {
             var connString = configuration.GetValue<string>("DATABASE_URL");
-            if (environment == "Development")
+            if (environment == "Development" || environment == "Staging")
                 return connString;
             else
             {
