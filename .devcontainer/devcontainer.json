@@ -35,7 +35,8 @@
 		"ghcr.io/devcontainers/features/node:1": {
 			"nodeGypDependencies": true,
 			"version": "lts"
-		}
+		},
+		"ghcr.io/devcontainers/features/docker-in-docker:2": {}
 	},
 	// Features to add to the dev container. More info: https://containers.dev/features.
 	// "features": {},
