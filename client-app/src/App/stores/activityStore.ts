@@ -144,7 +144,8 @@ export default class ActivityStore {
       this.setLoadingInitial(true);
       try {
         let loadedActivity = await agent.Activities.details(id);
-        let formattedActivity = this.formatDate(loadedActivity);
+        let formattedActivity =
+          this.parseActivityWithProperDate(loadedActivity);
         runInAction(() => {
           this.setActivity(formattedActivity);
           this.setLoadingInitial(false);
@@ -214,7 +215,8 @@ export default class ActivityStore {
   };
 
   addActivity = (activity: Activity) => {
-    const activityWithFormattedDate = this.formatDate(activity);
+    const activityWithFormattedDate =
+      this.parseActivityWithProperDate(activity);
     this.activityRegistry.set(activity.id, activityWithFormattedDate);
   };
 
@@ -305,7 +307,7 @@ export default class ActivityStore {
     });
   };
 
-  private formatDate(activity: Activity) {
+  private parseActivityWithProperDate(activity: Activity) {
     return {
       ...activity,
       date: new Date(activity.date!),
