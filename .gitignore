@@ -497,11 +497,8 @@ appsettings.json
 .env
 .env.development
 .env.production
+.env.staging
 
 ## SQLite Artifacts
 reactivities.db-shm
 reactivities.db-wal
-
-# Do not commit wwwroot
-# as this will be regenerated on client-side build
-wwwroot
