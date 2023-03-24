@@ -13,7 +13,6 @@ export default defineConfig({
     splitVendorChunkPlugin(),
   ],
   build: {
-    outDir: '../API/wwwroot',
     emptyOutDir: true,
     rollupOptions: {
       input: {
