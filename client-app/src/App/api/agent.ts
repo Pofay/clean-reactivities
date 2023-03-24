@@ -16,7 +16,7 @@ const sleep = (delay: number) =>
     setTimeout(resolve, delay);
   });
 
-axios.defaults.baseURL = import.meta.env.VITE_API_URL;
+axios.defaults.baseURL = import.meta.env.VITE_API_URL || '/api'
 
 axios.interceptors.request.use((config) => {
   const token = store.commonStore.token;

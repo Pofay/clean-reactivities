@@ -7,7 +7,7 @@ import { ChatComment } from 'App/models/interfaces/comment';
 import { store } from 'App/stores/store';
 import { makeAutoObservable, runInAction } from 'mobx';
 
-const chatUrl = import.meta.env.VITE_CHAT_URL;
+const chatUrl = import.meta.env.VITE_CHAT_URL || '/chat';
 
 class CommentStore {
   comments: ChatComment[] = [];
