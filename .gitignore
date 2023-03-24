@@ -504,3 +504,4 @@ reactivities.db-shm
 reactivities.db-wal
 
 wwwroot
+dist

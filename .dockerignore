@@ -5,3 +5,5 @@ appsettings.json
 .env.staging
 **/bin
 **/obj
+wwwroot
+dist
