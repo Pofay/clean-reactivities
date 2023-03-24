@@ -502,3 +502,5 @@ appsettings.json
 ## SQLite Artifacts
 reactivities.db-shm
 reactivities.db-wal
+
+wwwroot
