@@ -35,5 +35,5 @@ RUN npm run build:prod
 FROM mcr.microsoft.com/dotnet/aspnet:6.0
 WORKDIR /app
 COPY --from=build-env /app/out .
-COPY --from=build-client /app/client-app/dist ../API/wwwroot
+COPY --from=build-client /app/client-app/dist ./wwwroot
 ENTRYPOINT [ "dotnet", "API.dll" ]
