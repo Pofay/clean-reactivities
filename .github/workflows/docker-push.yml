@@ -22,7 +22,7 @@ jobs:
           push: true
           tags: pofay/clean-reactivities:latest
   deploy:
-    needs: check-wwwroot 
+    needs: docker
     name: Deploy app
     runs-on: ubuntu-latest
     steps:
