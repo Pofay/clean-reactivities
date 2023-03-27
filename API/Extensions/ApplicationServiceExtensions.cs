@@ -64,13 +64,16 @@ namespace API.Extensions
                 var pgUserPass = connString.Split("@")[0];
                 var pgHostPortDb = connString.Split("@")[1];
                 var pgHostPort = pgHostPortDb.Split("/")[0];
-                var pgDb = pgHostPortDb.Split("/")[1];
+                var pgDbString = pgHostPortDb.Split("/")[1];
                 var pgUser = pgUserPass.Split(":")[0];
                 var pgPass = pgUserPass.Split(":")[1];
                 var pgHost = pgHostPort.Split(":")[0];
                 var pgPort = pgHostPort.Split(":")[1];
 
-                connString = $"Server={pgHost};Port={pgPort};User Id={pgUser};Password={pgPass};Database={pgDb};";
+                var dbName = pgDbString.Split("?")[0];
+                var sslMode = pgDbString.Split("?")[1].Split("=")[1];
+
+                connString = $"Server={pgHost};Port={pgPort};User Id={pgUser};Password={pgPass};Database={dbName};SslMode={sslMode}";
                 return connString;
             }
         }
