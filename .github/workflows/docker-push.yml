@@ -21,19 +21,6 @@ jobs:
         with:
           push: true
           tags: pofay/clean-reactivities:latest
-  check-wwwroot:
-    needs: docker
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - name: Check if wwwroot exists
-        run: |
-          if [ -d "./wwwroot" ]; then
-            echo "wwwroot exists"
-          else
-            echo "wwwroot does not exist"
-            exit 1
-          fi
   deploy:
     needs: check-wwwroot 
     name: Deploy app
