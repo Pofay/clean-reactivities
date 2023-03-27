@@ -38,7 +38,8 @@
   },
   "scripts": {
     "start": "vite --config vite.config.ts",
-    "build": "tsc && vite build",
+    "build:prod": "tsc && vite build --mode production",
+    "build:staging": "tsc && vite build --mode staging",
     "preview": "vite preview --config vite.config.ts",
     "test": "vite test",
     "postinstall": "semantic-ui-css-patch"

@@ -61,7 +61,7 @@ public class DataDbContextFactory : IDesignTimeDbContextFactory<DataContext>
     public DataContext CreateDbContext(string[] args)
     {
         var optionsBuilder = new DbContextOptionsBuilder<DataContext>();
-        optionsBuilder.UseSqlite(Environment.GetEnvironmentVariable("DB_CONNECTION"));
+        optionsBuilder.UseNpgsql(Environment.GetEnvironmentVariable("DATABASE_URL"));
 
         return new DataContext(optionsBuilder.Options);
     }

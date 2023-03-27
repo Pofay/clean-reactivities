@@ -497,7 +497,11 @@ appsettings.json
 .env
 .env.development
 .env.production
+.env.staging
 
 ## SQLite Artifacts
 reactivities.db-shm
 reactivities.db-wal
+
+wwwroot
+dist

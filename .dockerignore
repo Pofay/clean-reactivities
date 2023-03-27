@@ -1,0 +1,9 @@
+appsettings.json
+.env
+.env.development
+.env.production
+.env.staging
+**/bin
+**/obj
+wwwroot
+dist

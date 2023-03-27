@@ -9,7 +9,7 @@ function NotFound() {
         Oops - could not find this.
       </Header>
       <Segment.Inline>
-        <Button as={Link} to='activities' primary>
+        <Button as={Link} to='/activities' primary>
           Return to activities page
         </Button>
       </Segment.Inline>

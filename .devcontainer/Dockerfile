@@ -1,0 +1,1 @@
+FROM --platform=linux/amd64 mcr.microsoft.com/devcontainers/dotnet:0-6.0

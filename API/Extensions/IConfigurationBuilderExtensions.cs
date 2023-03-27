@@ -19,6 +19,16 @@ namespace API.Extensions
                       .WithOverwriteExistingVars()
                       .Load();
             }
+            else if (environment.IsStaging())
+            {
+                DotEnv.Fluent()
+                      .WithEnvFiles(".env.staging")
+                      .WithDefaultEncoding()
+                      .WithoutExceptions()
+                      .WithTrimValues()
+                      .WithOverwriteExistingVars()
+                      .Load();
+            }
 
             return configBuilder;
         }

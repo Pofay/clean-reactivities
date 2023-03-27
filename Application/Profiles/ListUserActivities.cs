@@ -41,13 +41,13 @@ namespace Application.Profiles
                 switch (request.Predicate)
                 {
                     case "past":
-                        query = query.Where(d => d.Date <= DateTime.Now);
+                        query = query.Where(d => d.Date <= DateTime.UtcNow);
                         break;
                     case "hosting":
                         query = query.Where(d => d.HostUserName == request.UserName);
                         break;
                     default:
-                        query = query.Where(d => d.Date >= DateTime.Now);
+                        query = query.Where(d => d.Date >= DateTime.UtcNow);
                         break;
                 }
                 var userActivities = await query.ToListAsync();
