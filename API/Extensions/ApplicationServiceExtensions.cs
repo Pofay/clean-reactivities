@@ -1,6 +1,8 @@
 using Application.Activities;
 using Application.Interfaces;
 using Application.Settings;
+using FluentValidation;
+using FluentValidation.AspNetCore;
 using Infrastructure;
 using Infrastructure.Photos;
 using MediatR;
@@ -48,6 +50,9 @@ namespace API.Extensions
                 opt.ApiSecret = configuration.GetValue<string>("CLOUDINARY_APISECRET");
             });
             services.AddSignalR();
+            services.AddFluentValidationAutoValidation();
+            services.AddFluentValidationClientsideAdapters();
+            services.AddValidatorsFromAssemblyContaining<CreateActivity>();
 
             return services;
         }
